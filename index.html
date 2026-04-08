@@ -174,6 +174,31 @@ input,button,select,textarea{font-family:inherit}
 .empty-l{background:none;border:none;color:#2E6B2E;font-size:13px;cursor:pointer;text-decoration:underline}
 @media print{body>*:not(#povl){display:none!important}.povl{position:static!important;background:none!important;padding:0!important}.pcard{box-shadow:none!important}.pc-close,.pbtn{display:none!important}}
 @media(max-width:600px){.fgrid{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr 1fr}.hdr{flex-direction:column;align-items:flex-start}.toolbar{flex-direction:column}}
+
+/* TV MODE */
+.tv-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:2px solid #1A4A1A;margin-bottom:20px}
+.tv-title{color:#4CAF50;font-size:28px;font-weight:700;letter-spacing:1px}
+.tv-time{color:#4CAF50;font-size:22px;font-family:monospace;font-weight:700}
+.tv-stats{display:flex;gap:16px;padding:0 24px;margin-bottom:24px;flex-wrap:wrap}
+.tv-stat{background:#0F2A0F;border:1.5px solid #1A4A1A;border-radius:12px;padding:14px 20px;text-align:center;min-width:110px}
+.tv-stat-n{font-size:36px;font-weight:700;line-height:1;color:#4CAF50}
+.tv-stat-l{font-size:12px;color:#4A7A4A;margin-top:4px;letter-spacing:.5px;text-transform:uppercase}
+.tv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:0 24px 24px}
+.tv-card{background:#0F2A0F;border:1.5px solid #1A4A1A;border-radius:14px;padding:18px 20px}
+.tv-card.urgent{border-color:#EF5350;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{border-color:#EF5350}50%{border-color:#FF8A80}}
+.tv-card-num{font-size:12px;color:#4A7A4A;margin-bottom:8px;font-weight:600}
+.tv-card-name{font-size:24px;font-weight:700;color:#fff;margin-bottom:6px}
+.tv-card-phone{font-size:16px;color:#88B888;margin-bottom:10px;direction:ltr;text-align:right}
+.tv-card-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:10px}
+.tv-badge-new{background:#D84315;color:#fff}
+.tv-badge-slau{background:#B71C1C;color:#fff}
+.tv-badge-butc{background:#1565C0;color:#fff}
+.tv-badge-done2{background:#2E7D32;color:#fff}
+.tv-card-info{font-size:15px;color:#A5C8A5;line-height:1.7}
+.tv-card-info b{color:#fff}
+.tv-card-time{font-size:13px;color:#4A7A4A;margin-top:8px;font-family:monospace}
+.tv-empty{text-align:center;padding:80px 20px;color:#2A5A2A;font-size:20px}
 </style>
 </head>
 <body>
@@ -209,6 +234,7 @@ input,button,select,textarea{font-family:inherit}
   <button class="nb active" id="nav-orders" onclick="T('orders')">&#x1F4CB; الطلبات</button>
   <button class="nb" id="nav-add" onclick="T('add')">&#x2795; إضافة طلب</button>
   <button class="nb" id="nav-report" onclick="T('report')">&#x1F4CA; التقرير اليومي</button>
+  <button class="nb" id="nav-tv" onclick="T('tv')">&#x1F4FA; شاشة TV</button>
 </div>
 
 <div class="body">
@@ -293,6 +319,11 @@ input,button,select,textarea{font-family:inherit}
   </div>
 </div>
 
+
+<!-- TV TAB -->
+<div class="tab" id="tab-tv" style="padding:0">
+  <div id="tv-body" style="background:#0A1A0A;min-height:100vh;padding:20px"></div>
+</div>
 </div><!-- /body -->
 
 <script>
@@ -345,6 +376,8 @@ db.ref("eid_orders").orderByChild("createdAt").on("value", function(snap){
   // Refresh slots if date selected
   var fd = document.getElementById("fdate");
   if(fd && fd.value) renderSlots();
+  // Refresh TV if active
+  if(document.getElementById("tab-tv").classList.contains("active")) renderTV();
 }, function(err){
   document.getElementById("sdot").className = "dot err";
   document.getElementById("stxt").textContent = "خطأ — " + err.code;
@@ -459,7 +492,7 @@ function buildCard(o, now){
     +"<button class='ubtn' onclick='US2(\""+o._key+"\")'>تحديث</button>"
     +"<button class='prtbtn' onclick='showPrint(\""+o._key+"\")'>&#x1F5A8;</button>"
     +"<div class='wa-wrap' id='waw-"+o._key+"'><button class='wa-btn' onclick='openWA(\""+o._key+"\",\""+ph+"\",event)'>&#x1F4AC; ▾</button></div>"
-    +"<button class='delbtn' onclick='DEL(\""+o._key+"\")'>&#x1F5D1;</button>"
+    +"<button style='padding:7px 10px;border-radius:8px;background:none;border:1.5px solid #E0DDD8;color:#2E6B2E;font-size:12px;font-weight:700;cursor:pointer' onclick='openEdit(\""+o._key+"\")'> &#x270F; تعديل</button>"+"<button class='delbtn' onclick='DEL(\""+o._key+"\")'>&#x1F5D1;</button>"
     +"</div></div>";
 }
 
@@ -809,18 +842,190 @@ function RR(){
 
 // ── Tab switch ────────────────────────────────
 function T(n){
-  ["orders","add","report"].forEach(function(t){
+  ["orders","add","report","tv"].forEach(function(t){
     document.getElementById("tab-"+t).classList.remove("active");
     document.getElementById("nav-"+t).classList.remove("active");
   });
   document.getElementById("tab-"+n).classList.add("active");
   document.getElementById("nav-"+n).classList.add("active");
   if(n==="report") RR();
+  if(n==="tv") renderTV();
+  if(n!=="tv" && tvTimer){ clearInterval(tvTimer); tvTimer=null; }
 }
 
 // ── Init ──────────────────────────────────────
 document.getElementById("rd").value = new Date().toISOString().slice(0,10);
 buildSheep();
+
+// ── TV MODE ───────────────────────────────────
+var tvTimer = null;
+
+function renderTV(){
+  var el = document.getElementById("tv-body");
+  if(!el) return;
+  var now = new Date();
+  // Show all except done/pend
+  var active = AD.filter(function(o){ return o.status!=="done"&&o.status!=="pend"; });
+  // Sort by urgency: overdue first, then by delivery time
+  active.sort(function(a,b){
+    var at = a.deliveryDatetime?new Date(a.deliveryDatetime):new Date(9e15);
+    var bt = b.deliveryDatetime?new Date(b.deliveryDatetime):new Date(9e15);
+    return at-bt;
+  });
+  var counts = {new:0,slau:0,butc:0,done2:0};
+  AD.forEach(function(o){ if(counts[o.status]!==undefined) counts[o.status]++; });
+
+  var timeStr = now.toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+
+  var html = "<div class='tv-header'>"
+    +"<div class='tv-title'>&#x1F411; أضاحي عيد الأضحى — مطعم المركزية</div>"
+    +"<div class='tv-time' id='tv-clock'>"+timeStr+"</div>"
+    +"</div>"
+    +"<div class='tv-stats'>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#FFAB91'>"+ar(counts.new)+"</div><div class='tv-stat-l'>جديد</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#EF9A9A'>"+ar(counts.slau)+"</div><div class='tv-stat-l'>مذبوح</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#90CAF9'>"+ar(counts.butc)+"</div><div class='tv-stat-l'>عند اللحام</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#A5D6A7'>"+ar(counts.done2)+"</div><div class='tv-stat-l'>تم التجهيز</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#69F0AE'>"+ar(AD.filter(function(o){return o.status==="done";}).length)+"</div><div class='tv-stat-l'>سُلِّم</div></div>"
+    +"</div>";
+
+  if(!active.length){
+    html += "<div class='tv-empty'>&#x2705; جميع الطلبات تم تسليمها</div>";
+  } else {
+    html += "<div class='tv-cards'>" + active.map(function(o){
+      var sm = SM[o.status]||SM.new;
+      var dtO = o.deliveryDatetime?new Date(o.deliveryDatetime):null;
+      var dtS = dtO?dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
+      var overdue = dtO&&(now-dtO)>0;
+      var urgent = dtO&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
+      var badgeCls = "tv-badge-"+(SM[o.status]?o.status:"new");
+      var sheep = o.sheep||[];
+      var sheepSummary = sheep.map(function(s,i){ return "خروف "+(i+1)+": "+(s.type||"")+" | "+(s.cutType||""); }).join(" — ");
+      return "<div class='tv-card"+(overdue||urgent?" urgent":"")+"'>"
+        +"<div class='tv-card-num'>طلب #"+(o.orderNum||o._key.slice(-5).toUpperCase())
+        +(overdue?" &#x1F6A8; متأخر":urgent?" &#x26A1; قريب":"")+"</div>"
+        +"<div class='tv-card-name'>"+(o.clientName||"—")+"</div>"
+        +"<div class='tv-card-phone'>"+(o.clientPhone||"—")+"</div>"
+        +"<span class='tv-card-badge "+badgeCls+"'>"+sm.ar+"</span>"
+        +"<div class='tv-card-info'>"
+        +"<b>"+ar(o.count||1)+" خروف</b> | "+(o.deliveryType||"—")
+        +(sheepSummary?"<br><span style='font-size:13px'>"+sheepSummary+"</span>":"")
+        +"</div>"
+        +"<div class='tv-card-time'>&#x1F4C5; "+dtS+"</div>"
+        +"</div>";
+    }).join("") + "</div>";
+  }
+  el.innerHTML = html;
+  // Live clock
+  if(tvTimer) clearInterval(tvTimer);
+  tvTimer = setInterval(function(){
+    var cl = document.getElementById("tv-clock");
+    if(cl) cl.textContent = new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  }, 1000);
+}
+
+// ── EDIT ORDER ────────────────────────────────
+var editKey = null;
+
+function openEdit(key){
+  editKey = key;
+  var o = AD.find(function(x){ return x._key===key; });
+  if(!o) return;
+  var dtDate = (o.deliveryDatetime||"").slice(0,10);
+  var dtTime = (o.deliveryDatetime||"").slice(11,16);
+  var sheep = o.sheep||[];
+  var sheepHTML = sheep.map(function(s,i){
+    return "<div style='background:#F0FBF4;border:1.5px solid #A5D6A7;border-radius:10px;padding:12px 14px;margin-bottom:10px'>"
+      +"<div style='font-size:12px;font-weight:700;color:#1B3A1B;margin-bottom:8px'>&#x1F411; خروف "+(i+1)+"</div>"
+      +"<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px'>"
+      +"<div><div class='flbl' style='margin-bottom:5px'>عن مين يُذبح</div>"
+      +"<input type='text' class='fi' id='es-for-"+i+"' value='"+(s.for||"").replace(/'/g,"&#39;")+"'/></div>"
+      +"<div><div class='flbl' style='margin-bottom:5px'>نوع الطلب</div>"
+      +"<select class='fsel' id='es-cut-"+i+"'>"
+      +["تقطيع بحضور العميل","تقطيع المركزية","ملاحظات معينة","تبرع للجمعيات","حضور الذبح فقط"].map(function(opt){
+        return "<option value='"+opt+"'"+(s.cutType===opt?" selected":"")+">"+opt+"</option>";
+      }).join("")
+      +"</select></div>"
+      +"</div>"
+      +"<div style='margin-top:8px'><div class='flbl' style='margin-bottom:5px'>ملاحظات</div>"
+      +"<input type='text' class='fi' id='es-note-"+i+"' value='"+(s.cutNotes||"").replace(/'/g,"&#39;")+"' placeholder='ملاحظات خاصة'/></div>"
+      +"</div>";
+  }).join("");
+
+  document.getElementById("edit-body").innerHTML =
+    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px'>"
+    +"<div><div class='flbl' style='margin-bottom:5px'>اسم العميل</div><input type='text' class='fi' id='e-name' value='"+(o.clientName||"").replace(/'/g,"&#39;")+"'/></div>"
+    +"<div><div class='flbl' style='margin-bottom:5px'>رقم الجوال</div><input type='tel' class='fi' id='e-phone' value='"+(o.clientPhone||"")+"' style='direction:ltr;text-align:right'/></div>"
+    +"<div><div class='flbl' style='margin-bottom:5px'>تاريخ التسليم</div><input type='date' class='fi' id='e-date' value='"+dtDate+"'/></div>"
+    +"<div><div class='flbl' style='margin-bottom:5px'>وقت التسليم</div><input type='time' class='fi' id='e-time' value='"+dtTime+"'/></div>"
+    +"</div>"
+    +"<div style='margin-bottom:14px'><div class='flbl' style='margin-bottom:6px'>طريقة الاستلام</div>"
+    +"<select class='fsel' id='e-del'>"
+    +["استلام من المطعم","استلام من الجزار","استلام من المزرعة","توصيل للبيت"].map(function(opt){
+      return "<option value='"+opt+"'"+(o.deliveryType===opt?" selected":"")+">"+opt+"</option>";
+    }).join("")
+    +"</select></div>"
+    +(o.address?"<div style='margin-bottom:14px'><div class='flbl' style='margin-bottom:6px'>العنوان</div><input type='text' class='fi' id='e-addr' value='"+(o.address||"")+"'/></div>":"")
+    +(sheepHTML?"<div style='font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px'>تفاصيل الأضاحي</div>"+sheepHTML:"");
+
+  document.getElementById("edit-ovl").style.display="flex";
+}
+
+function closeEdit(){
+  document.getElementById("edit-ovl").style.display="none";
+  editKey = null;
+}
+
+function saveEdit(){
+  if(!editKey) return;
+  var o = AD.find(function(x){ return x._key===editKey; });
+  if(!o) return;
+  var name  = document.getElementById("e-name").value.trim();
+  var phone = document.getElementById("e-phone").value.trim();
+  var date  = document.getElementById("e-date").value;
+  var time  = document.getElementById("e-time").value;
+  var del   = document.getElementById("e-del").value;
+  var addr  = document.getElementById("e-addr")?document.getElementById("e-addr").value.trim():"";
+  if(!name||!phone||!date||!time){ alert("يرجى تعبئة جميع الحقول الأساسية"); return; }
+  var dt = date+"T"+time+":00";
+  // Update sheep
+  var sheep = (o.sheep||[]).map(function(s,i){
+    var forEl  = document.getElementById("es-for-"+i);
+    var cutEl  = document.getElementById("es-cut-"+i);
+    var noteEl = document.getElementById("es-note-"+i);
+    return Object.assign({},s,{
+      for:  forEl  ? forEl.value.trim()  : s.for,
+      cutType: cutEl  ? cutEl.value        : s.cutType,
+      cutNotes: noteEl ? noteEl.value.trim() : s.cutNotes,
+    });
+  });
+  var btn = document.getElementById("edit-save-btn");
+  btn.textContent="جاري الحفظ..."; btn.disabled=true;
+  db.ref("eid_orders/"+editKey).update({
+    clientName: name, clientPhone: phone,
+    deliveryDatetime: dt, deliveryDate: date,
+    deliveryType: del, address: addr,
+    sheep: sheep,
+    lastEdited: new Date().toISOString(),
+  }).then(function(){
+    btn.textContent="&#x2713; تم الحفظ!";
+    setTimeout(function(){ closeEdit(); btn.textContent="حفظ التعديلات"; btn.disabled=false; }, 1200);
+  }).catch(function(e){ alert("خطأ: "+e.message); btn.textContent="حفظ التعديلات"; btn.disabled=false; });
+}
 </script>
+
+<!-- EDIT MODAL -->
+<div id="edit-ovl" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeEdit()">
+  <div style="background:#fff;border-radius:16px;padding:24px 28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative">
+    <button onclick="closeEdit()" style="position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#AAA">&#x2715;</button>
+    <div style="font-size:16px;font-weight:700;color:#1B3A1B;margin-bottom:18px">&#x270F;&#xFE0F; تعديل الطلب</div>
+    <div id="edit-body"></div>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button id="edit-save-btn" onclick="saveEdit()" style="flex:1;padding:12px;border-radius:9px;background:#2E6B2E;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer">حفظ التعديلات</button>
+      <button onclick="closeEdit()" style="padding:12px 20px;border-radius:9px;background:#F5F3EE;color:#555;border:1.5px solid #DDD;font-size:14px;cursor:pointer">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
