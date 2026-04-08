@@ -8,27 +8,26 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#F5F3EE;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;color:#1A1A1A;direction:rtl;min-height:100vh}
+body{background:#F5F3EE;font-family:"Segoe UI",Tahoma,sans-serif;color:#1A1A1A;direction:rtl}
 input,button,select,textarea{font-family:inherit}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#EEE}::-webkit-scrollbar-thumb{background:#C5B99A;border-radius:3px}
-/* HEADER */
-.hdr{background:linear-gradient(135deg,#1B3A1B 0%,#2E6B2E 55%,#1B3A1B 100%);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.hdr-title{color:#fff;font-weight:700;font-size:19px;display:flex;align-items:center;gap:10px}
+.hdr{background:linear-gradient(135deg,#1B3A1B,#2E6B2E,#1B3A1B);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr-title{color:#fff;font-weight:700;font-size:18px}
 .hdr-sub{color:rgba(255,255,255,.5);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 .hdr-r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.sp{background:rgba(255,255,255,.12);border-radius:10px;padding:7px 13px;text-align:center;min-width:68px}
-.sp-n{color:#fff;font-weight:700;font-size:20px;line-height:1.1}
+.sp{background:rgba(255,255,255,.12);border-radius:10px;padding:7px 13px;text-align:center;min-width:65px}
+.sp-n{color:#fff;font-weight:700;font-size:19px;line-height:1.1}
 .sp-l{color:rgba(255,255,255,.55);font-size:10px;margin-top:2px}
 .sync{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:11px;padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:5px}
-.dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:pulse 2s infinite}
+.dot{width:7px;height:7px;border-radius:50%;background:#888;flex-shrink:0}
+.dot.live{background:#4CAF50;animation:pulse 2s infinite}
+.dot.err{background:#EF5350}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-/* NAV */
 .nav{background:#fff;border-bottom:1.5px solid #E5E0D8;padding:0 24px;display:flex;gap:2px;overflow-x:auto}
-.nb{padding:12px 20px;cursor:pointer;font-size:13px;background:none;border:none;border-bottom:3px solid transparent;color:#888;white-space:nowrap;font-weight:500}
+.nb{padding:12px 20px;cursor:pointer;font-size:13px;background:none;border:none;border-bottom:3px solid transparent;color:#888;white-space:nowrap;font-weight:500;transition:all .15s}
 .nb.active{color:#2E6B2E;border-bottom-color:#2E6B2E;font-weight:700}
 .body{padding:18px 24px}
 .tab{display:none}.tab.active{display:block}
-/* TOOLBAR */
+/* toolbar */
 .toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
 .si{flex:1;min-width:200px;padding:9px 13px;border-radius:10px;border:1.5px solid #E0DDD8;background:#fff;font-size:13px}
 .si:focus{outline:none;border-color:#2E6B2E}
@@ -36,25 +35,25 @@ input,button,select,textarea{font-family:inherit}
 .df:focus{outline:none;border-color:#2E6B2E}
 .tb{padding:9px 14px;border-radius:10px;border:1.5px solid #E0DDD8;background:#fff;font-size:12px;color:#555;cursor:pointer;white-space:nowrap;font-weight:500}
 .tb.on{background:#2E6B2E;color:#fff;border-color:#2E6B2E}
-/* STATUS BAR */
+/* status bar */
 .sbar{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap}
 .sfp{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid #DDD8D0;background:#fff;color:#888;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:5px}
 .sfp.active{border-color:transparent;color:#fff}
-.sf-all.active{background:#1B3A1B}.sf-new.active{background:#D84315}.sf-slau.active{background:#B71C1C}
-.sf-butc.active{background:#1565C0}.sf-done2.active{background:#558B2F}.sf-done.active{background:#1B5E20}.sf-pres.active{background:#6A1B9A}
+.sf-all.active{background:#1B3A1B}
+.sf-new.active{background:#D84315}
+.sf-slau.active{background:#B71C1C}
+.sf-butc.active{background:#1565C0}
+.sf-done2.active{background:#558B2F}
+.sf-done.active{background:#1B5E20}
+.sf-pres.active{background:#6A1B9A}
 .sc{font-size:10px;background:rgba(255,255,255,.25);padding:1px 6px;border-radius:8px}
 .sfp:not(.active) .sc{background:#F0EDE8;color:#888}
-/* CARDS */
+/* cards */
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:13px}
-.ocard{background:#fff;border-radius:14px;border:1.5px solid #E5E0D8;transition:box-shadow .2s;position:relative}
-.ocard:hover{box-shadow:0 4px 20px rgba(0,0,0,.08)}
-/* Farm pickup card — different color */
-.ocard.farm-pickup{border-color:#2E6B2E;border-width:2px}
-.ocard.farm-pickup .chtop{background:#E8F5E9}
-/* Presence only card */
-.ocard.presence-only{border-color:#6A1B9A;border-width:2px}
-.ocard.presence-only .chtop{background:#F3E5F5}
-.chtop{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F0EDE8}
+.ocard{background:#fff;border-radius:14px;border:1.5px solid #E5E0D8;position:relative}
+.ocard.farm-c{border-color:#2E6B2E;border-width:2px}
+.ocard.pres-c{border-color:#6A1B9A;border-width:2px}
+.chtop{padding:11px 16px 0;display:flex;align-items:center;justify-content:space-between}
 .chnum{font-size:11px;color:#B0A898;font-weight:700}
 .sbadge{padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700}
 .b-new{background:#FBE9E7;color:#BF360C}
@@ -63,75 +62,80 @@ input,button,select,textarea{font-family:inherit}
 .b-done2{background:#F1F8E9;color:#33691E}
 .b-done{background:#E8F5E9;color:#1B5E20}
 .b-pres{background:#EDE7F6;color:#4A148C}
-.b-pend{background:#FFF3E0;color:#E65100}
-/* Card body */
+.b-pend{background:#F3E5F5;color:#6A1B9A}
 .cbody{padding:11px 16px 13px}
 .crow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .av{width:40px;height:40px;border-radius:50%;background:#E8F5E9;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.av.farm{background:#C8E6C9}
-.av.pres{background:#E1BEE7}
 .cn{font-weight:700;font-size:15px}
 .cp{font-size:12px;color:#888;direction:ltr;text-align:right}
 .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
 .tag{padding:3px 9px;border-radius:7px;font-size:11px;font-weight:600}
-.tg{background:#F1F8E9;color:#33691E}.ta{background:#FFF8E1;color:#E65100}.tb2{background:#E8EAF6;color:#1A237E}.tp{background:#FCE4EC;color:#880E4F}
-.tt{background:#E0F7FA;color:#004D40}.tpu{background:#F3E5F5;color:#4A148C}.tr{background:#FFEBEE;color:#B71C1C}.tgr{background:#E8F5E9;color:#1B5E20}
+.tg{background:#F1F8E9;color:#33691E}
+.ta{background:#FFF8E1;color:#E65100}
+.tb2{background:#E8EAF6;color:#1A237E}
+.tp{background:#FCE4EC;color:#880E4F}
+.tt{background:#E0F7FA;color:#004D40}
+.tpu{background:#F3E5F5;color:#4A148C}
+.tr{background:#FFEBEE;color:#B71C1C}
 .tfarm{background:#C8E6C9;color:#1B5E20;border:1px solid #81C784}
 .iline{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:#555;margin-bottom:4px}
 .pbanner{background:#FFF3E0;border:1px solid #FFE0B2;border-radius:8px;padding:6px 10px;margin-bottom:7px;font-size:11px;color:#E65100;font-weight:700}
-/* Sheep details per card */
 .sheep-list{margin-top:8px;display:flex;flex-direction:column;gap:6px}
 .sheep-item{background:#F9F7F4;border-radius:9px;padding:9px 12px;border:1px solid #E5E0D8}
-.sheep-hdr{font-weight:700;font-size:12px;color:#2E6B2E;margin-bottom:5px;display:flex;align-items:center;gap:5px}
-.sheep-row{font-size:11px;color:#555;margin-bottom:2px;display:flex;align-items:flex-start;gap:5px}
-.sheep-row b{color:#1A1A1A}
-.donation-badge{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:6px;padding:3px 8px;font-size:11px;color:#1B5E20;font-weight:600;margin-top:3px;display:inline-block}
+.sh-hdr{font-weight:700;font-size:12px;color:#2E6B2E;margin-bottom:5px}
+.sh-row{font-size:11px;color:#555;margin-bottom:2px}
+.don-badge{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:6px;padding:3px 8px;font-size:11px;color:#1B5E20;font-weight:600;margin-top:3px;display:inline-block}
 .nbox{background:#FFFDE7;border:1px solid #FFF176;border-radius:8px;padding:7px 10px;margin-top:4px}
 .nlbl{font-size:10px;font-weight:700;color:#F9A825;margin-bottom:2px}
 .ntxt{font-size:12px;color:#555;line-height:1.5}
-/* Weight input */
 .wrow{display:flex;align-items:center;gap:8px;margin-top:7px;background:#F3E5F5;border-radius:8px;padding:6px 10px}
 .winp{border:none;background:transparent;font-size:13px;font-weight:700;color:#4A148C;width:75px;direction:ltr;text-align:center}
 .winp:focus{outline:none}
 .wsave{padding:3px 10px;border-radius:6px;background:#6A1B9A;color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer}
-/* Print card button */
-.print-btn{padding:5px 12px;border-radius:7px;background:#1B3A1B;color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
-.print-btn:hover{background:#2E6B2E}
 .ctime{font-size:10px;color:#C0B8AC;margin-top:5px}
-/* Card footer */
 .cftr{border-top:1px solid #F0EDE8;padding:9px 16px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .stsel{flex:1;min-width:120px;padding:7px 9px;border-radius:8px;border:1.5px solid #DDD8D0;font-size:12px;background:#F9F7F4;cursor:pointer}
 .stsel:focus{outline:none;border-color:#2E6B2E}
 .ubtn{padding:7px 13px;border-radius:8px;background:#2E6B2E;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer}
 .ubtn:hover{background:#1B3A1B}
+/* WA dropdown — fixed position, high z-index */
 .wa-wrap{position:relative;display:inline-block}
 .wa-btn{padding:7px 11px;border-radius:8px;background:#25D366;color:#fff;border:none;font-size:13px;cursor:pointer;font-weight:700}
 .wa-btn:hover{background:#1DA851}
-.wa-menu{position:fixed;background:#fff;border-radius:10px;border:1.5px solid #E5E0D8;box-shadow:0 8px 28px rgba(0,0,0,.15);z-index:9999;min-width:230px;}
-.wa-item{padding:11px 15px;font-size:13px;cursor:pointer;color:#333;display:flex;align-items:center;gap:8px;text-decoration:none}
+.wa-menu{position:fixed;background:#fff;border-radius:10px;border:1.5px solid #E5E0D8;box-shadow:0 8px 28px rgba(0,0,0,.15);z-index:9999;min-width:230px;overflow:hidden}
+.wa-item{padding:11px 15px;font-size:13px;cursor:pointer;color:#333;display:flex;align-items:center;gap:8px;text-decoration:none;transition:background .15s}
 .wa-item:hover{background:#E8F5E9;color:#1B5E20}
 .delbtn{padding:7px 9px;border-radius:8px;background:none;border:1.5px solid #EEE;color:#CCC;font-size:13px;cursor:pointer}
 .delbtn:hover{border-color:#EF9A9A;color:#E53935}
-/* PRINT CARD */
-.print-card-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
-.print-card{background:#fff;border-radius:16px;padding:28px 32px;max-width:420px;width:100%;position:relative}
+.prtbtn{padding:7px 10px;border-radius:8px;background:#1B3A1B;color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer}
+/* print overlay */
+.povl{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.pcard{background:#fff;border-radius:16px;padding:28px 32px;max-width:420px;width:100%;position:relative;max-height:90vh;overflow-y:auto}
 .pc-close{position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#AAA}
-.pc-logo{font-size:28px;margin-bottom:4px}
-.pc-title{font-size:18px;font-weight:700;color:#1B3A1B}
-.pc-sub{font-size:12px;color:#888;margin-bottom:16px}
 .pc-line{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F0EDE8;font-size:13px}
 .pc-line:last-of-type{border-bottom:none}
 .pc-key{color:#888}
-.pc-val{font-weight:600;color:#1A1A1A;text-align:left}
-.pc-sheep{background:#E8F5E9;border-radius:10px;padding:10px 14px;margin:10px 0}
+.pc-val{font-weight:600;text-align:left}
+.pc-sheep{background:#E8F5E9;border-radius:10px;padding:10px 14px;margin:8px 0}
 .pc-sheep-title{font-weight:700;font-size:12px;color:#1B3A1B;margin-bottom:5px}
 .pc-sheep-line{font-size:12px;color:#444;margin-bottom:2px}
-.pc-footer{text-align:center;margin-top:14px;font-size:11px;color:#AAA}
-.pc-print-btn{width:100%;padding:11px;background:#1B3A1B;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px}
+.pbtn{width:100%;padding:11px;background:#1B3A1B;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px}
+/* SLOTS */
+.slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:10px}
+.slot{padding:10px 8px;border-radius:10px;border:1.5px solid #E0DBD3;background:#F9F7F4;cursor:pointer;text-align:center;transition:all .2s}
+.slot:hover:not(.slot-full){border-color:#2E6B2E;background:#E8F5E9}
+.slot.slot-sel{border-color:#2E6B2E;background:#2E6B2E;color:#fff}
+.slot.slot-full{background:#F5F5F5;border-color:#EEE;cursor:not-allowed;opacity:.6}
+.slot-time{font-size:14px;font-weight:700;display:block;margin-bottom:4px}
+.slot-info{font-size:11px;color:#888;display:block}
+.slot.slot-sel .slot-info{color:rgba(255,255,255,.8)}
+.slot.slot-full .slot-time{color:#AAA}
+.slot-sheep-cnt{font-size:10px;color:#2E6B2E;display:block;margin-top:2px}
+.slot.slot-sel .slot-sheep-cnt{color:rgba(255,255,255,.75)}
 /* FORM */
-.fwrap{max-width:700px}
+.fwrap{max-width:680px}
 .fcard{background:#fff;border-radius:14px;border:1.5px solid #E5E0D8;padding:20px 22px;margin-bottom:13px}
-.fsec{font-size:12px;color:#2E6B2E;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:15px;display:flex;align-items:center;gap:7px}
+.fsec{font-size:12px;color:#2E6B2E;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:15px}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg.full{grid-column:1/-1}
@@ -140,24 +144,22 @@ input,button,select,textarea{font-family:inherit}
 .fi:focus,.fsel:focus,.fta:focus{outline:none;border-color:#2E6B2E}
 .fta{resize:vertical;min-height:65px}
 .rwrap{display:flex;gap:7px;flex-wrap:wrap}
-.ropt{display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:9px;border:1.5px solid #E0DBD3;background:#F9F7F4;cursor:pointer;font-size:13px;font-weight:500;user-select:none}
+.ropt{display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:9px;border:1.5px solid #E0DBD3;background:#F9F7F4;cursor:pointer;font-size:13px;font-weight:500;user-select:none;transition:all .2s}
 .ropt:hover{border-color:#2E6B2E}
 .ropt.active{border-color:#2E6B2E;background:#E8F5E9;color:#1B5E20;font-weight:700}
 .ropt input{display:none}
-/* Sheep block in form */
-.sheep-block{background:#F0FBF4;border:1.5px solid #A5D6A7;border-radius:12px;padding:16px 18px;margin-bottom:12px}
-.sheep-block-title{font-size:13px;font-weight:700;color:#1B3A1B;margin-bottom:12px;display:flex;align-items:center;gap:7px}
-.cut-detail{background:#FFF8E1;border:1px solid #FFE082;border-radius:9px;padding:12px 14px;margin-top:10px}
-.cut-detail-title{font-size:11px;font-weight:700;color:#F9A825;margin-bottom:8px;text-transform:uppercase}
-/* Dup warning */
-.dup{background:#FFF3E0;border:1.5px solid #FFB74D;border-radius:9px;padding:10px 14px;font-size:13px;color:#E65100;margin-bottom:12px;display:none}
+.sheep-blk{background:#F0FBF4;border:1.5px solid #A5D6A7;border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.sheep-blk-title{font-size:13px;font-weight:700;color:#1B3A1B;margin-bottom:12px}
+.cut-det{background:#FFF8E1;border:1px solid #FFE082;border-radius:9px;padding:12px 14px;margin-top:10px}
+.cut-det-title{font-size:11px;font-weight:700;color:#F9A825;margin-bottom:8px;text-transform:uppercase}
+.dup-warn{background:#FFF3E0;border:1.5px solid #FFB74D;border-radius:9px;padding:10px 14px;font-size:13px;color:#E65100;margin-bottom:12px;display:none}
 .sbtn{width:100%;padding:13px;border-radius:10px;border:none;cursor:pointer;font-size:15px;font-weight:700;color:#fff;transition:all .3s}
 .sbtn.idle{background:#2E6B2E}.sbtn.saving{background:#888}.sbtn.ok{background:#1565C0}
 .smsg{font-size:12px;margin-top:7px;color:#2E6B2E;display:none;text-align:center}
 /* REPORT */
-.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.rgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
 .rcard{background:#fff;border-radius:12px;padding:14px 16px;border:1.5px solid #E5E0D8}
-.rn{font-size:30px;font-weight:700;line-height:1.1}
+.rn{font-size:28px;font-weight:700;line-height:1.1}
 .rl{font-size:11px;color:#888;margin-top:4px}
 .rsec{background:#fff;border-radius:12px;padding:18px 20px;border:1.5px solid #E5E0D8;margin-bottom:12px}
 .rtit{font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
@@ -170,26 +172,22 @@ input,button,select,textarea{font-family:inherit}
 .empty-i{font-size:52px;opacity:.12;margin-bottom:12px}
 .empty-t{color:#AAA;font-size:14px;margin-bottom:8px}
 .empty-l{background:none;border:none;color:#2E6B2E;font-size:13px;cursor:pointer;text-decoration:underline}
-@media print{
-  body>*:not(#print-overlay){display:none!important}
-  #print-overlay{position:static!important;background:none!important;padding:0!important}
-  .print-card{box-shadow:none!important;border-radius:0!important}
-  .pc-close,.pc-print-btn{display:none!important}
-}
+@media print{body>*:not(#povl){display:none!important}.povl{position:static!important;background:none!important;padding:0!important}.pcard{box-shadow:none!important}.pc-close,.pbtn{display:none!important}}
 @media(max-width:600px){.fgrid{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr 1fr}.hdr{flex-direction:column;align-items:flex-start}.toolbar{flex-direction:column}}
 </style>
 </head>
 <body>
 
-<!-- PRINT OVERLAY -->
-<div id="print-overlay" class="print-card-overlay" style="display:none" onclick="closePrint(event)">
-  <div class="print-card" id="print-content" onclick="event.stopPropagation()">
+<!-- Print overlay -->
+<div id="povl" class="povl" style="display:none" onclick="if(event.target===this)closePrint()">
+  <div class="pcard">
     <button class="pc-close" onclick="closePrint()">&#x2715;</button>
-    <div id="print-body"></div>
-    <button class="pc-print-btn" onclick="window.print()">&#x1F5A8; طباعة الكرت التعريفي</button>
+    <div id="pbody"></div>
+    <button class="pbtn" onclick="window.print()">&#x1F5A8; طباعة</button>
   </div>
 </div>
 
+<!-- Header -->
 <div class="hdr">
   <div>
     <div class="hdr-title">&#x1F411; داشبورد أضاحي عيد الأضحى</div>
@@ -206,6 +204,7 @@ input,button,select,textarea{font-family:inherit}
   </div>
 </div>
 
+<!-- Nav -->
 <div class="nav">
   <button class="nb active" id="nav-orders" onclick="T('orders')">&#x1F4CB; الطلبات</button>
   <button class="nb" id="nav-add" onclick="T('add')">&#x2795; إضافة طلب</button>
@@ -214,7 +213,7 @@ input,button,select,textarea{font-family:inherit}
 
 <div class="body">
 
-<!-- ORDERS -->
+<!-- ORDERS TAB -->
 <div class="tab active" id="tab-orders">
   <div class="toolbar">
     <input class="si" id="si" placeholder="&#x1F50D; ابحث بالاسم أو رقم الجوال..." oninput="RC()"/>
@@ -228,40 +227,48 @@ input,button,select,textarea{font-family:inherit}
     <button class="sfp sf-slau"       id="fp-slau"  onclick="F('slau')">&#x1F52A; مذبوح <span class="sc" id="fc-slau">٠</span></button>
     <button class="sfp sf-butc"       id="fp-butc"  onclick="F('butc')">&#x1F969; عند اللحام <span class="sc" id="fc-butc">٠</span></button>
     <button class="sfp sf-done2"      id="fp-done2" onclick="F('done2')">&#x2705; تم التجهيز <span class="sc" id="fc-done2">٠</span></button>
-    <button class="sfp sf-done"       id="fp-done"  onclick="F('done')">&#x1F7E2; سُلِّم للعميل <span class="sc" id="fc-done">٠</span></button>
+    <button class="sfp sf-done"       id="fp-done"  onclick="F('done')">&#x1F7E2; سُلِّم <span class="sc" id="fc-done">٠</span></button>
     <button class="sfp sf-pres"       id="fp-pres"  onclick="F('pres')">&#x1F440; حضور الذبح <span class="sc" id="fc-pres">٠</span></button>
   </div>
-  <div class="cgrid" id="cc"><div class="empty"><div class="empty-i">&#x1F411;</div><div class="empty-t">جاري تحميل الطلبات...</div></div></div>
+  <div class="cgrid" id="cc"><div class="empty"><div class="empty-i">&#x1F411;</div><div class="empty-t">جاري الاتصال...</div></div></div>
 </div>
 
-<!-- ADD ORDER -->
+<!-- ADD TAB -->
 <div class="tab" id="tab-add">
   <div class="fwrap">
-    <div id="dw" class="dup"></div>
-
+    <div id="dw" class="dup-warn"></div>
     <div class="fcard">
       <div class="fsec">&#x1F464; بيانات العميل</div>
       <div class="fgrid">
         <div class="fg"><div class="flbl">اسم العميل *</div><input type="text" class="fi" id="fn" placeholder="محمد أبو علي"/></div>
         <div class="fg"><div class="flbl">رقم الجوال *</div><input type="tel" class="fi" id="fph" placeholder="07XXXXXXXX" style="direction:ltr;text-align:right" oninput="chkDup()"/></div>
-        <div class="fg"><div class="flbl">عدد الأضاحي *</div><input type="number" class="fi" id="fct" min="1" value="1" oninput="buildSheepForms()" onchange="buildSheepForms()"/></div>
-        <div class="fg"><div class="flbl">موعد التسليم *</div><input type="datetime-local" class="fi" id="fdt"/></div>
+        <div class="fg"><div class="flbl">عدد الأضاحي *</div><input type="number" class="fi" id="fct" min="1" value="1" onchange="buildSheep()"/></div>
+        <div class="fg"><div class="flbl">تاريخ الاستلام *</div><input type="date" class="fi" id="fdate" onchange="renderSlots()"/></div>
       </div>
-      <div class="fg" style="margin-bottom:14px">
+      <!-- Slots -->
+      <div id="slots-sec" style="display:none">
+        <div class="flbl" style="margin-bottom:8px">وقت الاستلام * <span style="font-size:11px;color:#888;font-weight:400">(١٠ عملاء كحد أقصى لكل ساعة)</span></div>
+        <div class="slot-grid" id="slots-grid"></div>
+        <input type="hidden" id="fdt"/>
+      </div>
+      <div style="height:8px"></div>
+      <!-- Delivery type -->
+      <div class="fg">
         <div class="flbl" style="margin-bottom:8px">طريقة الاستلام *</div>
         <div class="rwrap" id="del-opts">
-          <label class="ropt active" onclick="SO('del','استلام من المطعم',this)"><input type="radio" name="del" checked/> &#x1F3EA; استلام من المطعم</label>
-          <label class="ropt" onclick="SO('del','استلام من الجزار',this)"><input type="radio" name="del"/> &#x1F969; استلام من الجزار</label>
-          <label class="ropt" style="border-color:#2E6B2E;background:#E8F5E9;color:#1B5E20" onclick="SO('del','استلام من المزرعة',this)"><input type="radio" name="del"/> &#x1F33F; استلام من المزرعة</label>
+          <label class="ropt active" onclick="pickDel('استلام من المطعم',this)"><input type="radio" name="del" checked/> &#x1F3EA; من المطعم</label>
+          <label class="ropt" onclick="pickDel('استلام من الجزار',this)"><input type="radio" name="del"/> &#x1F969; من الجزار</label>
+          <label class="ropt" style="border-color:#2E6B2E" onclick="pickDel('استلام من المزرعة',this)"><input type="radio" name="del"/> &#x1F33F; من المزرعة</label>
+          <label class="ropt" onclick="pickDel('توصيل للبيت',this)"><input type="radio" name="del"/> &#x1F697; توصيل للبيت</label>
         </div>
-      </div>
-      <div class="fg" id="addr-g" style="display:none">
-        <div class="flbl">عنوان التوصيل</div>
-        <input type="text" class="fi" id="fad" placeholder="اكتب العنوان بالتفصيل"/>
+        <div id="addr-g" style="display:none;margin-top:10px">
+          <div class="flbl" style="margin-bottom:6px">عنوان التوصيل</div>
+          <input type="text" class="fi" id="fad" placeholder="اكتب العنوان بالتفصيل"/>
+        </div>
       </div>
     </div>
 
-    <!-- Sheep forms container -->
+    <!-- Sheep blocks -->
     <div id="sheep-forms"></div>
 
     <div class="fcard">
@@ -274,7 +281,7 @@ input,button,select,textarea{font-family:inherit}
   </div>
 </div>
 
-<!-- REPORT -->
+<!-- REPORT TAB -->
 <div class="tab" id="tab-report">
   <div style="max-width:780px">
     <div style="display:flex;gap:10px;margin-bottom:18px;align-items:center;flex-wrap:wrap">
@@ -286,15 +293,27 @@ input,button,select,textarea{font-family:inherit}
   </div>
 </div>
 
-</div><!-- body -->
+</div><!-- /body -->
 
 <script>
-firebase.initializeApp({apiKey:"AIzaSyCaEJOD5PP3mk9XaPkrG_NsbmMj__7K3PM",authDomain:"markaziyya-d14fd.firebaseapp.com",databaseURL:"https://markaziyya-d14fd-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"markaziyya-d14fd",storageBucket:"markaziyya-d14fd.firebasestorage.app",messagingSenderId:"821492235905",appId:"1:821492235905:web:b02d4706e18c5269199780"});
-var db=firebase.database();
-var AD=[],CF="all",ST=false,DV="استلام من المطعم",OM=null;
+// ── Firebase ──────────────────────────────────
+firebase.initializeApp({
+  apiKey:"AIzaSyCaEJOD5PP3mk9XaPkrG_NsbmMj__7K3PM",
+  authDomain:"markaziyya-d14fd.firebaseapp.com",
+  databaseURL:"https://markaziyya-d14fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"markaziyya-d14fd",
+  storageBucket:"markaziyya-d14fd.firebasestorage.app",
+  messagingSenderId:"821492235905",
+  appId:"1:821492235905:web:b02d4706e18c5269199780"
+});
+var db = firebase.database();
 
-var SM={
-  new:  {ar:"طلب جديد",       b:"b-new"},
+// ── State ─────────────────────────────────────
+var AD = [], CF = "all", SORT = false, DEL_TYPE = "استلام من المطعم", OPEN_WA = null, SEL_SLOT = null;
+var SLOTS_PER_HOUR = 10, H_START = 8, H_END = 22;
+
+var SM = {
+  new:  {ar:"طلب جديد",        b:"b-new"},
   slau: {ar:"مذبوح",           b:"b-slau"},
   butc: {ar:"عند اللحام",      b:"b-butc"},
   done2:{ar:"تم التجهيز",      b:"b-done2"},
@@ -303,389 +322,460 @@ var SM={
   pend: {ar:"انتهى",           b:"b-pend"},
 };
 
-var WA={
-  slau: function(o){return"أهلاً "+o.clientName+" 🌿\nتم ذبح أضحيتكم رقم #"+(o.orderNum||"")+" بنجاح.\nسنُبلغكم بخطوات التجهيز.\nمطعم المركزية 🐑";},
-  butc: function(o){return"أهلاً "+o.clientName+" 🔪\nأضحيتكم الآن عند اللحام للتجهيز.\nسنُبلغكم عند الانتهاء.\nمطعم المركزية";},
-  done2:function(o){return"أهلاً "+o.clientName+" ✅\nتم تجهيز أضحيتكم!\n"+(o.deliveryType==="استلام من المزرعة"?"يمكنكم الاستلام من المزرعة 🌿":o.deliveryType==="استلام من الجزار"?"يمكنكم الاستلام من الجزار 🔪":"يمكنكم الاستلام من المطعم 🏪")+"\nمطعم المركزية";},
-  done: function(o){return"أهلاً "+o.clientName+" 🌙\nتم تسليم أضحيتكم بنجاح.\nتقبّل الله منكم ومنّا.\nعيد أضحى مبارك 🎉\nمطعم المركزية";},
+var WA = {
+  slau: function(o){ return "أهلاً "+o.clientName+" 🌿\nتم ذبح أضحيتكم رقم #"+(o.orderNum||"")+".\nسنُبلغكم بالخطوات القادمة.\nمطعم المركزية 🐑"; },
+  butc: function(o){ return "أهلاً "+o.clientName+" 🔪\nأضحيتكم الآن عند اللحام.\nسنُبلغكم عند الانتهاء.\nمطعم المركزية"; },
+  done2:function(o){ return "أهلاً "+o.clientName+" ✅\nتم تجهيز أضحيتكم!\n"+(o.deliveryType||"استلام من المطعم")+".\nمطعم المركزية"; },
+  done: function(o){ return "أهلاً "+o.clientName+" 🌙\nتم تسليم أضحيتكم.\nتقبّل الله منكم.\nعيد أضحى مبارك 🎉\nمطعم المركزية"; },
 };
 
-function ar(n){return n.toString().replace(/\d/g,function(d){return"٠١٢٣٤٥٦٧٨٩"[d];});}
+// ── Helpers ───────────────────────────────────
+function ar(n){ return n.toString().replace(/\d/g, function(d){ return "٠١٢٣٤٥٦٧٨٩"[d]; }); }
 
-// Firebase listener
-db.ref("eid_orders").orderByChild("createdAt").on("value",function(snap){
-  AD=[];snap.forEach(function(c){AD.push(Object.assign({},c.val(),{_key:c.key}));});AD.reverse();
-  document.getElementById("sdot").style.background="#4CAF50";
-  document.getElementById("stxt").textContent="Live • "+AD.length+" طلب";
-  US();RC();RR();
-},function(){
-  document.getElementById("sdot").style.background="#EF5350";
-  document.getElementById("stxt").textContent="خطأ في الاتصال";
+// ── Firebase single listener ──────────────────
+db.ref("eid_orders").orderByChild("createdAt").on("value", function(snap){
+  AD = [];
+  snap.forEach(function(c){ AD.push(Object.assign({}, c.val(), {_key: c.key})); });
+  AD.reverse();
+  document.getElementById("sdot").className = "dot live";
+  document.getElementById("stxt").textContent = "Live • " + AD.length + " طلب";
+  updateStats();
+  RC();
+  RR();
+  // Refresh slots if date selected
+  var fd = document.getElementById("fdate");
+  if(fd && fd.value) renderSlots();
+}, function(err){
+  document.getElementById("sdot").className = "dot err";
+  document.getElementById("stxt").textContent = "خطأ — " + err.code;
 });
 
-function US(){
-  var c={new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
-  AD.forEach(function(o){if(c[o.status]!==undefined)c[o.status]++;});
-  var t=AD.length;
-  document.getElementById("st-t").textContent=ar(t);
-  document.getElementById("st-n").textContent=ar(c.new);
-  document.getElementById("st-s").textContent=ar(c.slau);
-  document.getElementById("st-b").textContent=ar(c.butc);
-  document.getElementById("st-d2").textContent=ar(c.done2);
-  document.getElementById("st-d").textContent=ar(c.done);
+// ── Stats ─────────────────────────────────────
+function updateStats(){
+  var c = {new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
+  AD.forEach(function(o){ if(c[o.status]!==undefined) c[o.status]++; });
+  var t = AD.length;
+  document.getElementById("st-t").textContent  = ar(t);
+  document.getElementById("st-n").textContent  = ar(c.new);
+  document.getElementById("st-s").textContent  = ar(c.slau);
+  document.getElementById("st-b").textContent  = ar(c.butc);
+  document.getElementById("st-d2").textContent = ar(c.done2);
+  document.getElementById("st-d").textContent  = ar(c.done);
   ["all","new","slau","butc","done2","done","pres"].forEach(function(k){
-    var e=document.getElementById("fc-"+k);if(e)e.textContent=ar(k==="all"?t:c[k]||0);
+    var el = document.getElementById("fc-"+k);
+    if(el) el.textContent = ar(k==="all" ? t : (c[k]||0));
   });
 }
 
+// ── Render cards ──────────────────────────────
 function RC(){
-  var s=(document.getElementById("si").value||"").trim().toLowerCase();
-  var d=document.getElementById("df").value;
-  var list=AD.filter(function(o){
-    var mf=CF==="all"||o.status===CF;
-    var ms=!s||(o.clientName||"").toLowerCase().indexOf(s)!==-1||(o.clientPhone||"").replace(/\s/g,"").indexOf(s.replace(/\s/g,""))!==-1;
-    var md=!d||(o.deliveryDatetime||"").startsWith(d);
-    return mf&&ms&&md;
+  var s = (document.getElementById("si").value||"").trim().toLowerCase();
+  var d = document.getElementById("df").value;
+  var list = AD.filter(function(o){
+    var mf = CF==="all" || o.status===CF;
+    var ms = !s || (o.clientName||"").toLowerCase().indexOf(s)!==-1 || (o.clientPhone||"").replace(/\s/g,"").indexOf(s.replace(/\s/g,""))!==-1;
+    var md = !d || (o.deliveryDatetime||"").startsWith(d);
+    return mf && ms && md;
   });
-  if(ST)list.sort(function(a,b){return(a.deliveryDatetime||"").localeCompare(b.deliveryDatetime||"");});
-  var el=document.getElementById("cc");
-  if(!list.length){el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F411;</div><div class='empty-t'>"+(s||d?"لا توجد نتائج":"لا يوجد طلبات")+"</div>"+(!s&&!d&&CF==="all"?"<button class='empty-l' onclick=\"T('add')\">أضف أول طلب ←</button>":"")+"</div>";return;}
-  var now=new Date();
-  el.innerHTML=list.map(function(o){return buildCard(o,now);}).join("");
+  if(SORT) list.sort(function(a,b){ return (a.deliveryDatetime||"").localeCompare(b.deliveryDatetime||""); });
+  var el = document.getElementById("cc");
+  if(!list.length){
+    el.innerHTML = "<div class='empty'><div class='empty-i'>&#x1F411;</div><div class='empty-t'>"+(s||d?"لا توجد نتائج":"لا يوجد طلبات")+"</div>"+(!s&&!d&&CF==="all"?"<button class='empty-l' onclick=\"T('add')\">أضف أول طلب ←</button>":"")+"</div>";
+    return;
+  }
+  var now = new Date();
+  el.innerHTML = list.map(function(o){ return buildCard(o, now); }).join("");
 }
 
-function buildCard(o,now){
-  var sm=SM[o.status]||SM.new;
-  var dtO=o.deliveryDatetime?new Date(o.deliveryDatetime):null;
-  var dtS=dtO?dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
-  var crS=o.createdAt?new Date(o.createdAt).toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
-  var isFarm=o.deliveryType==="استلام من المزرعة";
-  var isPres=o.status==="pres"||o.status==="pend";
-  var urgent=dtO&&o.status!=="done"&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
-  var overdue=dtO&&o.status!=="done"&&o.status!=="pend"&&(now-dtO)>0;
-  var ph=(o.clientPhone||"").replace(/[^\d]/g,"");if(ph.startsWith("0"))ph="962"+ph.slice(1);
-  var cardClass="ocard"+(isFarm?" farm-pickup":"")+(isPres?" presence-only":"");
+function buildCard(o, now){
+  var sm = SM[o.status] || SM.new;
+  var dtO = o.deliveryDatetime ? new Date(o.deliveryDatetime) : null;
+  var dtS = dtO ? dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "—";
+  var crS = o.createdAt ? new Date(o.createdAt).toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+  var isFarm = o.deliveryType==="استلام من المزرعة";
+  var isPres = o.status==="pres"||o.status==="pend";
+  var urgent = dtO&&o.status!=="done"&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
+  var overdue = dtO&&o.status!=="done"&&o.status!=="pend"&&(now-dtO)>0;
+  var ph = (o.clientPhone||"").replace(/[^\d]/g,"");
+  if(ph.startsWith("0")) ph = "962"+ph.slice(1);
 
-  // Build sheep details HTML
-  var sheepHtml="";
-  var sheep=o.sheep||[];
-  if(sheep.length>0){
-    sheepHtml="<div class='sheep-list'>"+sheep.map(function(s,i){
-      var cutLabel=s.cutType==="تقطيع بحضور العميل"?"✋ تقطيع بحضور العميل":
-                  s.cutType==="تقطيع المركزية"?"🏪 تقطيع المركزية — كيلو ونص/صحن":
-                  s.cutType==="تبرع"?"🤲 تبرع للجمعيات":
-                  s.cutType==="حضور الذبح فقط"?"👁️ حضور الذبح فقط":
-                  s.cutType||"—";
+  // Sheep details
+  var sheepHTML = "";
+  var sheep = o.sheep||[];
+  if(sheep.length){
+    sheepHTML = "<div class='sheep-list'>"+sheep.map(function(s,i){
+      var cl = s.cutType==="تقطيع بحضور العميل"?"✋ بحضور العميل":
+               s.cutType==="تقطيع المركزية"?"🏪 تقطيع المركزية":
+               s.cutType==="تبرع للجمعيات"?"🤲 تبرع":
+               s.cutType==="حضور الذبح فقط"?"👁️ حضور الذبح":
+               s.cutType||"—";
       return "<div class='sheep-item'>"
-        +"<div class='sheep-hdr'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" • "+(s.weight||"")+" كغ</div>"
-        +(s.for?"<div class='sheep-row'>👤 <span>عن: <b>"+s.for+"</b></span></div>":"")
-        +"<div class='sheep-row'>✂️ <span>"+cutLabel+"</span></div>"
-        +(s.cutType==="تبرع"&&s.donationOrg?"<div class='donation-badge'>🤲 "+s.donationOrg+" — "+s.donationWeight+" كغ</div>":"")
+        +"<div class='sh-hdr'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+"</div>"
+        +(s.for?"<div class='sh-row'>👤 عن: <b>"+s.for+"</b></div>":"")
+        +"<div class='sh-row'>"+cl+"</div>"
+        +(s.cutType==="تبرع للجمعيات"&&s.donationOrg?"<span class='don-badge'>🤲 "+s.donationOrg+" — "+s.donationWeight+" كغ</span>":"")
         +(s.cutNotes?"<div class='nbox'><div class='nlbl'>ملاحظات</div><div class='ntxt'>"+s.cutNotes+"</div></div>":"")
         +"</div>";
     }).join("")+"</div>";
-  }else if(o.cutType){
-    sheepHtml="<div class='iline'>✂️ <span>"+(o.cutType||"")+"</span></div>";
   }
 
-  var waOptions=["slau","butc","done2","done"].map(function(s){
-    if(!WA[s])return"";
-    var url="https://wa.me/"+ph+"?text="+encodeURIComponent(WA[s](o));
-    return"<a href='"+url+"' target='_blank' class='wa-item' onclick='CWM()'>"+SM[s].ar+"</a>";
-  }).join("");
+  // Status options
+  var stOpts = isPres
+    ? "<option value='pres'"+(o.status==="pres"?" selected":"")+">👁️ حضور الذبح فقط</option>"
+      +"<option value='pend'"+(o.status==="pend"?" selected":"")+">✅ انتهى</option>"
+    : "<option value='new'"+(o.status==="new"?" selected":"")+">🔴 طلب جديد</option>"
+      +"<option value='slau'"+(o.status==="slau"?" selected":"")+">🔪 مذبوح</option>"
+      +"<option value='butc'"+(o.status==="butc"?" selected":"")+">🥩 عند اللحام</option>"
+      +"<option value='done2'"+(o.status==="done2"?" selected":"")+">✅ تم التجهيز</option>"
+      +"<option value='done'"+(o.status==="done"?" selected":"")+">🟢 سُلِّم للعميل</option>";
 
-  // Status options based on type
-  var statusOpts;
-  if(isPres){
-    statusOpts="<option value='pres'"+(o.status==="pres"?" selected":"")+">&#x1F440; حضور الذبح فقط</option>"
-      +"<option value='pend'"+(o.status==="pend"?" selected":"")+">&#x2705; انتهى</option>";
-  }else{
-    statusOpts="<option value='new'"+(o.status==="new"?" selected":"")+">&#x1F534; طلب جديد</option>"
-      +"<option value='slau'"+(o.status==="slau"?" selected":"")+">&#x1F52A; مذبوح</option>"
-      +"<option value='butc'"+(o.status==="butc"?" selected":"")+">&#x1F969; عند اللحام</option>"
-      +"<option value='done2'"+(o.status==="done2"?" selected":"")+">&#x2705; تم التجهيز</option>"
-      +"<option value='done'"+(o.status==="done"?" selected":"")+">&#x1F7E2; سُلِّم للعميل</option>";
-  }
-
-  return "<div class='"+cardClass+"'>"
-    +"<div class='chtop'>"
-    +"<div style='display:flex;align-items:center;gap:8px'>"
+  var cc = "ocard"+(isFarm?" farm-c":"")+(isPres?" pres-c":"");
+  return "<div class='"+cc+"'>"
+    +"<div class='chtop'><div style='display:flex;align-items:center;gap:8px'>"
     +"<span class='chnum'>طلب #"+(o.orderNum||o._key.slice(-5).toUpperCase())+"</span>"
-    +(isFarm?"<span class='tag tfarm'>&#x1F33F; استلام من المزرعة</span>":"")
-    +"</div>"
-    +"<span class='sbadge "+sm.b+"'>"+sm.ar+"</span>"
-    +"</div>"
+    +(isFarm?"<span class='tag tfarm'>🌿 مزرعة</span>":"")
+    +"</div><span class='sbadge "+sm.b+"'>"+sm.ar+"</span></div>"
     +"<div class='cbody'>"
-    +(overdue?"<div class='pbanner'>&#x1F6A8; متأخر — الموعد مضى</div>":"")
-    +(urgent?"<div class='pbanner'>&#x26A1; الموعد خلال أقل من ٣ ساعات</div>":"")
-    +"<div class='crow'>"
-    +"<div class='av"+(isFarm?" farm":isPres?" pres":"")+"'>"+(isFarm?"🌿":isPres?"👁️":"🧑")+"</div>"
-    +"<div><div class='cn'>"+(o.clientName||"—")+"</div><div class='cp'>"+(o.clientPhone||"—")+"</div></div>"
+    +(overdue?"<div class='pbanner'>🚨 متأخر</div>":"")
+    +(urgent?"<div class='pbanner'>⚡ الموعد خلال أقل من ٣ ساعات</div>":"")
+    +"<div class='crow'><div class='av'>"+(isFarm?"🌿":isPres?"👁️":"🧑")+"</div>"
+    +"<div><div class='cn'>"+(o.clientName||"—")+"</div><div class='cp'>"+(o.clientPhone||"—")+"</div></div></div>"
+    +"<div class='tags'><span class='tag tg'>🐑 ×"+(o.count||1)+"</span>"
+    +"<span class='tag "+(o.deliveryType==="استلام من المزرعة"?"tg":o.deliveryType==="استلام من الجزار"?"tb2":"tp")+"'>"+(o.deliveryType||"—")+"</span>"
+    +"<span class='tag tt'>💵 مدفوع</span>"
+    +(o.weight?"<span class='tag tpu'>⚖️ "+o.weight+" كغ</span>":"")
     +"</div>"
-    +"<div class='tags'>"
-    +"<span class='tag tg'>&#x1F411; خروف ×"+(o.count||1)+"</span>"
-    +(o.deliveryType==="استلام من الجزار"?"<span class='tag tb2'>&#x1F969; استلام من الجزار</span>":"")
-    +(o.deliveryType==="استلام من المطعم"?"<span class='tag tp'>&#x1F3EA; استلام من المطعم</span>":"")
-    +"<span class='tag tt'>&#x1F4B5; مدفوع</span>"
-    +(o.weight?"<span class='tag tpu'>&#x2696;&#xFE0F; "+o.weight+" كغ</span>":"")
-    +"</div>"
-    +"<div class='iline'><span>&#x1F4C5;</span><span>موعد التسليم: <b>"+dtS+"</b></span></div>"
-    +(o.deliveryType==="توصيل للبيت"&&o.address?"<div class='iline'><span>&#x1F4CD;</span><span>"+o.address+"</span></div>":"")
-    +(o.agent?"<div class='iline'><span>&#x1F464;</span><span>"+o.agent+"</span></div>":"")
-    +sheepHtml
-    +"<div class='wrow'>&#x2696;&#xFE0F; <span style='font-size:12px;color:#555'>وزن الذبيحة (كغ):</span>"
+    +"<div class='iline'>📅 <span>موعد التسليم: <b>"+dtS+"</b></span></div>"
+    +(o.deliveryType==="توصيل للبيت"&&o.address?"<div class='iline'>📍 <span>"+o.address+"</span></div>":"")
+    +(o.agent?"<div class='iline'>👤 <span>"+o.agent+"</span></div>":"")
+    +sheepHTML
+    +"<div class='wrow'>⚖️ <span style='font-size:12px;color:#555'>وزن (كغ):</span>"
     +"<input class='winp' id='w-"+o._key+"' type='number' step='0.1' min='0' value='"+(o.weight||"")+"' placeholder='—'/>"
     +"<button class='wsave' onclick='SW(\""+o._key+"\")'>حفظ</button></div>"
-    +"<div class='ctime'>تم التسجيل: "+crS+"</div>"
+    +"<div class='ctime'>"+crS+"</div>"
     +"</div>"
     +"<div class='cftr'>"
-    +"<select class='stsel' id='sel-"+o._key+"'>"+statusOpts+"</select>"
+    +"<select class='stsel' id='sel-"+o._key+"'>"+stOpts+"</select>"
     +"<button class='ubtn' onclick='US2(\""+o._key+"\")'>تحديث</button>"
-    +"<button class='print-btn' onclick='showPrint(\""+o._key+"\")'>&#x1F5A8; كرت</button>"
-    +"<div class='wa-wrap' id='waw-"+o._key+"'>"
-    +"<button class='wa-btn' onclick='WM(\""+o._key+"\",\""+ph+"\",event)'>&#x1F4AC; &#x25BE;</button>"
-    +"</div>"
+    +"<button class='prtbtn' onclick='showPrint(\""+o._key+"\")'>&#x1F5A8;</button>"
+    +"<div class='wa-wrap' id='waw-"+o._key+"'><button class='wa-btn' onclick='openWA(\""+o._key+"\",\""+ph+"\",event)'>&#x1F4AC; ▾</button></div>"
     +"<button class='delbtn' onclick='DEL(\""+o._key+"\")'>&#x1F5D1;</button>"
     +"</div></div>";
 }
 
-// Print card
-function showPrint(key){
-  var o=AD.find(function(x){return x._key===key;});if(!o)return;
-  var sheep=o.sheep||[];
-  var dtS=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
-  var sheepHTML=sheep.map(function(s,i){
-    return"<div class='pc-sheep'>"
-      +"<div class='pc-sheep-title'>&#x1F411; خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+" كغ</div>"
-      +(s.for?"<div class='pc-sheep-line'>عن: <b>"+s.for+"</b></div>":"")
-      +"<div class='pc-sheep-line'>التقطيع: "+(s.cutType||"—")+"</div>"
-      +(s.cutType==="تبرع"&&s.donationOrg?"<div class='pc-sheep-line'>تبرع لـ: "+s.donationOrg+" ("+s.donationWeight+" كغ)</div>":"")
-      +(s.cutNotes?"<div class='pc-sheep-line'>ملاحظات: "+s.cutNotes+"</div>":"")
-      +"</div>";
-  }).join("");
-  document.getElementById("print-body").innerHTML=
-    "<div class='pc-logo'>&#x1F411;</div>"
-    +"<div class='pc-title'>كرت تعريفي — أضحية العيد</div>"
-    +"<div class='pc-sub'>مطعم المركزية × OrderTech</div>"
-    +"<div class='pc-line'><span class='pc-key'>رقم الطلب</span><span class='pc-val'>#"+(o.orderNum||o._key.slice(-5).toUpperCase())+"</span></div>"
-    +"<div class='pc-line'><span class='pc-key'>اسم العميل</span><span class='pc-val'>"+(o.clientName||"—")+"</span></div>"
-    +"<div class='pc-line'><span class='pc-key'>رقم الجوال</span><span class='pc-val' style='direction:ltr'>"+(o.clientPhone||"—")+"</span></div>"
-    +"<div class='pc-line'><span class='pc-key'>عدد الأضاحي</span><span class='pc-val'>"+(o.count||1)+"</span></div>"
-    +"<div class='pc-line'><span class='pc-key'>طريقة الاستلام</span><span class='pc-val'>"+(o.deliveryType||"—")+"</span></div>"
-    +"<div class='pc-line'><span class='pc-key'>موعد التسليم</span><span class='pc-val'>"+dtS+"</span></div>"
-    +sheepHTML
-    +"<div class='pc-footer'>مطعم المركزية | عيد الأضحى ٢٠٢٦</div>";
-  document.getElementById("print-overlay").style.display="flex";
-}
-function closePrint(e){if(!e||e.target===document.getElementById("print-overlay"))document.getElementById("print-overlay").style.display="none";}
-
-// WA Menu
-function WM(key,ph,e){
+// ── WA Menu (fixed position) ──────────────────
+function openWA(key, ph, e){
   e.stopPropagation();
-  if(OM&&OM!==key){var old=document.getElementById("wam-"+OM);if(old)old.remove();}
-  var ex=document.getElementById("wam-"+key);if(ex){ex.remove();OM=null;return;}
-  var o=AD.find(function(x){return x._key===key;});if(!o)return;
-  var isPres=o.status==="pres"||o.status==="pend";
-  var items=isPres?[]:["slau","butc","done2","done"];
-  if(!items.length){return;}
-  var btn=document.getElementById("waw-"+key).querySelector(".wa-btn");
-  var rect=btn.getBoundingClientRect();
-  var html="<div class='wa-menu' id='wam-"+key+"' style='top:"+(rect.bottom+window.scrollY+4)+"px;left:"+(rect.left)+"px'>"+items.map(function(s){
-    if(!WA[s])return"";
-    var url="https://wa.me/"+ph+"?text="+encodeURIComponent(WA[s](o));
-    return"<a href='"+url+"' target='_blank' class='wa-item' onclick='CWM()'>"+SM[s].ar+"</a>";
-  }).join("")+"</div>";
-  document.body.insertAdjacentHTML("beforeend",html);OM=key;
-}
-function CWM(){if(OM){var e=document.getElementById("wam-"+OM);if(e)e.remove();OM=null;}}
-document.addEventListener("click",CWM);
-
-function US2(k){var v=document.getElementById("sel-"+k).value;db.ref("eid_orders/"+k).update({status:v}).catch(function(e){alert(e.message);});}
-function SW(k){var v=parseFloat(document.getElementById("w-"+k).value)||0;db.ref("eid_orders/"+k).update({weight:v}).then(function(){var b=document.querySelector("#w-"+k).nextElementSibling;var t=b.textContent;b.textContent="✓";b.style.background="#2E6B2E";setTimeout(function(){b.textContent=t;b.style.background="";},1500);}).catch(function(e){alert(e.message);});}
-function DEL(k){if(!confirm("تأكيد حذف الطلب؟"))return;db.ref("eid_orders/"+k).remove().catch(function(e){alert(e.message);});}
-function F(f){CF=f;["all","new","slau","butc","done2","done","pres"].forEach(function(k){document.getElementById("fp-"+k).classList.toggle("active",k===f);});RC();}
-function toggleSort(){ST=!ST;document.getElementById("srtb").classList.toggle("on",ST);RC();}
-function clearF(){document.getElementById("si").value="";document.getElementById("df").value="";ST=false;document.getElementById("srtb").classList.remove("on");F("all");}
-
-// SHEEP FORMS
-function buildSheepForms(){
-  var countEl=document.getElementById("fct");
-  if(!countEl)return;
-  var count=parseInt(countEl.value)||1;
-  if(count<1)count=1;
-  if(count>20)count=20;
-  var container=document.getElementById("sheep-forms");
-  if(!container)return;
-  container.innerHTML="";
-  for(var i=1;i<=count;i++){
-    container.insertAdjacentHTML("beforeend",buildSheepBlock(i,{}));
-  }
-}
-
-function buildSheepBlock(n,ex){
-  ex=ex||{};
-  var cutTypeOpts=["تقطيع بحضور العميل","تقطيع المركزية","ملاحظات معينة","تبرع للجمعيات","حضور الذبح فقط"].map(function(opt){
-    return"<option value='"+opt+"'"+(ex.cutVal===opt?" selected":"")+">"+opt+"</option>";
+  closeWA();
+  var o = AD.find(function(x){ return x._key===key; });
+  if(!o) return;
+  var isPres = o.status==="pres"||o.status==="pend";
+  if(isPres) return;
+  var items = ["slau","butc","done2","done"];
+  var btn = document.getElementById("waw-"+key).querySelector(".wa-btn");
+  var rect = btn.getBoundingClientRect();
+  var menu = document.createElement("div");
+  menu.className = "wa-menu";
+  menu.id = "wam-active";
+  menu.style.top = (rect.bottom + window.scrollY + 4)+"px";
+  menu.style.left = rect.left+"px";
+  menu.innerHTML = items.map(function(s){
+    var url = "https://wa.me/"+ph+"?text="+encodeURIComponent(WA[s](o));
+    return "<a href='"+url+"' target='_blank' class='wa-item' onclick='closeWA()'>"+SM[s].ar+"</a>";
   }).join("");
-  var showNotes=(ex.cutVal==="ملاحظات معينة")?"":"display:none";
-  var showDon=(ex.cutVal==="تبرع للجمعيات")?"":"display:none";
-  var showDet=(ex.cutVal==="تقطيع بحضور العميل"||ex.cutVal==="حضور الذبح فقط")?"display:none":"";
-  return"<div class='fcard sheep-block' id='sb-"+n+"'>"
-    +"<div class='fsec'>&#x1F411; تخصيص الخروف رقم "+n+"</div>"
+  document.body.appendChild(menu);
+  OPEN_WA = key;
+}
+function closeWA(){
+  var m = document.getElementById("wam-active");
+  if(m) m.remove();
+  OPEN_WA = null;
+}
+document.addEventListener("click", closeWA);
+
+// ── Actions ───────────────────────────────────
+function US2(k){ db.ref("eid_orders/"+k).update({status: document.getElementById("sel-"+k).value}).catch(function(e){alert(e.message);}); }
+function SW(k){
+  var v = parseFloat(document.getElementById("w-"+k).value)||0;
+  db.ref("eid_orders/"+k).update({weight:v}).then(function(){
+    var b = document.querySelector("#w-"+k).nextElementSibling;
+    var t = b.textContent; b.textContent="✓"; b.style.background="#2E6B2E";
+    setTimeout(function(){ b.textContent=t; b.style.background=""; }, 1500);
+  }).catch(function(e){ alert(e.message); });
+}
+function DEL(k){ if(!confirm("تأكيد حذف الطلب؟")) return; db.ref("eid_orders/"+k).remove().catch(function(e){ alert(e.message); }); }
+
+// ── Filters ───────────────────────────────────
+function F(f){
+  CF = f;
+  ["all","new","slau","butc","done2","done","pres"].forEach(function(k){ document.getElementById("fp-"+k).classList.toggle("active", k===f); });
+  RC();
+}
+function toggleSort(){ SORT=!SORT; document.getElementById("srtb").classList.toggle("on",SORT); RC(); }
+function clearF(){
+  document.getElementById("si").value="";
+  document.getElementById("df").value="";
+  SORT=false; document.getElementById("srtb").classList.remove("on");
+  F("all");
+}
+
+// ── Slots ─────────────────────────────────────
+function renderSlots(){
+  var dateVal = document.getElementById("fdate").value;
+  var sec = document.getElementById("slots-sec");
+  if(!dateVal){ sec.style.display="none"; return; }
+  sec.style.display="block";
+  // Calculate from existing AD
+  var slotMap = {};
+  AD.forEach(function(o){
+    if(!o.deliveryDatetime || !o.deliveryDatetime.startsWith(dateVal)) return;
+    var hour = o.deliveryDatetime.slice(0,13);
+    if(!slotMap[hour]) slotMap[hour] = {clients:0, sheep:0};
+    slotMap[hour].clients++;
+    slotMap[hour].sheep += parseInt(o.count)||1;
+  });
+  var html = "";
+  for(var h=H_START; h<H_END; h++){
+    var pad = h<10?"0"+h:""+h;
+    var key = dateVal+"T"+pad;
+    var info = slotMap[key]||{clients:0,sheep:0};
+    var full = info.clients>=SLOTS_PER_HOUR;
+    var sel = SEL_SLOT===key;
+    var h12 = h===0?12:h>12?h-12:h;
+    var suf = h<12?"ص":"م";
+    var timeLabel = h12+":٠٠ "+suf;
+    var rem = SLOTS_PER_HOUR - info.clients;
+    var cls = "slot"+(full?" slot-full":"")+(sel?" slot-sel":"");
+    html += "<button class='"+cls+"'"+(full?"disabled":"onclick=\"pickSlot('"+key+"','"+dateVal+"','"+pad+"')\"")+">"
+      +"<span class='slot-time'>"+timeLabel+"</span>"
+      +"<span class='slot-info'>"+(full?"<span style='color:#E53935;font-weight:700'>مكتملة</span>":ar(info.clients)+"/"+ar(SLOTS_PER_HOUR)+" عميل")+"</span>"
+      +(!full&&info.sheep?"<span class='slot-sheep-cnt'>"+ar(info.sheep)+" خروف</span>":"")
+      +"</button>";
+  }
+  document.getElementById("slots-grid").innerHTML = html;
+}
+
+function pickSlot(key, dateVal, pad){
+  SEL_SLOT = key;
+  document.getElementById("fdt").value = dateVal+"T"+pad+":00";
+  renderSlots();
+}
+
+// ── Sheep forms ───────────────────────────────
+function buildSheep(){
+  var count = Math.max(1, Math.min(20, parseInt(document.getElementById("fct").value)||1));
+  var c = document.getElementById("sheep-forms");
+  c.innerHTML = "";
+  for(var i=1; i<=count; i++) c.insertAdjacentHTML("beforeend", sheepBlock(i));
+}
+
+function sheepBlock(n){
+  return "<div class='fcard sheep-blk' id='sb-"+n+"'>"
+    +"<div class='sheep-blk-title'>&#x1F411; تخصيص الخروف رقم "+ar(n)+"</div>"
     +"<div class='fgrid'>"
-    +"<div class='fg'><div class='flbl'>عن مين يُذبح</div><input type='text' class='fi sf' placeholder='اسم الشخص' value='"+(ex.forVal||"")+"'/></div>"
+    +"<div class='fg'><div class='flbl'>عن مين يُذبح</div><input type='text' class='fi sf' placeholder='اسم الشخص'/></div>"
     +"<div class='fg'><div class='flbl'>نوع الخروف</div>"
-    +"<div class='rwrap' style='flex-wrap:nowrap'>"
-    +"<label class='ropt"+(ex.typeVal!=="روماني"?" active":"")+"' onclick='toggleType(this,"+n+")'><input type='radio' name='type-"+n+"' value='بلدي'"+(ex.typeVal!=="روماني"?" checked":"")+"'/>&#x1F1EF;&#x1F1F4; بلدي</label>"
-    +"<label class='ropt"+(ex.typeVal==="روماني"?" active":"")+"' onclick='toggleType(this,"+n+")'><input type='radio' name='type-"+n+"' value='روماني'"+(ex.typeVal==="روماني"?" checked":"")+"'/>&#x1F1F7;&#x1F1F4; روماني</label>"
+    +"<div class='rwrap'>"
+    +"<label class='ropt active' onclick='rsel(this,\"type\","+n+")' data-v='بلدي'><input type='radio' name='type-"+n+"' checked/> &#x1F1EF;&#x1F1F4; بلدي</label>"
+    +"<label class='ropt' onclick='rsel(this,\"type\","+n+")' data-v='روماني'><input type='radio' name='type-"+n+"'/> &#x1F1F7;&#x1F1F4; روماني</label>"
     +"</div></div>"
     +"<div class='fg'><div class='flbl'>الوزن</div>"
-    +"<div class='rwrap' style='flex-wrap:nowrap'>"
-    +"<label class='ropt"+(ex.weightVal==="٣٨-٤٠"?"":" active")+"' onclick='toggleWeight(this,"+n+")'><input type='radio' name='wt-"+n+"' value='٣٢-٣٤'"+(ex.weightVal!=="٣٨-٤٠"?" checked":"")+"'/> ٣٢-٣٤ كغ</label>"
-    +"<label class='ropt"+(ex.weightVal==="٣٨-٤٠"?" active":"")+"' onclick='toggleWeight(this,"+n+")'><input type='radio' name='wt-"+n+"' value='٣٨-٤٠'"+(ex.weightVal==="٣٨-٤٠"?" checked":"")+"'/> ٣٨-٤٠ كغ</label>"
+    +"<div class='rwrap'>"
+    +"<label class='ropt active' onclick='rsel(this,\"wt\","+n+")' data-v='٣٢-٣٤'><input type='radio' name='wt-"+n+"' checked/> ٣٢-٣٤ كغ</label>"
+    +"<label class='ropt' onclick='rsel(this,\"wt\","+n+")' data-v='٣٨-٤٠'><input type='radio' name='wt-"+n+"'/> ٣٨-٤٠ كغ</label>"
     +"</div></div>"
     +"<div class='fg'><div class='flbl'>نوع الطلب</div>"
-    +"<select class='fsel cut-type-sel' onchange='onCutChange(this,"+n+")'>"+cutTypeOpts+"</select></div>"
+    +"<select class='fsel cut-sel' onchange='onCutChange(this,"+n+")'>"
+    +"<option value='تقطيع بحضور العميل'>✋ تقطيع بحضور العميل</option>"
+    +"<option value='تقطيع المركزية' selected>🏪 تقطيع المركزية</option>"
+    +"<option value='ملاحظات معينة'>📋 ملاحظات معينة</option>"
+    +"<option value='تبرع للجمعيات'>🤲 تبرع للجمعيات</option>"
+    +"<option value='حضور الذبح فقط'>👁️ حضور الذبح فقط</option>"
+    +"</select></div>"
     +"</div>"
-    +"<div class='cut-detail' id='cd-"+n+"' style='"+showDet+"'>"
-    +"<div class='cut-detail-title'>تفاصيل التقطيع</div>"
-    +"<div class='fg' id='notes-g-"+n+"' style='"+showNotes+"'><div class='flbl'>ملاحظات خاصة</div><textarea class='fta sn' placeholder='مثال: الكتف منفصلة...'>"+(ex.notesVal||"")+"</textarea></div>"
-    +"<div id='don-g-"+n+"' style='"+showDon+"'>"
-    +"<div class='fg' style='margin-bottom:10px'><div class='flbl'>اسم الجمعية</div><input type='text' class='fi dorg' placeholder='اسم الجمعية الخيرية' value='"+(ex.dorgVal||"")+"'/></div>"
-    +"<div class='fg'><div class='flbl'>وزن التبرع (كغ)</div><input type='number' class='fi dw2' placeholder='مثال: 10' step='0.5' min='0' value='"+(ex.dwVal||"")+"'/></div>"
+    +"<div class='cut-det' id='cd-"+n+"'>"
+    +"<div class='cut-det-title'>تفاصيل التقطيع</div>"
+    +"<div id='notes-g-"+n+"' style='display:none'><div class='flbl' style='margin-bottom:6px'>ملاحظات خاصة</div><textarea class='fta sn' placeholder='مثال: الكتف منفصلة...'></textarea></div>"
+    +"<div id='don-g-"+n+"' style='display:none'>"
+    +"<div class='fg' style='margin-bottom:10px'><div class='flbl' style='margin-bottom:6px'>اسم الجمعية</div><input type='text' class='fi dorg' placeholder='اسم الجمعية'/></div>"
+    +"<div class='fg'><div class='flbl' style='margin-bottom:6px'>وزن التبرع (كغ)</div><input type='number' class='fi dw2' placeholder='10' step='0.5' min='0'/></div>"
     +"</div>"
     +"</div>"
     +"</div>";
 }
 
-function toggleType(el,n){
-  var g=el.closest(".rwrap");g.querySelectorAll(".ropt").forEach(function(r){r.classList.remove("active");});el.classList.add("active");
-}
-function toggleWeight(el,n){
-  var g=el.closest(".rwrap");g.querySelectorAll(".ropt").forEach(function(r){r.classList.remove("active");});el.classList.add("active");
-}
-function onCutChange(sel,n){
-  var v=sel.value;
-  var cd=document.getElementById("cd-"+n);
-  var ng=document.getElementById("notes-g-"+n);
-  var dg=document.getElementById("don-g-"+n);
-  if(v==="تقطيع بحضور العميل"||v==="حضور الذبح فقط"){
-    cd.style.display="none";
-  }else{
-    cd.style.display="block";
-    ng.style.display=(v==="ملاحظات معينة")?"block":"none";
-    dg.style.display=(v==="تبرع للجمعيات")?"block":"none";
-  }
-}
-
-function getSheepData(){
-  var count=parseInt(document.getElementById("fct").value)||1;
-  var sheep=[];
-  for(var i=1;i<=count;i++){
-    var block=document.getElementById("sb-"+i);if(!block)continue;
-    var typeRadio=block.querySelector("input[name='type-"+i+"']:checked");
-    var weightRadio=block.querySelector("input[name='wt-"+i+"']:checked");
-    var cutSel=block.querySelector(".cut-type-sel");
-    var sn=block.querySelector(".sn");
-    var dorg=block.querySelector(".dorg");
-    var dw=block.querySelector(".dw2");
-    var cutV=cutSel?cutSel.value:"تقطيع المركزية";
-    sheep.push({
-      for:block.querySelector(".sf").value.trim(),
-      type:typeRadio?typeRadio.value:"بلدي",
-      weight:weightRadio?weightRadio.value:"٣٢-٣٤",
-      cutType:cutV,
-      cutNotes:sn?sn.value.trim():"",
-      donationOrg:dorg?dorg.value.trim():"",
-      donationWeight:dw?parseFloat(dw.value)||0:0,
-      isPresenceOnly:cutV==="حضور الذبح فقط",
-    });
-  }
-  return sheep;
-}
-
-function chkDup(){
-  var p=(document.getElementById("fph").value||"").replace(/\s/g,"");
-  var el=document.getElementById("dw");
-  if(p.length<7){el.style.display="none";return;}
-  var d=AD.filter(function(o){return(o.clientPhone||"").replace(/\s/g,"")===p;});
-  if(d.length){el.textContent="⚠️ هذا الرقم مسجّل مسبقاً لـ \""+d[0].clientName+"\" — تأكد قبل الحفظ";el.style.display="block";}
-  else el.style.display="none";
-}
-
-function SO(type,val,el){
-  DV=val;
-  var needAddr=(val==="توصيل للبيت");
-  document.getElementById("addr-g").style.display=needAddr?"flex":"none";
-  document.querySelectorAll("#del-opts .ropt").forEach(function(r){r.classList.remove("active");});
+function rsel(el, type, n){
+  var g = el.closest(".rwrap");
+  g.querySelectorAll(".ropt").forEach(function(r){ r.classList.remove("active"); });
   el.classList.add("active");
 }
 
+function onCutChange(sel, n){
+  var v = sel.value;
+  var cd = document.getElementById("cd-"+n);
+  var ng = document.getElementById("notes-g-"+n);
+  var dg = document.getElementById("don-g-"+n);
+  if(v==="تقطيع بحضور العميل"||v==="حضور الذبح فقط"){
+    cd.style.display="none";
+  } else {
+    cd.style.display="block";
+    ng.style.display = v==="ملاحظات معينة"?"block":"none";
+    dg.style.display = v==="تبرع للجمعيات"?"block":"none";
+  }
+}
+
+function getSheep(){
+  var count = parseInt(document.getElementById("fct").value)||1;
+  var arr = [];
+  for(var i=1; i<=count; i++){
+    var b = document.getElementById("sb-"+i); if(!b) continue;
+    var typeEl = b.querySelector(".ropt.active[data-v]");
+    var wtEl   = b.querySelector(".rwrap:nth-child(2) .ropt.active[data-v]");
+    // Use last two rwrap .ropt.active
+    var ropts = b.querySelectorAll(".rwrap");
+    var typeV = "بلدي", wtV = "٣٢-٣٤";
+    if(ropts[0]){ var a=ropts[0].querySelector(".ropt.active"); if(a) typeV=a.getAttribute("data-v")||"بلدي"; }
+    if(ropts[1]){ var a=ropts[1].querySelector(".ropt.active"); if(a) wtV=a.getAttribute("data-v")||"٣٢-٣٤"; }
+    var cutSel = b.querySelector(".cut-sel");
+    var cutV = cutSel ? cutSel.value : "تقطيع المركزية";
+    var sn = b.querySelector(".sn");
+    var dorg = b.querySelector(".dorg");
+    var dw = b.querySelector(".dw2");
+    arr.push({
+      for: b.querySelector(".sf").value.trim(),
+      type: typeV,
+      weight: wtV,
+      cutType: cutV,
+      cutNotes: sn?sn.value.trim():"",
+      donationOrg: dorg?dorg.value.trim():"",
+      donationWeight: dw?parseFloat(dw.value)||0:0,
+      isPresenceOnly: cutV==="حضور الذبح فقط",
+    });
+  }
+  return arr;
+}
+
+// ── Dup check ─────────────────────────────────
+function chkDup(){
+  var p = (document.getElementById("fph").value||"").replace(/\s/g,"");
+  var el = document.getElementById("dw");
+  if(p.length<7){ el.style.display="none"; return; }
+  var d = AD.filter(function(o){ return (o.clientPhone||"").replace(/\s/g,"")===p; });
+  if(d.length){ el.textContent="⚠️ هذا الرقم مسجّل مسبقاً لـ \""+d[0].clientName+"\" — تأكد قبل الحفظ"; el.style.display="block"; }
+  else el.style.display="none";
+}
+
+// ── Delivery type ─────────────────────────────
+function pickDel(val, el){
+  DEL_TYPE = val;
+  document.getElementById("addr-g").style.display = val==="توصيل للبيت"?"block":"none";
+  document.querySelectorAll("#del-opts .ropt").forEach(function(r){ r.classList.remove("active"); });
+  el.classList.add("active");
+}
+
+// ── Submit ────────────────────────────────────
 function SUB(){
-  var name=document.getElementById("fn").value.trim();
-  var phone=document.getElementById("fph").value.trim();
-  var count=parseInt(document.getElementById("fct").value)||1;
-  var dt=document.getElementById("fdt").value;
-  var addr=document.getElementById("fad").value.trim();
-  var agent=document.getElementById("fag").value.trim();
-  if(!name){alert("اسم العميل مطلوب");return;}
-  if(!phone){alert("رقم الجوال مطلوب");return;}
-  if(!dt){alert("موعد التسليم مطلوب");return;}
-  if(DV==="توصيل للبيت"&&!addr){alert("عنوان التوصيل مطلوب");return;}
-  var sheep=getSheepData();
-  // If ANY sheep is presence-only, set status accordingly
-  var allPres=sheep.length>0&&sheep.every(function(s){return s.isPresenceOnly;});
-  var order={
-    clientName:name,clientPhone:phone,count:count,
-    deliveryType:DV,address:addr||"",
-    deliveryDatetime:dt,agent:agent,
-    sheep:sheep,
+  var name  = document.getElementById("fn").value.trim();
+  var phone = document.getElementById("fph").value.trim();
+  var count = parseInt(document.getElementById("fct").value)||1;
+  var dt    = document.getElementById("fdt").value;
+  var addr  = document.getElementById("fad").value.trim();
+  var agent = document.getElementById("fag").value.trim();
+  if(!name)  { alert("اسم العميل مطلوب"); return; }
+  if(!phone) { alert("رقم الجوال مطلوب"); return; }
+  if(!dt)    { alert("يرجى اختيار وقت الاستلام"); return; }
+  if(DEL_TYPE==="توصيل للبيت"&&!addr){ alert("عنوان التوصيل مطلوب"); return; }
+  var sheep = getSheep();
+  var allPres = sheep.length>0 && sheep.every(function(s){ return s.isPresenceOnly; });
+  var order = {
+    clientName:name, clientPhone:phone, count:count,
+    deliveryType:DEL_TYPE, address:addr||"",
+    deliveryDatetime:dt, deliveryDate:dt.slice(0,10),
+    agent:agent, sheep:sheep,
     status:allPres?"pres":"new",
     createdAt:new Date().toISOString(),
     orderNum:Date.now().toString().slice(-5),
   };
-  var btn=document.getElementById("subbtn"),msg=document.getElementById("smsg");
-  btn.textContent="جاري الحفظ...";btn.className="sbtn saving";
+  var btn=document.getElementById("subbtn"), msg=document.getElementById("smsg");
+  btn.textContent="جاري الحفظ..."; btn.className="sbtn saving";
   db.ref("eid_orders").push(order).then(function(){
-    btn.innerHTML="✓ تم تسجيل الطلب!";btn.className="sbtn ok";
-    msg.textContent="ظهر فوراً لجميع الأطراف ✅";msg.style.display="block";
-    document.getElementById("fn").value="";document.getElementById("fph").value="";
-    document.getElementById("fdt").value="";document.getElementById("fad").value="";
-    document.getElementById("fag").value="";document.getElementById("fct").value="1";
+    btn.innerHTML="&#x2713; تم تسجيل الطلب!"; btn.className="sbtn ok";
+    msg.textContent="ظهر فوراً لجميع الأطراف ✅"; msg.style.display="block";
+    ["fn","fph","fdt","fad","fag"].forEach(function(id){ document.getElementById(id).value=""; });
+    document.getElementById("fct").value="1";
+    document.getElementById("fdate").value="";
+    document.getElementById("slots-sec").style.display="none";
     document.getElementById("dw").style.display="none";
-    buildSheepForms();resetDel();
-    setTimeout(function(){btn.textContent="تسجيل الطلب ←";btn.className="sbtn idle";msg.style.display="none";},3000);
-  }).catch(function(e){btn.textContent="خطأ — حاول مجدداً";btn.className="sbtn idle";alert(e.message);});
+    SEL_SLOT=null; DEL_TYPE="استلام من المطعم";
+    document.getElementById("addr-g").style.display="none";
+    document.querySelectorAll("#del-opts .ropt").forEach(function(r,i){ r.classList.toggle("active",i===0); });
+    buildSheep();
+    setTimeout(function(){ btn.textContent="تسجيل الطلب ←"; btn.className="sbtn idle"; msg.style.display="none"; }, 3000);
+  }).catch(function(e){ btn.textContent="خطأ — حاول مجدداً"; btn.className="sbtn idle"; alert(e.message); });
 }
 
-function resetDel(){
-  DV="استلام من المطعم";
-  document.getElementById("addr-g").style.display="none";
-  document.querySelectorAll("#del-opts .ropt").forEach(function(r,i){r.classList.toggle("active",i===0);});
+// ── Print ─────────────────────────────────────
+function showPrint(key){
+  var o = AD.find(function(x){ return x._key===key; }); if(!o) return;
+  var sheep = o.sheep||[];
+  var dtS = o.deliveryDatetime ? new Date(o.deliveryDatetime).toLocaleString("ar-EG",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
+  var sheepHTML = sheep.map(function(s,i){
+    return "<div class='pc-sheep'><div class='pc-sheep-title'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+"</div>"
+      +(s.for?"<div class='pc-sheep-line'>عن: <b>"+s.for+"</b></div>":"")
+      +"<div class='pc-sheep-line'>التقطيع: "+(s.cutType||"—")+"</div>"
+      +(s.cutType==="تبرع للجمعيات"&&s.donationOrg?"<div class='pc-sheep-line'>تبرع لـ: "+s.donationOrg+" ("+s.donationWeight+" كغ)</div>":"")
+      +(s.cutNotes?"<div class='pc-sheep-line'>ملاحظات: "+s.cutNotes+"</div>":"")
+      +"</div>";
+  }).join("");
+  document.getElementById("pbody").innerHTML =
+    "<div style='font-size:28px;margin-bottom:4px'>🐑</div>"
+    +"<div style='font-size:18px;font-weight:700;color:#1B3A1B'>كرت تعريفي — أضحية العيد</div>"
+    +"<div style='font-size:12px;color:#888;margin-bottom:16px'>مطعم المركزية × OrderTech</div>"
+    +"<div class='pc-line'><span class='pc-key'>رقم الطلب</span><span class='pc-val'>#"+(o.orderNum||o._key.slice(-5).toUpperCase())+"</span></div>"
+    +"<div class='pc-line'><span class='pc-key'>العميل</span><span class='pc-val'>"+(o.clientName||"—")+"</span></div>"
+    +"<div class='pc-line'><span class='pc-key'>الجوال</span><span class='pc-val' style='direction:ltr'>"+(o.clientPhone||"—")+"</span></div>"
+    +"<div class='pc-line'><span class='pc-key'>عدد الأضاحي</span><span class='pc-val'>"+(o.count||1)+"</span></div>"
+    +"<div class='pc-line'><span class='pc-key'>طريقة الاستلام</span><span class='pc-val'>"+(o.deliveryType||"—")+"</span></div>"
+    +"<div class='pc-line'><span class='pc-key'>موعد التسليم</span><span class='pc-val'>"+dtS+"</span></div>"
+    +sheepHTML
+    +"<div style='text-align:center;margin-top:14px;font-size:11px;color:#AAA'>مطعم المركزية | عيد الأضحى ٢٠٢٦</div>";
+  document.getElementById("povl").style.display="flex";
 }
+function closePrint(){ document.getElementById("povl").style.display="none"; }
 
-// REPORT
-function setToday(){document.getElementById("rd").value=new Date().toISOString().slice(0,10);RR();}
+// ── Report ────────────────────────────────────
+function setToday(){ document.getElementById("rd").value=new Date().toISOString().slice(0,10); RR(); }
 function RR(){
-  var dv=document.getElementById("rd").value;
-  var el=document.getElementById("rb");
-  if(!dv){el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F4CA;</div><div class='empty-t'>اختر تاريخاً لعرض التقرير</div></div>";return;}
-  var day=AD.filter(function(o){return(o.createdAt||"").startsWith(dv);});
-  var c={new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
-  var del=0,pick=0,farm=0,animals=0;
+  var dv = document.getElementById("rd").value;
+  var el = document.getElementById("rb");
+  if(!dv){ el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F4CA;</div><div class='empty-t'>اختر تاريخاً</div></div>"; return; }
+  var day = AD.filter(function(o){ return (o.createdAt||"").startsWith(dv); });
+  var c = {new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
+  var del=0,pick=0,farm=0,jazar=0,animals=0,baladi=0,romani=0;
   day.forEach(function(o){
-    if(c[o.status]!==undefined)c[o.status]++;
-    if(o.deliveryType==="توصيل للبيت")del++;
-    else if(o.deliveryType==="استلام من المزرعة")farm++;
+    if(c[o.status]!==undefined) c[o.status]++;
+    if(o.deliveryType==="توصيل للبيت") del++;
+    else if(o.deliveryType==="استلام من المزرعة") farm++;
+    else if(o.deliveryType==="استلام من الجزار") jazar++;
     else pick++;
-    animals+=parseInt(o.count)||1;
+    animals += parseInt(o.count)||1;
+    if(o.sheep&&o.sheep.length){
+      o.sheep.forEach(function(s){ if(s.type==="روماني") romani++; else baladi++; });
+    } else { baladi += parseInt(o.count)||1; }
   });
-  var t=day.length,pend=t-c.done-c.pend;
-  var dAr=new Date(dv+"T12:00:00").toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  function rc(n,l,c){return"<div class='rcard'><div class='rn' style='color:"+c+"'>"+n+"</div><div class='rl'>"+l+"</div></div>";}
-  function rb(lbl,v,col){var p=t>0?Math.round(v/t*100):0;return"<div class='rrow'><span style='min-width:170px;font-size:13px'>"+lbl+"</span><div class='rbar'><div class='rbarinr' style='width:"+p+"%;background:"+col+"'></div></div><span class='rval' style='color:"+col+"'>"+ar(v)+"</span></div>";}
-  el.innerHTML="<div style='font-size:15px;font-weight:700;color:#1B3A1B;margin-bottom:16px'>"+dAr+"</div>"
-    +"<div class='rgrid'>"+rc(ar(t),"إجمالي الطلبات","#2E6B2E")+rc(ar(animals),"إجمالي الأضاحي","#33691E")+rc(ar(c.done+c.pend),"تم التسليم/الانتهاء","#1565C0")+rc(ar(pend>0?pend:0),"باقي / معلّق","#C62828")+"</div>"
+  var t = day.length, pend = t - c.done - c.pend;
+  var dAr = new Date(dv+"T12:00:00").toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  function rc(n,l,col){ return "<div class='rcard'><div class='rn' style='color:"+col+"'>"+n+"</div><div class='rl'>"+l+"</div></div>"; }
+  function rb(lbl,v,col){ var p=t>0?Math.round(v/t*100):0; return "<div class='rrow'><span style='min-width:175px;font-size:13px'>"+lbl+"</span><div class='rbar'><div class='rbarinr' style='width:"+p+"%;background:"+col+"'></div></div><span class='rval' style='color:"+col+"'>"+ar(v)+"</span></div>"; }
+  el.innerHTML =
+    "<div style='font-size:15px;font-weight:700;color:#1B3A1B;margin-bottom:16px'>"+dAr+"</div>"
+    +"<div class='rgrid'>"
+    +rc(ar(t),"إجمالي الطلبات","#2E6B2E")
+    +rc(ar(animals),"إجمالي الأضاحي","#33691E")
+    +rc(ar(baladi)+"/"+ar(romani),"بلدي / روماني","#558B2F")
+    +rc(ar(c.done+c.pend),"تم التسليم","#1565C0")
+    +rc(ar(pend>0?pend:0),"باقي / معلّق","#C62828")
+    +"</div>"
     +"<div class='rsec'><div class='rtit'>توزيع الحالات</div>"
     +rb("🔴 طلب جديد",c.new,"#EF5350")
     +rb("🔪 مذبوح",c.slau,"#B71C1C")
@@ -694,15 +784,30 @@ function RR(){
     +rb("🟢 سُلِّم للعميل",c.done,"#2E7D32")
     +rb("👁️ حضور الذبح",c.pres+c.pend,"#6A1B9A")
     +"</div>"
+    +"<div class='rsec'><div class='rtit'>نوع الأضاحي</div>"
+    +rb("🇯🇴 بلدي",baladi,"#2E6B2E")
+    +rb("🇷🇴 روماني",romani,"#1565C0")
+    +"</div>"
     +"<div class='rsec'><div class='rtit'>طريقة الاستلام</div>"
     +rb("🏪 استلام من المطعم",pick,"#E65100")
-    +rb("🥩 استلام من الجزار",day.filter(function(o){return o.deliveryType==="استلام من الجزار";}).length,"#1565C0")
+    +rb("🥩 استلام من الجزار",jazar,"#1565C0")
     +rb("🌿 استلام من المزرعة",farm,"#2E6B2E")
     +rb("🚗 توصيل للبيت",del,"#880E4F")
     +"</div>"
-    +(day.length?"<div class='rsec'><div class='rtit'>قائمة الطلبات</div>"+day.map(function(o){var sm=SM[o.status]||SM.new;var dt=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",{hour:"2-digit",minute:"2-digit"}):"—";return"<div style='display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F3EE;gap:8px;flex-wrap:wrap'><span style='font-weight:700'>"+(o.clientName||"—")+"</span><span style='color:#888;font-size:12px'>"+(o.count||1)+" خروف</span><span class='sbadge "+sm.b+"' style='font-size:10px'>"+sm.ar+"</span><span style='font-size:12px;color:#555'>⏰ "+dt+"</span></div>";}).join("")+"</div>":"");
+    +(day.length?"<div class='rsec'><div class='rtit'>قائمة الطلبات</div>"
+      +day.map(function(o){
+        var sm=SM[o.status]||SM.new;
+        var dt=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",{hour:"2-digit",minute:"2-digit"}):"—";
+        return "<div style='display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F3EE;gap:8px;flex-wrap:wrap'>"
+          +"<span style='font-weight:700'>"+(o.clientName||"—")+"</span>"
+          +"<span style='color:#888;font-size:12px'>"+(o.count||1)+" خروف</span>"
+          +"<span class='sbadge "+sm.b+"' style='font-size:10px'>"+sm.ar+"</span>"
+          +"<span style='font-size:12px;color:#555'>⏰ "+dt+"</span>"
+          +"</div>";
+      }).join("")+"</div>":"");
 }
 
+// ── Tab switch ────────────────────────────────
 function T(n){
   ["orders","add","report"].forEach(function(t){
     document.getElementById("tab-"+t).classList.remove("active");
@@ -710,12 +815,12 @@ function T(n){
   });
   document.getElementById("tab-"+n).classList.add("active");
   document.getElementById("nav-"+n).classList.add("active");
-  if(n==="report")RR();
+  if(n==="report") RR();
 }
 
-// Init
-document.getElementById("rd").value=new Date().toISOString().slice(0,10);
-buildSheepForms();
+// ── Init ──────────────────────────────────────
+document.getElementById("rd").value = new Date().toISOString().slice(0,10);
+buildSheep();
 </script>
 </body>
 </html>
