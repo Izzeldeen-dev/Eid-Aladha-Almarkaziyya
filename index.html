@@ -199,6 +199,18 @@ input,button,select,textarea{font-family:inherit}
 .tv-card-info b{color:#fff}
 .tv-card-time{font-size:13px;color:#4A7A4A;margin-top:8px;font-family:monospace}
 .tv-empty{text-align:center;padding:80px 20px;color:#2A5A2A;font-size:20px}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0A1A0A,#1B3A1B);z-index:9999;display:flex;align-items:center;justify-content:center}
+.login-box{background:#fff;border-radius:18px;padding:40px 44px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{font-size:48px;margin-bottom:10px}
+.login-title{font-size:22px;font-weight:700;color:#1B3A1B;margin-bottom:4px}
+.login-sub{font-size:13px;color:#888;margin-bottom:28px}
+.login-input{width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #E0DBD3;font-size:16px;text-align:center;letter-spacing:3px;margin-bottom:12px;background:#F9F7F4;transition:border-color .2s}
+.login-input:focus{outline:none;border-color:#2E6B2E}
+.login-btn{width:100%;padding:13px;border-radius:10px;background:#2E6B2E;color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:#1B3A1B}
+.login-err{color:#E53935;font-size:13px;margin-top:8px;display:none}
 </style>
 </head>
 <body>
@@ -213,6 +225,18 @@ input,button,select,textarea{font-family:inherit}
 </div>
 
 <!-- Header -->
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">&#x1F411;</div>
+    <div class="login-title">داشبورد أضاحي العيد</div>
+    <div class="login-sub">مطعم المركزية × OrderTech</div>
+    <input class="login-input" type="password" id="pwd-input" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')checkPwd()"/>
+    <button class="login-btn" onclick="checkPwd()">دخول ←</button>
+    <div class="login-err" id="login-err">كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
 <div class="hdr">
   <div>
     <div class="hdr-title">&#x1F411; داشبورد أضاحي عيد الأضحى</div>
@@ -256,6 +280,14 @@ input,button,select,textarea{font-family:inherit}
     <button class="sfp sf-done"       id="fp-done"  onclick="F('done')">&#x1F7E2; سُلِّم <span class="sc" id="fc-done">٠</span></button>
     <button class="sfp sf-pres"       id="fp-pres"  onclick="F('pres')">&#x1F440; حضور الذبح <span class="sc" id="fc-pres">٠</span></button>
   </div>
+  <!-- Delivery filter -->
+  <div style="display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+    <span style="font-size:11px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.8px">طريقة الاستلام:</span>
+    <button class="tb on" id="df-all"   onclick="setDelFilter('all')">الكل</button>
+    <button class="tb" id="df-rest"  onclick="setDelFilter('استلام من المطعم')">&#x1F3EA; من المطعم</button>
+    <button class="tb" id="df-farm"  onclick="setDelFilter('استلام من المزرعة')">&#x1F33F; من المزرعة</button>
+    <button class="tb" id="df-home"  onclick="setDelFilter('توصيل للبيت')">&#x1F697; توصيل للبيت</button>
+  </div>
   <div class="cgrid" id="cc"><div class="empty"><div class="empty-i">&#x1F411;</div><div class="empty-t">جاري الاتصال...</div></div></div>
 </div>
 
@@ -283,7 +315,6 @@ input,button,select,textarea{font-family:inherit}
         <div class="flbl" style="margin-bottom:8px">طريقة الاستلام *</div>
         <div class="rwrap" id="del-opts">
           <label class="ropt active" onclick="pickDel('استلام من المطعم',this)"><input type="radio" name="del" checked/> &#x1F3EA; من المطعم</label>
-          <label class="ropt" onclick="pickDel('استلام من الجزار',this)"><input type="radio" name="del"/> &#x1F969; من الجزار</label>
           <label class="ropt" style="border-color:#2E6B2E" onclick="pickDel('استلام من المزرعة',this)"><input type="radio" name="del"/> &#x1F33F; من المزرعة</label>
           <label class="ropt" onclick="pickDel('توصيل للبيت',this)"><input type="radio" name="del"/> &#x1F697; توصيل للبيت</label>
         </div>
@@ -340,7 +371,7 @@ firebase.initializeApp({
 var db = firebase.database();
 
 // ── State ─────────────────────────────────────
-var AD = [], CF = "all", SORT = false, DEL_TYPE = "استلام من المطعم", OPEN_WA = null, SEL_SLOT = null;
+var AD = [], CF = "all", SORT = false, DEL_TYPE = "استلام من المطعم", OPEN_WA = null, SEL_SLOT = null, DEL_FILTER = "all";
 var SLOTS_PER_HOUR = 10, H_START = 8, H_END = 22;
 
 var SM = {
@@ -407,8 +438,9 @@ function RC(){
   var list = AD.filter(function(o){
     var mf = CF==="all" || o.status===CF;
     var ms = !s || (o.clientName||"").toLowerCase().indexOf(s)!==-1 || (o.clientPhone||"").replace(/\s/g,"").indexOf(s.replace(/\s/g,""))!==-1;
+    var mdel = DEL_FILTER==="all" || (o.deliveryType||"")=== DEL_FILTER;
     var md = !d || (o.deliveryDatetime||"").startsWith(d);
-    return mf && ms && md;
+    return mf && ms && md && mdel;
   });
   if(SORT) list.sort(function(a,b){ return (a.deliveryDatetime||"").localeCompare(b.deliveryDatetime||""); });
   var el = document.getElementById("cc");
@@ -474,7 +506,7 @@ function buildCard(o, now){
     +"<div class='crow'><div class='av'>"+(isFarm?"🌿":isPres?"👁️":"🧑")+"</div>"
     +"<div><div class='cn'>"+(o.clientName||"—")+"</div><div class='cp'>"+(o.clientPhone||"—")+"</div></div></div>"
     +"<div class='tags'><span class='tag tg'>🐑 ×"+(o.count||1)+"</span>"
-    +"<span class='tag "+(o.deliveryType==="استلام من المزرعة"?"tg":o.deliveryType==="استلام من الجزار"?"tb2":"tp")+"'>"+(o.deliveryType||"—")+"</span>"
+    +"<span class='tag "+(o.deliveryType==="استلام من المزرعة"?"tg":"tp":"tp")+"'>"+(o.deliveryType||"—")+"</span>"
     +"<span class='tag tt'>💵 مدفوع</span>"
     +(o.weight?"<span class='tag tpu'>⚖️ "+o.weight+" كغ</span>":"")
     +"</div>"
@@ -614,8 +646,8 @@ function sheepBlock(n){
     +"</div></div>"
     +"<div class='fg'><div class='flbl'>الوزن</div>"
     +"<div class='rwrap'>"
-    +"<label class='ropt active' onclick='rsel(this,\"wt\","+n+")' data-v='٣٢-٣٤'><input type='radio' name='wt-"+n+"' checked/> ٣٢-٣٤ كغ</label>"
-    +"<label class='ropt' onclick='rsel(this,\"wt\","+n+")' data-v='٣٨-٤٠'><input type='radio' name='wt-"+n+"'/> ٣٨-٤٠ كغ</label>"
+    +"<label class='ropt active' onclick='rsel(this,\"wt\","+n+")' data-v='٣٦-٣٨'><input type='radio' name='wt-"+n+"' checked/> ٣٦-٣٨ كغ</label>"
+    +"<label class='ropt' onclick='rsel(this,\"wt\","+n+")' data-v='٤٢-٤٤'><input type='radio' name='wt-"+n+"'/> ٤٢-٤٤ كغ</label>"
     +"</div></div>"
     +"<div class='fg'><div class='flbl'>نوع الطلب</div>"
     +"<select class='fsel cut-sel' onchange='onCutChange(this,"+n+")'>"
@@ -666,9 +698,9 @@ function getSheep(){
     var wtEl   = b.querySelector(".rwrap:nth-child(2) .ropt.active[data-v]");
     // Use last two rwrap .ropt.active
     var ropts = b.querySelectorAll(".rwrap");
-    var typeV = "بلدي", wtV = "٣٢-٣٤";
+    var typeV = "بلدي", wtV = "٣٦-٣٨";
     if(ropts[0]){ var a=ropts[0].querySelector(".ropt.active"); if(a) typeV=a.getAttribute("data-v")||"بلدي"; }
-    if(ropts[1]){ var a=ropts[1].querySelector(".ropt.active"); if(a) wtV=a.getAttribute("data-v")||"٣٢-٣٤"; }
+    if(ropts[1]){ var a=ropts[1].querySelector(".ropt.active"); if(a) wtV=a.getAttribute("data-v")||"٣٦-٣٨"; }
     var cutSel = b.querySelector(".cut-sel");
     var cutV = cutSel ? cutSel.value : "تقطيع المركزية";
     var sn = b.querySelector(".sn");
@@ -784,17 +816,22 @@ function RR(){
   if(!dv){ el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F4CA;</div><div class='empty-t'>اختر تاريخاً</div></div>"; return; }
   var day = AD.filter(function(o){ return (o.createdAt||"").startsWith(dv); });
   var c = {new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
-  var del=0,pick=0,farm=0,jazar=0,animals=0,baladi=0,romani=0;
+  var del=0,pick=0,farm=0,animals=0,baladi=0,romani=0,w3638=0,w4244=0;
   day.forEach(function(o){
     if(c[o.status]!==undefined) c[o.status]++;
     if(o.deliveryType==="توصيل للبيت") del++;
     else if(o.deliveryType==="استلام من المزرعة") farm++;
-    else if(o.deliveryType==="استلام من الجزار") jazar++;
     else pick++;
     animals += parseInt(o.count)||1;
     if(o.sheep&&o.sheep.length){
-      o.sheep.forEach(function(s){ if(s.type==="روماني") romani++; else baladi++; });
-    } else { baladi += parseInt(o.count)||1; }
+      o.sheep.forEach(function(s){
+        if(s.type==="روماني") romani++; else baladi++;
+        if((s.weight||"").indexOf("٣٦")!==-1) w3638++;
+        else if((s.weight||"").indexOf("٤٢")!==-1) w4244++;
+      });
+    } else {
+      baladi += parseInt(o.count)||1;
+    }
   });
   var t = day.length, pend = t - c.done - c.pend;
   var dAr = new Date(dv+"T12:00:00").toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
@@ -821,9 +858,12 @@ function RR(){
     +rb("🇯🇴 بلدي",baladi,"#2E6B2E")
     +rb("🇷🇴 روماني",romani,"#1565C0")
     +"</div>"
+    +"<div class='rsec'><div class='rtit'>الخرفان حسب الوزن</div>"
+    +rb("⚖️ وزن ٣٦-٣٨ كغ",w3638,"#8D6E63")
+    +rb("⚖️ وزن ٤٢-٤٤ كغ",w4244,"#5D4037")
+    +"</div>"
     +"<div class='rsec'><div class='rtit'>طريقة الاستلام</div>"
     +rb("🏪 استلام من المطعم",pick,"#E65100")
-    +rb("🥩 استلام من الجزار",jazar,"#1565C0")
     +rb("🌿 استلام من المزرعة",farm,"#2E6B2E")
     +rb("🚗 توصيل للبيت",del,"#880E4F")
     +"</div>"
@@ -838,6 +878,20 @@ function RR(){
           +"<span style='font-size:12px;color:#555'>⏰ "+dt+"</span>"
           +"</div>";
       }).join("")+"</div>":"");
+}
+
+// ── Delivery filter ──────────────────────────────
+function setDelFilter(f){
+  DEL_FILTER = f;
+  ["all","rest","jazar","farm","home"].forEach(function(k){
+    var el = document.getElementById("df-"+k);
+    if(el) el.classList.toggle("on", k===f||
+      (f==="all"&&k==="all")||
+      (f==="استلام من المطعم"&&k==="rest")||
+(f==="استلام من المزرعة"&&k==="farm")||
+      (f==="توصيل للبيت"&&k==="home"));
+  });
+  RC();
 }
 
 // ── Tab switch ────────────────────────────────
@@ -961,7 +1015,7 @@ function openEdit(key){
     +"</div>"
     +"<div style='margin-bottom:14px'><div class='flbl' style='margin-bottom:6px'>طريقة الاستلام</div>"
     +"<select class='fsel' id='e-del'>"
-    +["استلام من المطعم","استلام من الجزار","استلام من المزرعة","توصيل للبيت"].map(function(opt){
+    +["استلام من المطعم","استلام من المزرعة","توصيل للبيت"].map(function(opt){
       return "<option value='"+opt+"'"+(o.deliveryType===opt?" selected":"")+">"+opt+"</option>";
     }).join("")
     +"</select></div>"
@@ -1011,6 +1065,24 @@ function saveEdit(){
     btn.textContent="&#x2713; تم الحفظ!";
     setTimeout(function(){ closeEdit(); btn.textContent="حفظ التعديلات"; btn.disabled=false; }, 1200);
   }).catch(function(e){ alert("خطأ: "+e.message); btn.textContent="حفظ التعديلات"; btn.disabled=false; });
+}
+
+// ── LOGIN ─────────────────────────────────────
+(function(){
+  var ok = sessionStorage.getItem("mz_auth");
+  if(ok === "1") document.getElementById("login-screen").style.display="none";
+})();
+
+function checkPwd(){
+  var v = document.getElementById("pwd-input").value;
+  if(v === "MAR123456"){
+    sessionStorage.setItem("mz_auth","1");
+    document.getElementById("login-screen").style.display="none";
+  } else {
+    document.getElementById("login-err").style.display="block";
+    document.getElementById("pwd-input").value="";
+    document.getElementById("pwd-input").focus();
+  }
 }
 </script>
 
