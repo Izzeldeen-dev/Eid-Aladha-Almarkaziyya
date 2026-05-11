@@ -200,17 +200,7 @@ input,button,select,textarea{font-family:inherit}
 .tv-card-time{font-size:13px;color:#4A7A4A;margin-top:8px;font-family:monospace}
 .tv-empty{text-align:center;padding:80px 20px;color:#2A5A2A;font-size:20px}
 
-/* LOGIN */
-#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0A1A0A,#1B3A1B);z-index:9999;display:flex;align-items:center;justify-content:center}
-.login-box{background:#fff;border-radius:18px;padding:40px 44px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.login-logo{font-size:48px;margin-bottom:10px}
-.login-title{font-size:22px;font-weight:700;color:#1B3A1B;margin-bottom:4px}
-.login-sub{font-size:13px;color:#888;margin-bottom:28px}
-.login-input{width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #E0DBD3;font-size:16px;text-align:center;letter-spacing:3px;margin-bottom:12px;background:#F9F7F4;transition:border-color .2s}
-.login-input:focus{outline:none;border-color:#2E6B2E}
-.login-btn{width:100%;padding:13px;border-radius:10px;background:#2E6B2E;color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
-.login-btn:hover{background:#1B3A1B}
-.login-err{color:#E53935;font-size:13px;margin-top:8px;display:none}
+
 </style>
 </head>
 <body>
@@ -226,16 +216,6 @@ input,button,select,textarea{font-family:inherit}
 
 <!-- Header -->
 
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">&#x1F411;</div>
-    <div class="login-title">داشبورد أضاحي العيد</div>
-    <div class="login-sub">مطعم المركزية × OrderTech</div>
-    <input class="login-input" type="password" id="pwd-input" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')checkPwd()"/>
-    <button class="login-btn" onclick="checkPwd()">دخول ←</button>
-    <div class="login-err" id="login-err">كلمة المرور غير صحيحة</div>
-  </div>
-</div>
 
 <div class="hdr">
   <div>
@@ -1067,23 +1047,7 @@ function saveEdit(){
   }).catch(function(e){ alert("خطأ: "+e.message); btn.textContent="حفظ التعديلات"; btn.disabled=false; });
 }
 
-// ── LOGIN ─────────────────────────────────────
-(function(){
-  var ok = sessionStorage.getItem("mz_auth");
-  if(ok === "1") document.getElementById("login-screen").style.display="none";
-})();
 
-function checkPwd(){
-  var v = document.getElementById("pwd-input").value;
-  if(v === "MAR123456"){
-    sessionStorage.setItem("mz_auth","1");
-    document.getElementById("login-screen").style.display="none";
-  } else {
-    document.getElementById("login-err").style.display="block";
-    document.getElementById("pwd-input").value="";
-    document.getElementById("pwd-input").focus();
-  }
-}
 </script>
 
 <!-- EDIT MODAL -->
