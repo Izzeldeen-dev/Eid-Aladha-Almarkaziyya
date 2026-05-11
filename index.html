@@ -10,6 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#F5F3EE;font-family:"Segoe UI",Tahoma,sans-serif;color:#1A1A1A;direction:rtl}
 input,button,select,textarea{font-family:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#EEE}::-webkit-scrollbar-thumb{background:#C5B99A;border-radius:3px}
 .hdr{background:linear-gradient(135deg,#1B3A1B,#2E6B2E,#1B3A1B);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .hdr-title{color:#fff;font-weight:700;font-size:18px}
 .hdr-sub{color:rgba(255,255,255,.5);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
@@ -23,11 +24,10 @@ input,button,select,textarea{font-family:inherit}
 .dot.err{background:#EF5350}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .nav{background:#fff;border-bottom:1.5px solid #E5E0D8;padding:0 24px;display:flex;gap:2px;overflow-x:auto}
-.nb{padding:12px 20px;cursor:pointer;font-size:13px;background:none;border:none;border-bottom:3px solid transparent;color:#888;white-space:nowrap;font-weight:500;transition:all .15s}
+.nb{padding:12px 20px;cursor:pointer;font-size:13px;background:none;border:none;border-bottom:3px solid transparent;color:#888;white-space:nowrap;font-weight:500}
 .nb.active{color:#2E6B2E;border-bottom-color:#2E6B2E;font-weight:700}
 .body{padding:18px 24px}
 .tab{display:none}.tab.active{display:block}
-/* toolbar */
 .toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
 .si{flex:1;min-width:200px;padding:9px 13px;border-radius:10px;border:1.5px solid #E0DDD8;background:#fff;font-size:13px}
 .si:focus{outline:none;border-color:#2E6B2E}
@@ -35,20 +35,15 @@ input,button,select,textarea{font-family:inherit}
 .df:focus{outline:none;border-color:#2E6B2E}
 .tb{padding:9px 14px;border-radius:10px;border:1.5px solid #E0DDD8;background:#fff;font-size:12px;color:#555;cursor:pointer;white-space:nowrap;font-weight:500}
 .tb.on{background:#2E6B2E;color:#fff;border-color:#2E6B2E}
-/* status bar */
-.sbar{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap}
+.sbar{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
 .sfp{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid #DDD8D0;background:#fff;color:#888;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:5px}
 .sfp.active{border-color:transparent;color:#fff}
-.sf-all.active{background:#1B3A1B}
-.sf-new.active{background:#D84315}
-.sf-slau.active{background:#B71C1C}
-.sf-butc.active{background:#1565C0}
-.sf-done2.active{background:#558B2F}
-.sf-done.active{background:#1B5E20}
-.sf-pres.active{background:#6A1B9A}
+.sf-all.active{background:#1B3A1B}.sf-new.active{background:#D84315}.sf-slau.active{background:#B71C1C}
+.sf-butc.active{background:#1565C0}.sf-done2.active{background:#558B2F}.sf-done.active{background:#1B5E20}.sf-pres.active{background:#6A1B9A}
 .sc{font-size:10px;background:rgba(255,255,255,.25);padding:1px 6px;border-radius:8px}
 .sfp:not(.active) .sc{background:#F0EDE8;color:#888}
-/* cards */
+.del-fbar{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.del-fbar span{font-size:11px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:13px}
 .ocard{background:#fff;border-radius:14px;border:1.5px solid #E5E0D8;position:relative}
 .ocard.farm-c{border-color:#2E6B2E;border-width:2px}
@@ -56,27 +51,17 @@ input,button,select,textarea{font-family:inherit}
 .chtop{padding:11px 16px 0;display:flex;align-items:center;justify-content:space-between}
 .chnum{font-size:11px;color:#B0A898;font-weight:700}
 .sbadge{padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700}
-.b-new{background:#FBE9E7;color:#BF360C}
-.b-slau{background:#FFEBEE;color:#B71C1C}
-.b-butc{background:#E3F2FD;color:#0D47A1}
-.b-done2{background:#F1F8E9;color:#33691E}
-.b-done{background:#E8F5E9;color:#1B5E20}
-.b-pres{background:#EDE7F6;color:#4A148C}
-.b-pend{background:#F3E5F5;color:#6A1B9A}
+.b-new{background:#FBE9E7;color:#BF360C}.b-slau{background:#FFEBEE;color:#B71C1C}
+.b-butc{background:#E3F2FD;color:#0D47A1}.b-done2{background:#F1F8E9;color:#33691E}
+.b-done{background:#E8F5E9;color:#1B5E20}.b-pres{background:#EDE7F6;color:#4A148C}.b-pend{background:#F3E5F5;color:#6A1B9A}
 .cbody{padding:11px 16px 13px}
 .crow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .av{width:40px;height:40px;border-radius:50%;background:#E8F5E9;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.cn{font-weight:700;font-size:15px}
-.cp{font-size:12px;color:#888;direction:ltr;text-align:right}
+.cn{font-weight:700;font-size:15px}.cp{font-size:12px;color:#888;direction:ltr;text-align:right}
 .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
 .tag{padding:3px 9px;border-radius:7px;font-size:11px;font-weight:600}
-.tg{background:#F1F8E9;color:#33691E}
-.ta{background:#FFF8E1;color:#E65100}
-.tb2{background:#E8EAF6;color:#1A237E}
-.tp{background:#FCE4EC;color:#880E4F}
-.tt{background:#E0F7FA;color:#004D40}
-.tpu{background:#F3E5F5;color:#4A148C}
-.tr{background:#FFEBEE;color:#B71C1C}
+.tg{background:#F1F8E9;color:#33691E}.ta{background:#FFF8E1;color:#E65100}.tp{background:#FCE4EC;color:#880E4F}
+.tt{background:#E0F7FA;color:#004D40}.tpu{background:#F3E5F5;color:#4A148C}.tr{background:#FFEBEE;color:#B71C1C}
 .tfarm{background:#C8E6C9;color:#1B5E20;border:1px solid #81C784}
 .iline{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:#555;margin-bottom:4px}
 .pbanner{background:#FFF3E0;border:1px solid #FFE0B2;border-radius:8px;padding:6px 10px;margin-bottom:7px;font-size:11px;color:#E65100;font-weight:700}
@@ -84,7 +69,6 @@ input,button,select,textarea{font-family:inherit}
 .sheep-item{background:#F9F7F4;border-radius:9px;padding:9px 12px;border:1px solid #E5E0D8}
 .sh-hdr{font-weight:700;font-size:12px;color:#2E6B2E;margin-bottom:5px}
 .sh-row{font-size:11px;color:#555;margin-bottom:2px}
-.don-badge{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:6px;padding:3px 8px;font-size:11px;color:#1B5E20;font-weight:600;margin-top:3px;display:inline-block}
 .nbox{background:#FFFDE7;border:1px solid #FFF176;border-radius:8px;padding:7px 10px;margin-top:4px}
 .nlbl{font-size:10px;font-weight:700;color:#F9A825;margin-bottom:2px}
 .ntxt{font-size:12px;color:#555;line-height:1.5}
@@ -98,24 +82,22 @@ input,button,select,textarea{font-family:inherit}
 .stsel:focus{outline:none;border-color:#2E6B2E}
 .ubtn{padding:7px 13px;border-radius:8px;background:#2E6B2E;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer}
 .ubtn:hover{background:#1B3A1B}
-/* WA dropdown — fixed position, high z-index */
 .wa-wrap{position:relative;display:inline-block}
 .wa-btn{padding:7px 11px;border-radius:8px;background:#25D366;color:#fff;border:none;font-size:13px;cursor:pointer;font-weight:700}
-.wa-btn:hover{background:#1DA851}
 .wa-menu{position:fixed;background:#fff;border-radius:10px;border:1.5px solid #E5E0D8;box-shadow:0 8px 28px rgba(0,0,0,.15);z-index:9999;min-width:230px;overflow:hidden}
-.wa-item{padding:11px 15px;font-size:13px;cursor:pointer;color:#333;display:flex;align-items:center;gap:8px;text-decoration:none;transition:background .15s}
+.wa-item{padding:11px 15px;font-size:13px;cursor:pointer;color:#333;display:flex;align-items:center;gap:8px;text-decoration:none}
 .wa-item:hover{background:#E8F5E9;color:#1B5E20}
 .delbtn{padding:7px 9px;border-radius:8px;background:none;border:1.5px solid #EEE;color:#CCC;font-size:13px;cursor:pointer}
 .delbtn:hover{border-color:#EF9A9A;color:#E53935}
 .prtbtn{padding:7px 10px;border-radius:8px;background:#1B3A1B;color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer}
-/* print overlay */
+.editbtn{padding:7px 10px;border-radius:8px;background:none;border:1.5px solid #E0DDD8;color:#2E6B2E;font-size:12px;font-weight:700;cursor:pointer}
+/* PRINT */
 .povl{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
 .pcard{background:#fff;border-radius:16px;padding:28px 32px;max-width:420px;width:100%;position:relative;max-height:90vh;overflow-y:auto}
 .pc-close{position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#AAA}
 .pc-line{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F0EDE8;font-size:13px}
 .pc-line:last-of-type{border-bottom:none}
-.pc-key{color:#888}
-.pc-val{font-weight:600;text-align:left}
+.pc-key{color:#888}.pc-val{font-weight:600;text-align:left}
 .pc-sheep{background:#E8F5E9;border-radius:10px;padding:10px 14px;margin:8px 0}
 .pc-sheep-title{font-weight:700;font-size:12px;color:#1B3A1B;margin-bottom:5px}
 .pc-sheep-line{font-size:12px;color:#444;margin-bottom:2px}
@@ -129,7 +111,6 @@ input,button,select,textarea{font-family:inherit}
 .slot-time{font-size:14px;font-weight:700;display:block;margin-bottom:4px}
 .slot-info{font-size:11px;color:#888;display:block}
 .slot.slot-sel .slot-info{color:rgba(255,255,255,.8)}
-.slot.slot-full .slot-time{color:#AAA}
 .slot-sheep-cnt{font-size:10px;color:#2E6B2E;display:block;margin-top:2px}
 .slot.slot-sel .slot-sheep-cnt{color:rgba(255,255,255,.75)}
 /* FORM */
@@ -168,21 +149,14 @@ input,button,select,textarea{font-family:inherit}
 .rbar{flex:1;height:8px;background:#F0EDE8;border-radius:4px;overflow:hidden}
 .rbarinr{height:100%;border-radius:4px;transition:width .4s}
 .rval{font-weight:700;font-size:14px;min-width:28px;text-align:left}
-.empty{text-align:center;padding:60px 20px}
-.empty-i{font-size:52px;opacity:.12;margin-bottom:12px}
-.empty-t{color:#AAA;font-size:14px;margin-bottom:8px}
-.empty-l{background:none;border:none;color:#2E6B2E;font-size:13px;cursor:pointer;text-decoration:underline}
-@media print{body>*:not(#povl){display:none!important}.povl{position:static!important;background:none!important;padding:0!important}.pcard{box-shadow:none!important}.pc-close,.pbtn{display:none!important}}
-@media(max-width:600px){.fgrid{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr 1fr}.hdr{flex-direction:column;align-items:flex-start}.toolbar{flex-direction:column}}
-
-/* TV MODE */
+/* TV */
 .tv-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:2px solid #1A4A1A;margin-bottom:20px}
-.tv-title{color:#4CAF50;font-size:28px;font-weight:700;letter-spacing:1px}
+.tv-title{color:#4CAF50;font-size:28px;font-weight:700}
 .tv-time{color:#4CAF50;font-size:22px;font-family:monospace;font-weight:700}
 .tv-stats{display:flex;gap:16px;padding:0 24px;margin-bottom:24px;flex-wrap:wrap}
 .tv-stat{background:#0F2A0F;border:1.5px solid #1A4A1A;border-radius:12px;padding:14px 20px;text-align:center;min-width:110px}
 .tv-stat-n{font-size:36px;font-weight:700;line-height:1;color:#4CAF50}
-.tv-stat-l{font-size:12px;color:#4A7A4A;margin-top:4px;letter-spacing:.5px;text-transform:uppercase}
+.tv-stat-l{font-size:12px;color:#4A7A4A;margin-top:4px;text-transform:uppercase}
 .tv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:0 24px 24px}
 .tv-card{background:#0F2A0F;border:1.5px solid #1A4A1A;border-radius:14px;padding:18px 20px}
 .tv-card.urgent{border-color:#EF5350;animation:blink 1.5s infinite}
@@ -191,16 +165,19 @@ input,button,select,textarea{font-family:inherit}
 .tv-card-name{font-size:24px;font-weight:700;color:#fff;margin-bottom:6px}
 .tv-card-phone{font-size:16px;color:#88B888;margin-bottom:10px;direction:ltr;text-align:right}
 .tv-card-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:10px}
-.tv-badge-new{background:#D84315;color:#fff}
-.tv-badge-slau{background:#B71C1C;color:#fff}
-.tv-badge-butc{background:#1565C0;color:#fff}
-.tv-badge-done2{background:#2E7D32;color:#fff}
+.tv-badge-new{background:#D84315;color:#fff}.tv-badge-slau{background:#B71C1C;color:#fff}
+.tv-badge-butc{background:#1565C0;color:#fff}.tv-badge-done2{background:#2E7D32;color:#fff}
 .tv-card-info{font-size:15px;color:#A5C8A5;line-height:1.7}
 .tv-card-info b{color:#fff}
 .tv-card-time{font-size:13px;color:#4A7A4A;margin-top:8px;font-family:monospace}
 .tv-empty{text-align:center;padding:80px 20px;color:#2A5A2A;font-size:20px}
-
-
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px}
+.empty-i{font-size:52px;opacity:.12;margin-bottom:12px}
+.empty-t{color:#AAA;font-size:14px;margin-bottom:8px}
+.empty-l{background:none;border:none;color:#2E6B2E;font-size:13px;cursor:pointer;text-decoration:underline}
+@media print{body>*:not(#povl){display:none!important}.povl{position:static!important;background:none!important;padding:0!important}.pcard{box-shadow:none!important}.pc-close,.pbtn{display:none!important}}
+@media(max-width:600px){.fgrid{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr 1fr}.hdr{flex-direction:column;align-items:flex-start}.toolbar{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -214,9 +191,20 @@ input,button,select,textarea{font-family:inherit}
   </div>
 </div>
 
+<!-- Edit modal -->
+<div id="edit-ovl" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeEdit()">
+  <div style="background:#fff;border-radius:16px;padding:24px 28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative">
+    <button onclick="closeEdit()" style="position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#AAA">&#x2715;</button>
+    <div style="font-size:16px;font-weight:700;color:#1B3A1B;margin-bottom:18px">&#x270F;&#xFE0F; تعديل الطلب</div>
+    <div id="edit-body"></div>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button id="edit-save-btn" onclick="saveEdit()" style="flex:1;padding:12px;border-radius:9px;background:#2E6B2E;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer">حفظ التعديلات</button>
+      <button onclick="closeEdit()" style="padding:12px 20px;border-radius:9px;background:#F5F3EE;color:#555;border:1.5px solid #DDD;font-size:14px;cursor:pointer">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 <!-- Header -->
-
-
 <div class="hdr">
   <div>
     <div class="hdr-title">&#x1F411; داشبورد أضاحي عيد الأضحى</div>
@@ -243,7 +231,7 @@ input,button,select,textarea{font-family:inherit}
 
 <div class="body">
 
-<!-- ORDERS TAB -->
+<!-- ORDERS -->
 <div class="tab active" id="tab-orders">
   <div class="toolbar">
     <input class="si" id="si" placeholder="&#x1F50D; ابحث بالاسم أو رقم الجوال..." oninput="RC()"/>
@@ -251,6 +239,7 @@ input,button,select,textarea{font-family:inherit}
     <button class="tb" id="srtb" onclick="toggleSort()">&#x23F0; ترتيب حسب الموعد</button>
     <button class="tb" onclick="clearF()">&#x2715; مسح</button>
   </div>
+  <!-- Status filter -->
   <div class="sbar">
     <button class="sfp sf-all active" id="fp-all"   onclick="F('all')">الكل <span class="sc" id="fc-all">٠</span></button>
     <button class="sfp sf-new"        id="fp-new"   onclick="F('new')">&#x1F534; طلب جديد <span class="sc" id="fc-new">٠</span></button>
@@ -261,17 +250,17 @@ input,button,select,textarea{font-family:inherit}
     <button class="sfp sf-pres"       id="fp-pres"  onclick="F('pres')">&#x1F440; حضور الذبح <span class="sc" id="fc-pres">٠</span></button>
   </div>
   <!-- Delivery filter -->
-  <div style="display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
-    <span style="font-size:11px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.8px">طريقة الاستلام:</span>
-    <button class="tb on" id="df-all"   onclick="setDelFilter('all')">الكل</button>
-    <button class="tb" id="df-rest"  onclick="setDelFilter('استلام من المطعم')">&#x1F3EA; من المطعم</button>
-    <button class="tb" id="df-farm"  onclick="setDelFilter('استلام من المزرعة')">&#x1F33F; من المزرعة</button>
-    <button class="tb" id="df-home"  onclick="setDelFilter('توصيل للبيت')">&#x1F697; توصيل للبيت</button>
+  <div class="del-fbar">
+    <span>طريقة الاستلام:</span>
+    <button class="tb on" id="delf-all"  onclick="FD('all')">الكل</button>
+    <button class="tb" id="delf-rest"    onclick="FD('استلام من المطعم')">&#x1F3EA; من المطعم</button>
+    <button class="tb" id="delf-farm"    onclick="FD('استلام من المزرعة')">&#x1F33F; من المزرعة</button>
+    <button class="tb" id="delf-home"    onclick="FD('توصيل للبيت')">&#x1F697; توصيل للبيت</button>
   </div>
   <div class="cgrid" id="cc"><div class="empty"><div class="empty-i">&#x1F411;</div><div class="empty-t">جاري الاتصال...</div></div></div>
 </div>
 
-<!-- ADD TAB -->
+<!-- ADD -->
 <div class="tab" id="tab-add">
   <div class="fwrap">
     <div id="dw" class="dup-warn"></div>
@@ -283,14 +272,12 @@ input,button,select,textarea{font-family:inherit}
         <div class="fg"><div class="flbl">عدد الأضاحي *</div><input type="number" class="fi" id="fct" min="1" value="1" onchange="buildSheep()"/></div>
         <div class="fg"><div class="flbl">تاريخ الاستلام *</div><input type="date" class="fi" id="fdate" onchange="renderSlots()"/></div>
       </div>
-      <!-- Slots -->
       <div id="slots-sec" style="display:none">
         <div class="flbl" style="margin-bottom:8px">وقت الاستلام * <span style="font-size:11px;color:#888;font-weight:400">(١٠ عملاء كحد أقصى لكل ساعة)</span></div>
         <div class="slot-grid" id="slots-grid"></div>
         <input type="hidden" id="fdt"/>
       </div>
       <div style="height:8px"></div>
-      <!-- Delivery type -->
       <div class="fg">
         <div class="flbl" style="margin-bottom:8px">طريقة الاستلام *</div>
         <div class="rwrap" id="del-opts">
@@ -304,21 +291,17 @@ input,button,select,textarea{font-family:inherit}
         </div>
       </div>
     </div>
-
-    <!-- Sheep blocks -->
     <div id="sheep-forms"></div>
-
     <div class="fcard">
       <div class="fsec">&#x1F464; موظف الكول سنتر</div>
       <div class="fg"><div class="flbl">اسم الموظف</div><input type="text" class="fi" id="fag" placeholder="اسم الموظف"/></div>
     </div>
-
     <button class="sbtn idle" id="subbtn" onclick="SUB()">تسجيل الطلب ←</button>
     <div class="smsg" id="smsg"></div>
   </div>
 </div>
 
-<!-- REPORT TAB -->
+<!-- REPORT -->
 <div class="tab" id="tab-report">
   <div style="max-width:780px">
     <div style="display:flex;gap:10px;margin-bottom:18px;align-items:center;flex-wrap:wrap">
@@ -330,15 +313,14 @@ input,button,select,textarea{font-family:inherit}
   </div>
 </div>
 
-
-<!-- TV TAB -->
+<!-- TV -->
 <div class="tab" id="tab-tv" style="padding:0">
   <div id="tv-body" style="background:#0A1A0A;min-height:100vh;padding:20px"></div>
 </div>
-</div><!-- /body -->
+
+</div>
 
 <script>
-// ── Firebase ──────────────────────────────────
 firebase.initializeApp({
   apiKey:"AIzaSyCaEJOD5PP3mk9XaPkrG_NsbmMj__7K3PM",
   authDomain:"markaziyya-d14fd.firebaseapp.com",
@@ -348,286 +330,193 @@ firebase.initializeApp({
   messagingSenderId:"821492235905",
   appId:"1:821492235905:web:b02d4706e18c5269199780"
 });
-var db = firebase.database();
-
-// ── State ─────────────────────────────────────
-var AD = [], CF = "all", SORT = false, DEL_TYPE = "استلام من المطعم", OPEN_WA = null, SEL_SLOT = null, DEL_FILTER = "all";
-var SLOTS_PER_HOUR = 10, H_START = 8, H_END = 22;
-
-var SM = {
-  new:  {ar:"طلب جديد",        b:"b-new"},
-  slau: {ar:"مذبوح",           b:"b-slau"},
-  butc: {ar:"عند اللحام",      b:"b-butc"},
-  done2:{ar:"تم التجهيز",      b:"b-done2"},
-  done: {ar:"سُلِّم للعميل",   b:"b-done"},
-  pres: {ar:"حضور الذبح فقط", b:"b-pres"},
-  pend: {ar:"انتهى",           b:"b-pend"},
+var db=firebase.database();
+var AD=[],CF="all",DF="all",SORT=false,DEL_TYPE="استلام من المطعم",OWA=null,SSLOT=null,editKey=null,tvTimer=null;
+var HS=8,HE=22,SMAX=10;
+var SM={
+  new:{ar:"طلب جديد",b:"b-new"},slau:{ar:"مذبوح",b:"b-slau"},
+  butc:{ar:"عند اللحام",b:"b-butc"},done2:{ar:"تم التجهيز",b:"b-done2"},
+  done:{ar:"سُلِّم للعميل",b:"b-done"},pres:{ar:"حضور الذبح فقط",b:"b-pres"},pend:{ar:"انتهى",b:"b-pend"}
 };
-
-var WA = {
-  slau: function(o){ return "أهلاً "+o.clientName+" 🌿\nتم ذبح أضحيتكم رقم #"+(o.orderNum||"")+".\nسنُبلغكم بالخطوات القادمة.\nمطعم المركزية 🐑"; },
-  butc: function(o){ return "أهلاً "+o.clientName+" 🔪\nأضحيتكم الآن عند اللحام.\nسنُبلغكم عند الانتهاء.\nمطعم المركزية"; },
-  done2:function(o){ return "أهلاً "+o.clientName+" ✅\nتم تجهيز أضحيتكم!\n"+(o.deliveryType||"استلام من المطعم")+".\nمطعم المركزية"; },
-  done: function(o){ return "أهلاً "+o.clientName+" 🌙\nتم تسليم أضحيتكم.\nتقبّل الله منكم.\nعيد أضحى مبارك 🎉\nمطعم المركزية"; },
+var WA={
+  slau:function(o){return"أهلاً "+o.clientName+" 🌿\nتم ذبح أضحيتكم رقم #"+(o.orderNum||"")+".\nسنُبلغكم بالخطوات القادمة.\nمطعم المركزية 🐑";},
+  butc:function(o){return"أهلاً "+o.clientName+" 🥩\nأضحيتكم الآن عند اللحام.\nسنُبلغكم عند الانتهاء.\nمطعم المركزية";},
+  done2:function(o){return"أهلاً "+o.clientName+" ✅\nتم تجهيز أضحيتكم!\n"+(o.deliveryType||"استلام من المطعم")+".\nمطعم المركزية";},
+  done:function(o){return"أهلاً "+o.clientName+" 🌙\nتم تسليم أضحيتكم.\nتقبّل الله منكم.\nعيد أضحى مبارك 🎉\nمطعم المركزية";}
 };
+function ar(n){return n.toString().replace(/\d/g,function(d){return"٠١٢٣٤٥٦٧٨٩"[d];});}
 
-// ── Helpers ───────────────────────────────────
-function ar(n){ return n.toString().replace(/\d/g, function(d){ return "٠١٢٣٤٥٦٧٨٩"[d]; }); }
-
-// ── Firebase single listener ──────────────────
-db.ref("eid_orders").orderByChild("createdAt").on("value", function(snap){
-  AD = [];
-  snap.forEach(function(c){ AD.push(Object.assign({}, c.val(), {_key: c.key})); });
-  AD.reverse();
-  document.getElementById("sdot").className = "dot live";
-  document.getElementById("stxt").textContent = "Live • " + AD.length + " طلب";
-  updateStats();
-  RC();
-  RR();
-  // Refresh slots if date selected
-  var fd = document.getElementById("fdate");
-  if(fd && fd.value) renderSlots();
-  // Refresh TV if active
-  if(document.getElementById("tab-tv").classList.contains("active")) renderTV();
-}, function(err){
-  document.getElementById("sdot").className = "dot err";
-  document.getElementById("stxt").textContent = "خطأ — " + err.code;
+db.ref("eid_orders").orderByChild("createdAt").on("value",function(snap){
+  AD=[];snap.forEach(function(c){AD.push(Object.assign({},c.val(),{_key:c.key}));});AD.reverse();
+  document.getElementById("sdot").className="dot live";
+  document.getElementById("stxt").textContent="Live • "+AD.length+" طلب";
+  US();RC();RR();
+  var fd=document.getElementById("fdate");if(fd&&fd.value)renderSlots();
+  if(document.getElementById("tab-tv").classList.contains("active"))renderTV();
+},function(err){
+  document.getElementById("sdot").className="dot err";
+  document.getElementById("stxt").textContent="خطأ — "+err.code;
 });
 
-// ── Stats ─────────────────────────────────────
-function updateStats(){
-  var c = {new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
-  AD.forEach(function(o){ if(c[o.status]!==undefined) c[o.status]++; });
-  var t = AD.length;
-  document.getElementById("st-t").textContent  = ar(t);
-  document.getElementById("st-n").textContent  = ar(c.new);
-  document.getElementById("st-s").textContent  = ar(c.slau);
-  document.getElementById("st-b").textContent  = ar(c.butc);
-  document.getElementById("st-d2").textContent = ar(c.done2);
-  document.getElementById("st-d").textContent  = ar(c.done);
+function US(){
+  var c={new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
+  AD.forEach(function(o){if(c[o.status]!==undefined)c[o.status]++;});
+  var t=AD.length;
+  document.getElementById("st-t").textContent=ar(t);
+  document.getElementById("st-n").textContent=ar(c.new);
+  document.getElementById("st-s").textContent=ar(c.slau);
+  document.getElementById("st-b").textContent=ar(c.butc);
+  document.getElementById("st-d2").textContent=ar(c.done2);
+  document.getElementById("st-d").textContent=ar(c.done);
   ["all","new","slau","butc","done2","done","pres"].forEach(function(k){
-    var el = document.getElementById("fc-"+k);
-    if(el) el.textContent = ar(k==="all" ? t : (c[k]||0));
+    var el=document.getElementById("fc-"+k);if(el)el.textContent=ar(k==="all"?t:(c[k]||0));
   });
 }
 
-// ── Render cards ──────────────────────────────
 function RC(){
-  var s = (document.getElementById("si").value||"").trim().toLowerCase();
-  var d = document.getElementById("df").value;
-  var list = AD.filter(function(o){
-    var mf = CF==="all" || o.status===CF;
-    var ms = !s || (o.clientName||"").toLowerCase().indexOf(s)!==-1 || (o.clientPhone||"").replace(/\s/g,"").indexOf(s.replace(/\s/g,""))!==-1;
-    var mdel = DEL_FILTER==="all" || (o.deliveryType||"")=== DEL_FILTER;
-    var md = !d || (o.deliveryDatetime||"").startsWith(d);
-    return mf && ms && md && mdel;
+  var s=(document.getElementById("si").value||"").trim().toLowerCase();
+  var d=document.getElementById("df").value;
+  var list=AD.filter(function(o){
+    var mf=CF==="all"||o.status===CF;
+    var ms=!s||(o.clientName||"").toLowerCase().indexOf(s)!==-1||(o.clientPhone||"").replace(/\s/g,"").indexOf(s.replace(/\s/g,""))!==-1;
+    var md=!d||(o.deliveryDatetime||"").startsWith(d);
+    var mdf=DF==="all"||(o.deliveryType||"")===DF;
+    return mf&&ms&&md&&mdf;
   });
-  if(SORT) list.sort(function(a,b){ return (a.deliveryDatetime||"").localeCompare(b.deliveryDatetime||""); });
-  var el = document.getElementById("cc");
-  if(!list.length){
-    el.innerHTML = "<div class='empty'><div class='empty-i'>&#x1F411;</div><div class='empty-t'>"+(s||d?"لا توجد نتائج":"لا يوجد طلبات")+"</div>"+(!s&&!d&&CF==="all"?"<button class='empty-l' onclick=\"T('add')\">أضف أول طلب ←</button>":"")+"</div>";
-    return;
-  }
-  var now = new Date();
-  el.innerHTML = list.map(function(o){ return buildCard(o, now); }).join("");
+  if(SORT)list.sort(function(a,b){return(a.deliveryDatetime||"").localeCompare(b.deliveryDatetime||"");});
+  var el=document.getElementById("cc");
+  if(!list.length){el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F411;</div><div class='empty-t'>"+(s||d?"لا توجد نتائج":"لا يوجد طلبات")+"</div>"+(!s&&!d&&CF==="all"?"<button class='empty-l' onclick=\"T('add')\">أضف أول طلب ←</button>":"")+"</div>";return;}
+  var now=new Date();
+  el.innerHTML=list.map(function(o){return buildCard(o,now);}).join("");
 }
 
-function buildCard(o, now){
-  var sm = SM[o.status] || SM.new;
-  var dtO = o.deliveryDatetime ? new Date(o.deliveryDatetime) : null;
-  var dtS = dtO ? dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "—";
-  var crS = o.createdAt ? new Date(o.createdAt).toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
-  var isFarm = o.deliveryType==="استلام من المزرعة";
-  var isPres = o.status==="pres"||o.status==="pend";
-  var urgent = dtO&&o.status!=="done"&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
-  var overdue = dtO&&o.status!=="done"&&o.status!=="pend"&&(now-dtO)>0;
-  var ph = (o.clientPhone||"").replace(/[^\d]/g,"");
-  if(ph.startsWith("0")) ph = "962"+ph.slice(1);
-
-  // Sheep details
-  var sheepHTML = "";
-  var sheep = o.sheep||[];
+function buildCard(o,now){
+  var sm=SM[o.status]||SM.new;
+  var dtO=o.deliveryDatetime?new Date(o.deliveryDatetime):null;
+  var dtS=dtO?dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
+  var crS=o.createdAt?new Date(o.createdAt).toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+  var isFarm=o.deliveryType==="استلام من المزرعة";
+  var isPres=o.status==="pres"||o.status==="pend";
+  var urgent=dtO&&o.status!=="done"&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
+  var overdue=dtO&&o.status!=="done"&&o.status!=="pend"&&(now-dtO)>0;
+  var ph=(o.clientPhone||"").replace(/[^\d]/g,"");if(ph.startsWith("0"))ph="962"+ph.slice(1);
+  var sheep=o.sheep||[];
+  var sheepHTML="";
   if(sheep.length){
-    sheepHTML = "<div class='sheep-list'>"+sheep.map(function(s,i){
-      var cl = s.cutType==="تقطيع بحضور العميل"?"✋ بحضور العميل":
-               s.cutType==="تقطيع المركزية"?"🏪 تقطيع المركزية":
-               s.cutType==="تبرع للجمعيات"?"🤲 تبرع":
-               s.cutType==="حضور الذبح فقط"?"👁️ حضور الذبح":
-               s.cutType||"—";
-      return "<div class='sheep-item'>"
-        +"<div class='sh-hdr'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+"</div>"
+    sheepHTML="<div class='sheep-list'>"+sheep.map(function(s,i){
+      var cl=s.cutType==="تقطيع بحضور العميل"?"✋ بحضور العميل":s.cutType==="تقطيع المركزية"?"🏪 تقطيع المركزية":s.cutType==="تبرع للجمعيات"?"🤲 تبرع":s.cutType==="حضور الذبح فقط"?"👁️ حضور الذبح":s.cutType||"—";
+      return "<div class='sheep-item'><div class='sh-hdr'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+"</div>"
         +(s.for?"<div class='sh-row'>👤 عن: <b>"+s.for+"</b></div>":"")
         +"<div class='sh-row'>"+cl+"</div>"
-        +(s.cutType==="تبرع للجمعيات"&&s.donationOrg?"<span class='don-badge'>🤲 "+s.donationOrg+" — "+s.donationWeight+" كغ</span>":"")
+        +(s.cutType==="تبرع للجمعيات"&&s.donationOrg?"<span style='background:#E8F5E9;border:1px solid #A5D6A7;border-radius:6px;padding:3px 8px;font-size:11px;color:#1B5E20;font-weight:600;display:inline-block;margin-top:3px'>🤲 "+s.donationOrg+" — "+s.donationWeight+" كغ</span>":"")
         +(s.cutNotes?"<div class='nbox'><div class='nlbl'>ملاحظات</div><div class='ntxt'>"+s.cutNotes+"</div></div>":"")
         +"</div>";
     }).join("")+"</div>";
   }
-
-  // Status options
-  var stOpts = isPres
-    ? "<option value='pres'"+(o.status==="pres"?" selected":"")+">👁️ حضور الذبح فقط</option>"
-      +"<option value='pend'"+(o.status==="pend"?" selected":"")+">✅ انتهى</option>"
-    : "<option value='new'"+(o.status==="new"?" selected":"")+">🔴 طلب جديد</option>"
-      +"<option value='slau'"+(o.status==="slau"?" selected":"")+">🔪 مذبوح</option>"
-      +"<option value='butc'"+(o.status==="butc"?" selected":"")+">🥩 عند اللحام</option>"
-      +"<option value='done2'"+(o.status==="done2"?" selected":"")+">✅ تم التجهيز</option>"
-      +"<option value='done'"+(o.status==="done"?" selected":"")+">🟢 سُلِّم للعميل</option>";
-
-  var cc = "ocard"+(isFarm?" farm-c":"")+(isPres?" pres-c":"");
+  var stOpts=isPres
+    ?"<option value='pres'"+(o.status==="pres"?" selected":"")+">👁️ حضور الذبح فقط</option><option value='pend'"+(o.status==="pend"?" selected":"")+">✅ انتهى</option>"
+    :"<option value='new'"+(o.status==="new"?" selected":"")+">🔴 طلب جديد</option><option value='slau'"+(o.status==="slau"?" selected":"")+">🔪 مذبوح</option><option value='butc'"+(o.status==="butc"?" selected":"")+">🥩 عند اللحام</option><option value='done2'"+(o.status==="done2"?" selected":"")+">✅ تم التجهيز</option><option value='done'"+(o.status==="done"?" selected":"")+">🟢 سُلِّم للعميل</option>";
+  var cc="ocard"+(isFarm?" farm-c":"")+(isPres?" pres-c":"");
   return "<div class='"+cc+"'>"
-    +"<div class='chtop'><div style='display:flex;align-items:center;gap:8px'>"
-    +"<span class='chnum'>طلب #"+(o.orderNum||o._key.slice(-5).toUpperCase())+"</span>"
-    +(isFarm?"<span class='tag tfarm'>🌿 مزرعة</span>":"")
-    +"</div><span class='sbadge "+sm.b+"'>"+sm.ar+"</span></div>"
+    +"<div class='chtop'><div style='display:flex;align-items:center;gap:8px'><span class='chnum'>طلب #"+(o.orderNum||o._key.slice(-5).toUpperCase())+"</span>"+(isFarm?"<span class='tag tfarm'>🌿 مزرعة</span>":"")+"</div><span class='sbadge "+sm.b+"'>"+sm.ar+"</span></div>"
     +"<div class='cbody'>"
-    +(overdue?"<div class='pbanner'>🚨 متأخر</div>":"")
-    +(urgent?"<div class='pbanner'>⚡ الموعد خلال أقل من ٣ ساعات</div>":"")
-    +"<div class='crow'><div class='av'>"+(isFarm?"🌿":isPres?"👁️":"🧑")+"</div>"
-    +"<div><div class='cn'>"+(o.clientName||"—")+"</div><div class='cp'>"+(o.clientPhone||"—")+"</div></div></div>"
-    +"<div class='tags'><span class='tag tg'>🐑 ×"+(o.count||1)+"</span>"
-    +"<span class='tag "+(o.deliveryType==="استلام من المزرعة"?"tg":"tp":"tp")+"'>"+(o.deliveryType||"—")+"</span>"
-    +"<span class='tag tt'>💵 مدفوع</span>"
-    +(o.weight?"<span class='tag tpu'>⚖️ "+o.weight+" كغ</span>":"")
-    +"</div>"
+    +(overdue?"<div class='pbanner'>🚨 متأخر</div>":"")+(urgent?"<div class='pbanner'>⚡ الموعد خلال أقل من ٣ ساعات</div>":"")
+    +"<div class='crow'><div class='av'>"+(isFarm?"🌿":isPres?"👁️":"🧑")+"</div><div><div class='cn'>"+(o.clientName||"—")+"</div><div class='cp'>"+(o.clientPhone||"—")+"</div></div></div>"
+    +"<div class='tags'><span class='tag tg'>🐑 ×"+(o.count||1)+"</span><span class='tag "+(isFarm?"tg":"tp")+"'>"+(o.deliveryType||"—")+"</span><span class='tag tt'>💵 مدفوع</span>"+(o.weight?"<span class='tag tpu'>⚖️ "+o.weight+" كغ</span>":"")+"</div>"
     +"<div class='iline'>📅 <span>موعد التسليم: <b>"+dtS+"</b></span></div>"
     +(o.deliveryType==="توصيل للبيت"&&o.address?"<div class='iline'>📍 <span>"+o.address+"</span></div>":"")
     +(o.agent?"<div class='iline'>👤 <span>"+o.agent+"</span></div>":"")
     +sheepHTML
-    +"<div class='wrow'>⚖️ <span style='font-size:12px;color:#555'>وزن (كغ):</span>"
-    +"<input class='winp' id='w-"+o._key+"' type='number' step='0.1' min='0' value='"+(o.weight||"")+"' placeholder='—'/>"
-    +"<button class='wsave' onclick='SW(\""+o._key+"\")'>حفظ</button></div>"
+    +"<div class='wrow'>⚖️ <span style='font-size:12px;color:#555'>وزن (كغ):</span><input class='winp' id='w-"+o._key+"' type='number' step='0.1' min='0' value='"+(o.weight||"")+"' placeholder='—'/><button class='wsave' onclick='SW(\""+o._key+"\")'>حفظ</button></div>"
     +"<div class='ctime'>"+crS+"</div>"
     +"</div>"
-    +"<div class='cftr'>"
-    +"<select class='stsel' id='sel-"+o._key+"'>"+stOpts+"</select>"
+    +"<div class='cftr'><select class='stsel' id='sel-"+o._key+"'>"+stOpts+"</select>"
     +"<button class='ubtn' onclick='US2(\""+o._key+"\")'>تحديث</button>"
     +"<button class='prtbtn' onclick='showPrint(\""+o._key+"\")'>&#x1F5A8;</button>"
     +"<div class='wa-wrap' id='waw-"+o._key+"'><button class='wa-btn' onclick='openWA(\""+o._key+"\",\""+ph+"\",event)'>&#x1F4AC; ▾</button></div>"
-    +"<button style='padding:7px 10px;border-radius:8px;background:none;border:1.5px solid #E0DDD8;color:#2E6B2E;font-size:12px;font-weight:700;cursor:pointer' onclick='openEdit(\""+o._key+"\")'> &#x270F; تعديل</button>"+"<button class='delbtn' onclick='DEL(\""+o._key+"\")'>&#x1F5D1;</button>"
+    +"<button class='editbtn' onclick='openEdit(\""+o._key+"\")'>✏️ تعديل</button>"
+    +"<button class='delbtn' onclick='DEL(\""+o._key+"\")'>&#x1F5D1;</button>"
     +"</div></div>";
 }
 
-// ── WA Menu (fixed position) ──────────────────
-function openWA(key, ph, e){
-  e.stopPropagation();
-  closeWA();
-  var o = AD.find(function(x){ return x._key===key; });
-  if(!o) return;
-  var isPres = o.status==="pres"||o.status==="pend";
-  if(isPres) return;
-  var items = ["slau","butc","done2","done"];
-  var btn = document.getElementById("waw-"+key).querySelector(".wa-btn");
-  var rect = btn.getBoundingClientRect();
-  var menu = document.createElement("div");
-  menu.className = "wa-menu";
-  menu.id = "wam-active";
-  menu.style.top = (rect.bottom + window.scrollY + 4)+"px";
-  menu.style.left = rect.left+"px";
-  menu.innerHTML = items.map(function(s){
-    var url = "https://wa.me/"+ph+"?text="+encodeURIComponent(WA[s](o));
-    return "<a href='"+url+"' target='_blank' class='wa-item' onclick='closeWA()'>"+SM[s].ar+"</a>";
+function openWA(key,ph,e){
+  e.stopPropagation();closeWA();
+  var o=AD.find(function(x){return x._key===key;});if(!o)return;
+  if(o.status==="pres"||o.status==="pend")return;
+  var btn=document.getElementById("waw-"+key).querySelector(".wa-btn");
+  var rect=btn.getBoundingClientRect();
+  var menu=document.createElement("div");
+  menu.className="wa-menu";menu.id="wam-active";
+  menu.style.top=(rect.bottom+window.scrollY+4)+"px";menu.style.left=rect.left+"px";
+  menu.innerHTML=["slau","butc","done2","done"].map(function(s){
+    var url="https://wa.me/"+ph+"?text="+encodeURIComponent(WA[s](o));
+    return"<a href='"+url+"' target='_blank' class='wa-item' onclick='closeWA()'>"+SM[s].ar+"</a>";
   }).join("");
-  document.body.appendChild(menu);
-  OPEN_WA = key;
+  document.body.appendChild(menu);OWA=key;
 }
-function closeWA(){
-  var m = document.getElementById("wam-active");
-  if(m) m.remove();
-  OPEN_WA = null;
-}
-document.addEventListener("click", closeWA);
+function closeWA(){var m=document.getElementById("wam-active");if(m)m.remove();OWA=null;}
+document.addEventListener("click",closeWA);
 
-// ── Actions ───────────────────────────────────
-function US2(k){ db.ref("eid_orders/"+k).update({status: document.getElementById("sel-"+k).value}).catch(function(e){alert(e.message);}); }
-function SW(k){
-  var v = parseFloat(document.getElementById("w-"+k).value)||0;
-  db.ref("eid_orders/"+k).update({weight:v}).then(function(){
-    var b = document.querySelector("#w-"+k).nextElementSibling;
-    var t = b.textContent; b.textContent="✓"; b.style.background="#2E6B2E";
-    setTimeout(function(){ b.textContent=t; b.style.background=""; }, 1500);
-  }).catch(function(e){ alert(e.message); });
-}
-function DEL(k){ if(!confirm("تأكيد حذف الطلب؟")) return; db.ref("eid_orders/"+k).remove().catch(function(e){ alert(e.message); }); }
+function US2(k){db.ref("eid_orders/"+k).update({status:document.getElementById("sel-"+k).value}).catch(function(e){alert(e.message);});}
+function SW(k){var v=parseFloat(document.getElementById("w-"+k).value)||0;db.ref("eid_orders/"+k).update({weight:v}).then(function(){var b=document.querySelector("#w-"+k).nextElementSibling;var t=b.textContent;b.textContent="✓";b.style.background="#2E6B2E";setTimeout(function(){b.textContent=t;b.style.background="";},1500);}).catch(function(e){alert(e.message);});}
+function DEL(k){if(!confirm("تأكيد حذف الطلب؟"))return;db.ref("eid_orders/"+k).remove().catch(function(e){alert(e.message);});}
 
-// ── Filters ───────────────────────────────────
-function F(f){
-  CF = f;
-  ["all","new","slau","butc","done2","done","pres"].forEach(function(k){ document.getElementById("fp-"+k).classList.toggle("active", k===f); });
+function F(f){CF=f;["all","new","slau","butc","done2","done","pres"].forEach(function(k){document.getElementById("fp-"+k).classList.toggle("active",k===f);});RC();}
+function FD(f){
+  DF=f;
+  var map={"all":"all","استلام من المطعم":"rest","استلام من المزرعة":"farm","توصيل للبيت":"home"};
+  ["all","rest","farm","home"].forEach(function(k){document.getElementById("delf-"+k).classList.toggle("on",map[f]===k||(f==="all"&&k==="all"));});
   RC();
 }
-function toggleSort(){ SORT=!SORT; document.getElementById("srtb").classList.toggle("on",SORT); RC(); }
-function clearF(){
-  document.getElementById("si").value="";
-  document.getElementById("df").value="";
-  SORT=false; document.getElementById("srtb").classList.remove("on");
-  F("all");
-}
+function toggleSort(){SORT=!SORT;document.getElementById("srtb").classList.toggle("on",SORT);RC();}
+function clearF(){document.getElementById("si").value="";document.getElementById("df").value="";SORT=false;document.getElementById("srtb").classList.remove("on");F("all");FD("all");}
 
-// ── Slots ─────────────────────────────────────
 function renderSlots(){
-  var dateVal = document.getElementById("fdate").value;
-  var sec = document.getElementById("slots-sec");
-  if(!dateVal){ sec.style.display="none"; return; }
+  var dateVal=document.getElementById("fdate").value;
+  var sec=document.getElementById("slots-sec");
+  if(!dateVal){sec.style.display="none";return;}
   sec.style.display="block";
-  // Calculate from existing AD
-  var slotMap = {};
+  var slotMap={};
   AD.forEach(function(o){
-    if(!o.deliveryDatetime || !o.deliveryDatetime.startsWith(dateVal)) return;
-    var hour = o.deliveryDatetime.slice(0,13);
-    if(!slotMap[hour]) slotMap[hour] = {clients:0, sheep:0};
-    slotMap[hour].clients++;
-    slotMap[hour].sheep += parseInt(o.count)||1;
+    if(!o.deliveryDatetime||!o.deliveryDatetime.startsWith(dateVal))return;
+    var hour=o.deliveryDatetime.slice(0,13);
+    if(!slotMap[hour])slotMap[hour]={clients:0,sheep:0};
+    slotMap[hour].clients++;slotMap[hour].sheep+=parseInt(o.count)||1;
   });
-  var html = "";
-  for(var h=H_START; h<H_END; h++){
-    var pad = h<10?"0"+h:""+h;
-    var key = dateVal+"T"+pad;
-    var info = slotMap[key]||{clients:0,sheep:0};
-    var full = info.clients>=SLOTS_PER_HOUR;
-    var sel = SEL_SLOT===key;
-    var h12 = h===0?12:h>12?h-12:h;
-    var suf = h<12?"ص":"م";
-    var timeLabel = h12+":٠٠ "+suf;
-    var rem = SLOTS_PER_HOUR - info.clients;
-    var cls = "slot"+(full?" slot-full":"")+(sel?" slot-sel":"");
-    html += "<button class='"+cls+"'"+(full?"disabled":"onclick=\"pickSlot('"+key+"','"+dateVal+"','"+pad+"')\"")+">"
-      +"<span class='slot-time'>"+timeLabel+"</span>"
-      +"<span class='slot-info'>"+(full?"<span style='color:#E53935;font-weight:700'>مكتملة</span>":ar(info.clients)+"/"+ar(SLOTS_PER_HOUR)+" عميل")+"</span>"
+  var html="";
+  for(var h=HS;h<HE;h++){
+    var pad=h<10?"0"+h:""+h;var key=dateVal+"T"+pad;
+    var info=slotMap[key]||{clients:0,sheep:0};
+    var full=info.clients>=SMAX;var sel=SSLOT===key;
+    var h12=h===0?12:h>12?h-12:h;var suf=h<12?"ص":"م";
+    var cls="slot"+(full?" slot-full":"")+(sel?" slot-sel":"");
+    html+="<button class='"+cls+"'"+(full?"disabled":"onclick=\"pickSlot('"+key+"','"+dateVal+"','"+pad+"')\"")+">"
+      +"<span class='slot-time'>"+h12+":٠٠ "+suf+"</span>"
+      +"<span class='slot-info'>"+(full?"<span style='color:#E53935;font-weight:700'>مكتملة</span>":ar(info.clients)+"/"+ar(SMAX)+" عميل")+"</span>"
       +(!full&&info.sheep?"<span class='slot-sheep-cnt'>"+ar(info.sheep)+" خروف</span>":"")
       +"</button>";
   }
-  document.getElementById("slots-grid").innerHTML = html;
+  document.getElementById("slots-grid").innerHTML=html;
 }
+function pickSlot(key,dateVal,pad){SSLOT=key;document.getElementById("fdt").value=dateVal+"T"+pad+":00";renderSlots();}
 
-function pickSlot(key, dateVal, pad){
-  SEL_SLOT = key;
-  document.getElementById("fdt").value = dateVal+"T"+pad+":00";
-  renderSlots();
-}
-
-// ── Sheep forms ───────────────────────────────
 function buildSheep(){
-  var count = Math.max(1, Math.min(20, parseInt(document.getElementById("fct").value)||1));
-  var c = document.getElementById("sheep-forms");
-  c.innerHTML = "";
-  for(var i=1; i<=count; i++) c.insertAdjacentHTML("beforeend", sheepBlock(i));
+  var count=Math.max(1,Math.min(20,parseInt(document.getElementById("fct").value)||1));
+  var c=document.getElementById("sheep-forms");c.innerHTML="";
+  for(var i=1;i<=count;i++)c.insertAdjacentHTML("beforeend",sheepBlock(i));
 }
-
 function sheepBlock(n){
   return "<div class='fcard sheep-blk' id='sb-"+n+"'>"
     +"<div class='sheep-blk-title'>&#x1F411; تخصيص الخروف رقم "+ar(n)+"</div>"
     +"<div class='fgrid'>"
     +"<div class='fg'><div class='flbl'>عن مين يُذبح</div><input type='text' class='fi sf' placeholder='اسم الشخص'/></div>"
-    +"<div class='fg'><div class='flbl'>نوع الخروف</div>"
-    +"<div class='rwrap'>"
-    +"<label class='ropt active' onclick='rsel(this,\"type\","+n+")' data-v='بلدي'><input type='radio' name='type-"+n+"' checked/> &#x1F1EF;&#x1F1F4; بلدي</label>"
-    +"<label class='ropt' onclick='rsel(this,\"type\","+n+")' data-v='روماني'><input type='radio' name='type-"+n+"'/> &#x1F1F7;&#x1F1F4; روماني</label>"
+    +"<div class='fg'><div class='flbl'>نوع الخروف</div><div class='rwrap'>"
+    +"<label class='ropt active' onclick='rsel(this)' data-v='بلدي'><input type='radio' name='type-"+n+"' checked/> &#x1F1EF;&#x1F1F4; بلدي</label>"
+    +"<label class='ropt' onclick='rsel(this)' data-v='روماني'><input type='radio' name='type-"+n+"'/> &#x1F1F7;&#x1F1F4; روماني</label>"
     +"</div></div>"
-    +"<div class='fg'><div class='flbl'>الوزن</div>"
-    +"<div class='rwrap'>"
-    +"<label class='ropt active' onclick='rsel(this,\"wt\","+n+")' data-v='٣٦-٣٨'><input type='radio' name='wt-"+n+"' checked/> ٣٦-٣٨ كغ</label>"
-    +"<label class='ropt' onclick='rsel(this,\"wt\","+n+")' data-v='٤٢-٤٤'><input type='radio' name='wt-"+n+"'/> ٤٢-٤٤ كغ</label>"
+    +"<div class='fg'><div class='flbl'>الوزن</div><div class='rwrap'>"
+    +"<label class='ropt active' onclick='rsel(this)' data-v='٣٦-٣٨'><input type='radio' name='wt-"+n+"' checked/> ٣٦-٣٨ كغ</label>"
+    +"<label class='ropt' onclick='rsel(this)' data-v='٤٢-٤٤'><input type='radio' name='wt-"+n+"'/> ٤٢-٤٤ كغ</label>"
     +"</div></div>"
     +"<div class='fg'><div class='flbl'>نوع الطلب</div>"
     +"<select class='fsel cut-sel' onchange='onCutChange(this,"+n+")'>"
@@ -638,142 +527,87 @@ function sheepBlock(n){
     +"<option value='حضور الذبح فقط'>👁️ حضور الذبح فقط</option>"
     +"</select></div>"
     +"</div>"
-    +"<div class='cut-det' id='cd-"+n+"'>"
+    +"<div class='cut-det' id='cd-"+n+"' style='display:none'>"
     +"<div class='cut-det-title'>تفاصيل التقطيع</div>"
     +"<div id='notes-g-"+n+"' style='display:none'><div class='flbl' style='margin-bottom:6px'>ملاحظات خاصة</div><textarea class='fta sn' placeholder='مثال: الكتف منفصلة...'></textarea></div>"
     +"<div id='don-g-"+n+"' style='display:none'>"
     +"<div class='fg' style='margin-bottom:10px'><div class='flbl' style='margin-bottom:6px'>اسم الجمعية</div><input type='text' class='fi dorg' placeholder='اسم الجمعية'/></div>"
     +"<div class='fg'><div class='flbl' style='margin-bottom:6px'>وزن التبرع (كغ)</div><input type='number' class='fi dw2' placeholder='10' step='0.5' min='0'/></div>"
-    +"</div>"
-    +"</div>"
-    +"</div>";
+    +"</div></div></div>";
 }
-
-function rsel(el, type, n){
-  var g = el.closest(".rwrap");
-  g.querySelectorAll(".ropt").forEach(function(r){ r.classList.remove("active"); });
-  el.classList.add("active");
+function rsel(el){var g=el.closest(".rwrap");g.querySelectorAll(".ropt").forEach(function(r){r.classList.remove("active");});el.classList.add("active");}
+function onCutChange(sel,n){
+  var v=sel.value;var cd=document.getElementById("cd-"+n);
+  var ng=document.getElementById("notes-g-"+n);var dg=document.getElementById("don-g-"+n);
+  if(v==="تقطيع بحضور العميل"||v==="حضور الذبح فقط"){cd.style.display="none";}
+  else{cd.style.display="block";ng.style.display=v==="ملاحظات معينة"?"block":"none";dg.style.display=v==="تبرع للجمعيات"?"block":"none";}
 }
-
-function onCutChange(sel, n){
-  var v = sel.value;
-  var cd = document.getElementById("cd-"+n);
-  var ng = document.getElementById("notes-g-"+n);
-  var dg = document.getElementById("don-g-"+n);
-  if(v==="تقطيع بحضور العميل"||v==="حضور الذبح فقط"){
-    cd.style.display="none";
-  } else {
-    cd.style.display="block";
-    ng.style.display = v==="ملاحظات معينة"?"block":"none";
-    dg.style.display = v==="تبرع للجمعيات"?"block":"none";
-  }
-}
-
 function getSheep(){
-  var count = parseInt(document.getElementById("fct").value)||1;
-  var arr = [];
-  for(var i=1; i<=count; i++){
-    var b = document.getElementById("sb-"+i); if(!b) continue;
-    var typeEl = b.querySelector(".ropt.active[data-v]");
-    var wtEl   = b.querySelector(".rwrap:nth-child(2) .ropt.active[data-v]");
-    // Use last two rwrap .ropt.active
-    var ropts = b.querySelectorAll(".rwrap");
-    var typeV = "بلدي", wtV = "٣٦-٣٨";
-    if(ropts[0]){ var a=ropts[0].querySelector(".ropt.active"); if(a) typeV=a.getAttribute("data-v")||"بلدي"; }
-    if(ropts[1]){ var a=ropts[1].querySelector(".ropt.active"); if(a) wtV=a.getAttribute("data-v")||"٣٦-٣٨"; }
-    var cutSel = b.querySelector(".cut-sel");
-    var cutV = cutSel ? cutSel.value : "تقطيع المركزية";
-    var sn = b.querySelector(".sn");
-    var dorg = b.querySelector(".dorg");
-    var dw = b.querySelector(".dw2");
-    arr.push({
-      for: b.querySelector(".sf").value.trim(),
-      type: typeV,
-      weight: wtV,
-      cutType: cutV,
-      cutNotes: sn?sn.value.trim():"",
-      donationOrg: dorg?dorg.value.trim():"",
-      donationWeight: dw?parseFloat(dw.value)||0:0,
-      isPresenceOnly: cutV==="حضور الذبح فقط",
-    });
+  var count=parseInt(document.getElementById("fct").value)||1;var arr=[];
+  for(var i=1;i<=count;i++){
+    var b=document.getElementById("sb-"+i);if(!b)continue;
+    var ropts=b.querySelectorAll(".rwrap");
+    var typeV="بلدي",wtV="٣٦-٣٨";
+    if(ropts[0]){var a=ropts[0].querySelector(".ropt.active");if(a)typeV=a.getAttribute("data-v")||"بلدي";}
+    if(ropts[1]){var a=ropts[1].querySelector(".ropt.active");if(a)wtV=a.getAttribute("data-v")||"٣٦-٣٨";}
+    var cutSel=b.querySelector(".cut-sel");var cutV=cutSel?cutSel.value:"تقطيع المركزية";
+    var sn=b.querySelector(".sn");var dorg=b.querySelector(".dorg");var dw=b.querySelector(".dw2");
+    arr.push({for:b.querySelector(".sf").value.trim(),type:typeV,weight:wtV,cutType:cutV,
+      cutNotes:sn?sn.value.trim():"",donationOrg:dorg?dorg.value.trim():"",
+      donationWeight:dw?parseFloat(dw.value)||0:0,isPresenceOnly:cutV==="حضور الذبح فقط"});
   }
   return arr;
 }
-
-// ── Dup check ─────────────────────────────────
 function chkDup(){
-  var p = (document.getElementById("fph").value||"").replace(/\s/g,"");
-  var el = document.getElementById("dw");
-  if(p.length<7){ el.style.display="none"; return; }
-  var d = AD.filter(function(o){ return (o.clientPhone||"").replace(/\s/g,"")===p; });
-  if(d.length){ el.textContent="⚠️ هذا الرقم مسجّل مسبقاً لـ \""+d[0].clientName+"\" — تأكد قبل الحفظ"; el.style.display="block"; }
+  var p=(document.getElementById("fph").value||"").replace(/\s/g,"");
+  var el=document.getElementById("dw");if(p.length<7){el.style.display="none";return;}
+  var d=AD.filter(function(o){return(o.clientPhone||"").replace(/\s/g,"")===p;});
+  if(d.length){el.textContent="⚠️ هذا الرقم مسجّل مسبقاً لـ \""+d[0].clientName+"\" — تأكد قبل الحفظ";el.style.display="block";}
   else el.style.display="none";
 }
-
-// ── Delivery type ─────────────────────────────
-function pickDel(val, el){
-  DEL_TYPE = val;
-  document.getElementById("addr-g").style.display = val==="توصيل للبيت"?"block":"none";
-  document.querySelectorAll("#del-opts .ropt").forEach(function(r){ r.classList.remove("active"); });
-  el.classList.add("active");
+function pickDel(val,el){
+  DEL_TYPE=val;document.getElementById("addr-g").style.display=val==="توصيل للبيت"?"block":"none";
+  document.querySelectorAll("#del-opts .ropt").forEach(function(r){r.classList.remove("active");});el.classList.add("active");
 }
-
-// ── Submit ────────────────────────────────────
 function SUB(){
-  var name  = document.getElementById("fn").value.trim();
-  var phone = document.getElementById("fph").value.trim();
-  var count = parseInt(document.getElementById("fct").value)||1;
-  var dt    = document.getElementById("fdt").value;
-  var addr  = document.getElementById("fad").value.trim();
-  var agent = document.getElementById("fag").value.trim();
-  if(!name)  { alert("اسم العميل مطلوب"); return; }
-  if(!phone) { alert("رقم الجوال مطلوب"); return; }
-  if(!dt)    { alert("يرجى اختيار وقت الاستلام"); return; }
-  if(DEL_TYPE==="توصيل للبيت"&&!addr){ alert("عنوان التوصيل مطلوب"); return; }
-  var sheep = getSheep();
-  var allPres = sheep.length>0 && sheep.every(function(s){ return s.isPresenceOnly; });
-  var order = {
-    clientName:name, clientPhone:phone, count:count,
-    deliveryType:DEL_TYPE, address:addr||"",
-    deliveryDatetime:dt, deliveryDate:dt.slice(0,10),
-    agent:agent, sheep:sheep,
-    status:allPres?"pres":"new",
-    createdAt:new Date().toISOString(),
-    orderNum:Date.now().toString().slice(-5),
-  };
-  var btn=document.getElementById("subbtn"), msg=document.getElementById("smsg");
-  btn.textContent="جاري الحفظ..."; btn.className="sbtn saving";
+  var name=document.getElementById("fn").value.trim();var phone=document.getElementById("fph").value.trim();
+  var count=parseInt(document.getElementById("fct").value)||1;var dt=document.getElementById("fdt").value;
+  var addr=document.getElementById("fad").value.trim();var agent=document.getElementById("fag").value.trim();
+  if(!name){alert("اسم العميل مطلوب");return;}if(!phone){alert("رقم الجوال مطلوب");return;}
+  if(!dt){alert("يرجى اختيار وقت الاستلام");return;}
+  if(DEL_TYPE==="توصيل للبيت"&&!addr){alert("عنوان التوصيل مطلوب");return;}
+  var sheep=getSheep();var allPres=sheep.length>0&&sheep.every(function(s){return s.isPresenceOnly;});
+  var order={clientName:name,clientPhone:phone,count:count,deliveryType:DEL_TYPE,address:addr||"",
+    deliveryDatetime:dt,deliveryDate:dt.slice(0,10),agent:agent,sheep:sheep,
+    status:allPres?"pres":"new",createdAt:new Date().toISOString(),orderNum:Date.now().toString().slice(-5)};
+  var btn=document.getElementById("subbtn"),msg=document.getElementById("smsg");
+  btn.textContent="جاري الحفظ...";btn.className="sbtn saving";
   db.ref("eid_orders").push(order).then(function(){
-    btn.innerHTML="&#x2713; تم تسجيل الطلب!"; btn.className="sbtn ok";
-    msg.textContent="ظهر فوراً لجميع الأطراف ✅"; msg.style.display="block";
-    ["fn","fph","fdt","fad","fag"].forEach(function(id){ document.getElementById(id).value=""; });
-    document.getElementById("fct").value="1";
-    document.getElementById("fdate").value="";
-    document.getElementById("slots-sec").style.display="none";
-    document.getElementById("dw").style.display="none";
-    SEL_SLOT=null; DEL_TYPE="استلام من المطعم";
-    document.getElementById("addr-g").style.display="none";
-    document.querySelectorAll("#del-opts .ropt").forEach(function(r,i){ r.classList.toggle("active",i===0); });
+    btn.innerHTML="&#x2713; تم تسجيل الطلب!";btn.className="sbtn ok";
+    msg.textContent="ظهر فوراً لجميع الأطراف ✅";msg.style.display="block";
+    ["fn","fph","fdt","fad","fag"].forEach(function(id){document.getElementById(id).value="";});
+    document.getElementById("fct").value="1";document.getElementById("fdate").value="";
+    document.getElementById("slots-sec").style.display="none";document.getElementById("dw").style.display="none";
+    SSLOT=null;DEL_TYPE="استلام من المطعم";document.getElementById("addr-g").style.display="none";
+    document.querySelectorAll("#del-opts .ropt").forEach(function(r,i){r.classList.toggle("active",i===0);});
     buildSheep();
-    setTimeout(function(){ btn.textContent="تسجيل الطلب ←"; btn.className="sbtn idle"; msg.style.display="none"; }, 3000);
-  }).catch(function(e){ btn.textContent="خطأ — حاول مجدداً"; btn.className="sbtn idle"; alert(e.message); });
+    setTimeout(function(){btn.textContent="تسجيل الطلب ←";btn.className="sbtn idle";msg.style.display="none";},3000);
+  }).catch(function(e){btn.textContent="خطأ — حاول مجدداً";btn.className="sbtn idle";alert(e.message);});
 }
 
-// ── Print ─────────────────────────────────────
 function showPrint(key){
-  var o = AD.find(function(x){ return x._key===key; }); if(!o) return;
-  var sheep = o.sheep||[];
-  var dtS = o.deliveryDatetime ? new Date(o.deliveryDatetime).toLocaleString("ar-EG",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
-  var sheepHTML = sheep.map(function(s,i){
-    return "<div class='pc-sheep'><div class='pc-sheep-title'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+"</div>"
+  var o=AD.find(function(x){return x._key===key;});if(!o)return;
+  var sheep=o.sheep||[];
+  var dtS=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
+  var sheepHTML=sheep.map(function(s,i){
+    return"<div class='pc-sheep'><div class='pc-sheep-title'>🐑 خروف "+(i+1)+" — "+(s.type||"")+" | "+(s.weight||"")+"</div>"
       +(s.for?"<div class='pc-sheep-line'>عن: <b>"+s.for+"</b></div>":"")
       +"<div class='pc-sheep-line'>التقطيع: "+(s.cutType||"—")+"</div>"
       +(s.cutType==="تبرع للجمعيات"&&s.donationOrg?"<div class='pc-sheep-line'>تبرع لـ: "+s.donationOrg+" ("+s.donationWeight+" كغ)</div>":"")
       +(s.cutNotes?"<div class='pc-sheep-line'>ملاحظات: "+s.cutNotes+"</div>":"")
       +"</div>";
   }).join("");
-  document.getElementById("pbody").innerHTML =
-    "<div style='font-size:28px;margin-bottom:4px'>🐑</div>"
+  document.getElementById("pbody").innerHTML="<div style='font-size:28px;margin-bottom:4px'>🐑</div>"
     +"<div style='font-size:18px;font-weight:700;color:#1B3A1B'>كرت تعريفي — أضحية العيد</div>"
     +"<div style='font-size:12px;color:#888;margin-bottom:16px'>مطعم المركزية × OrderTech</div>"
     +"<div class='pc-line'><span class='pc-key'>رقم الطلب</span><span class='pc-val'>#"+(o.orderNum||o._key.slice(-5).toUpperCase())+"</span></div>"
@@ -786,207 +620,24 @@ function showPrint(key){
     +"<div style='text-align:center;margin-top:14px;font-size:11px;color:#AAA'>مطعم المركزية | عيد الأضحى ٢٠٢٦</div>";
   document.getElementById("povl").style.display="flex";
 }
-function closePrint(){ document.getElementById("povl").style.display="none"; }
-
-// ── Report ────────────────────────────────────
-function setToday(){ document.getElementById("rd").value=new Date().toISOString().slice(0,10); RR(); }
-function RR(){
-  var dv = document.getElementById("rd").value;
-  var el = document.getElementById("rb");
-  if(!dv){ el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F4CA;</div><div class='empty-t'>اختر تاريخاً</div></div>"; return; }
-  var day = AD.filter(function(o){ return (o.createdAt||"").startsWith(dv); });
-  var c = {new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
-  var del=0,pick=0,farm=0,animals=0,baladi=0,romani=0,w3638=0,w4244=0;
-  day.forEach(function(o){
-    if(c[o.status]!==undefined) c[o.status]++;
-    if(o.deliveryType==="توصيل للبيت") del++;
-    else if(o.deliveryType==="استلام من المزرعة") farm++;
-    else pick++;
-    animals += parseInt(o.count)||1;
-    if(o.sheep&&o.sheep.length){
-      o.sheep.forEach(function(s){
-        if(s.type==="روماني") romani++; else baladi++;
-        if((s.weight||"").indexOf("٣٦")!==-1) w3638++;
-        else if((s.weight||"").indexOf("٤٢")!==-1) w4244++;
-      });
-    } else {
-      baladi += parseInt(o.count)||1;
-    }
-  });
-  var t = day.length, pend = t - c.done - c.pend;
-  var dAr = new Date(dv+"T12:00:00").toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  function rc(n,l,col){ return "<div class='rcard'><div class='rn' style='color:"+col+"'>"+n+"</div><div class='rl'>"+l+"</div></div>"; }
-  function rb(lbl,v,col){ var p=t>0?Math.round(v/t*100):0; return "<div class='rrow'><span style='min-width:175px;font-size:13px'>"+lbl+"</span><div class='rbar'><div class='rbarinr' style='width:"+p+"%;background:"+col+"'></div></div><span class='rval' style='color:"+col+"'>"+ar(v)+"</span></div>"; }
-  el.innerHTML =
-    "<div style='font-size:15px;font-weight:700;color:#1B3A1B;margin-bottom:16px'>"+dAr+"</div>"
-    +"<div class='rgrid'>"
-    +rc(ar(t),"إجمالي الطلبات","#2E6B2E")
-    +rc(ar(animals),"إجمالي الأضاحي","#33691E")
-    +rc(ar(baladi)+"/"+ar(romani),"بلدي / روماني","#558B2F")
-    +rc(ar(c.done+c.pend),"تم التسليم","#1565C0")
-    +rc(ar(pend>0?pend:0),"باقي / معلّق","#C62828")
-    +"</div>"
-    +"<div class='rsec'><div class='rtit'>توزيع الحالات</div>"
-    +rb("🔴 طلب جديد",c.new,"#EF5350")
-    +rb("🔪 مذبوح",c.slau,"#B71C1C")
-    +rb("🥩 عند اللحام",c.butc,"#1565C0")
-    +rb("✅ تم التجهيز",c.done2,"#558B2F")
-    +rb("🟢 سُلِّم للعميل",c.done,"#2E7D32")
-    +rb("👁️ حضور الذبح",c.pres+c.pend,"#6A1B9A")
-    +"</div>"
-    +"<div class='rsec'><div class='rtit'>نوع الأضاحي</div>"
-    +rb("🇯🇴 بلدي",baladi,"#2E6B2E")
-    +rb("🇷🇴 روماني",romani,"#1565C0")
-    +"</div>"
-    +"<div class='rsec'><div class='rtit'>الخرفان حسب الوزن</div>"
-    +rb("⚖️ وزن ٣٦-٣٨ كغ",w3638,"#8D6E63")
-    +rb("⚖️ وزن ٤٢-٤٤ كغ",w4244,"#5D4037")
-    +"</div>"
-    +"<div class='rsec'><div class='rtit'>طريقة الاستلام</div>"
-    +rb("🏪 استلام من المطعم",pick,"#E65100")
-    +rb("🌿 استلام من المزرعة",farm,"#2E6B2E")
-    +rb("🚗 توصيل للبيت",del,"#880E4F")
-    +"</div>"
-    +(day.length?"<div class='rsec'><div class='rtit'>قائمة الطلبات</div>"
-      +day.map(function(o){
-        var sm=SM[o.status]||SM.new;
-        var dt=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",{hour:"2-digit",minute:"2-digit"}):"—";
-        return "<div style='display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F3EE;gap:8px;flex-wrap:wrap'>"
-          +"<span style='font-weight:700'>"+(o.clientName||"—")+"</span>"
-          +"<span style='color:#888;font-size:12px'>"+(o.count||1)+" خروف</span>"
-          +"<span class='sbadge "+sm.b+"' style='font-size:10px'>"+sm.ar+"</span>"
-          +"<span style='font-size:12px;color:#555'>⏰ "+dt+"</span>"
-          +"</div>";
-      }).join("")+"</div>":"");
-}
-
-// ── Delivery filter ──────────────────────────────
-function setDelFilter(f){
-  DEL_FILTER = f;
-  ["all","rest","jazar","farm","home"].forEach(function(k){
-    var el = document.getElementById("df-"+k);
-    if(el) el.classList.toggle("on", k===f||
-      (f==="all"&&k==="all")||
-      (f==="استلام من المطعم"&&k==="rest")||
-(f==="استلام من المزرعة"&&k==="farm")||
-      (f==="توصيل للبيت"&&k==="home"));
-  });
-  RC();
-}
-
-// ── Tab switch ────────────────────────────────
-function T(n){
-  ["orders","add","report","tv"].forEach(function(t){
-    document.getElementById("tab-"+t).classList.remove("active");
-    document.getElementById("nav-"+t).classList.remove("active");
-  });
-  document.getElementById("tab-"+n).classList.add("active");
-  document.getElementById("nav-"+n).classList.add("active");
-  if(n==="report") RR();
-  if(n==="tv") renderTV();
-  if(n!=="tv" && tvTimer){ clearInterval(tvTimer); tvTimer=null; }
-}
-
-// ── Init ──────────────────────────────────────
-document.getElementById("rd").value = new Date().toISOString().slice(0,10);
-buildSheep();
-
-// ── TV MODE ───────────────────────────────────
-var tvTimer = null;
-
-function renderTV(){
-  var el = document.getElementById("tv-body");
-  if(!el) return;
-  var now = new Date();
-  // Show all except done/pend
-  var active = AD.filter(function(o){ return o.status!=="done"&&o.status!=="pend"; });
-  // Sort by urgency: overdue first, then by delivery time
-  active.sort(function(a,b){
-    var at = a.deliveryDatetime?new Date(a.deliveryDatetime):new Date(9e15);
-    var bt = b.deliveryDatetime?new Date(b.deliveryDatetime):new Date(9e15);
-    return at-bt;
-  });
-  var counts = {new:0,slau:0,butc:0,done2:0};
-  AD.forEach(function(o){ if(counts[o.status]!==undefined) counts[o.status]++; });
-
-  var timeStr = now.toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-
-  var html = "<div class='tv-header'>"
-    +"<div class='tv-title'>&#x1F411; أضاحي عيد الأضحى — مطعم المركزية</div>"
-    +"<div class='tv-time' id='tv-clock'>"+timeStr+"</div>"
-    +"</div>"
-    +"<div class='tv-stats'>"
-    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#FFAB91'>"+ar(counts.new)+"</div><div class='tv-stat-l'>جديد</div></div>"
-    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#EF9A9A'>"+ar(counts.slau)+"</div><div class='tv-stat-l'>مذبوح</div></div>"
-    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#90CAF9'>"+ar(counts.butc)+"</div><div class='tv-stat-l'>عند اللحام</div></div>"
-    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#A5D6A7'>"+ar(counts.done2)+"</div><div class='tv-stat-l'>تم التجهيز</div></div>"
-    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#69F0AE'>"+ar(AD.filter(function(o){return o.status==="done";}).length)+"</div><div class='tv-stat-l'>سُلِّم</div></div>"
-    +"</div>";
-
-  if(!active.length){
-    html += "<div class='tv-empty'>&#x2705; جميع الطلبات تم تسليمها</div>";
-  } else {
-    html += "<div class='tv-cards'>" + active.map(function(o){
-      var sm = SM[o.status]||SM.new;
-      var dtO = o.deliveryDatetime?new Date(o.deliveryDatetime):null;
-      var dtS = dtO?dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
-      var overdue = dtO&&(now-dtO)>0;
-      var urgent = dtO&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
-      var badgeCls = "tv-badge-"+(SM[o.status]?o.status:"new");
-      var sheep = o.sheep||[];
-      var sheepSummary = sheep.map(function(s,i){ return "خروف "+(i+1)+": "+(s.type||"")+" | "+(s.cutType||""); }).join(" — ");
-      return "<div class='tv-card"+(overdue||urgent?" urgent":"")+"'>"
-        +"<div class='tv-card-num'>طلب #"+(o.orderNum||o._key.slice(-5).toUpperCase())
-        +(overdue?" &#x1F6A8; متأخر":urgent?" &#x26A1; قريب":"")+"</div>"
-        +"<div class='tv-card-name'>"+(o.clientName||"—")+"</div>"
-        +"<div class='tv-card-phone'>"+(o.clientPhone||"—")+"</div>"
-        +"<span class='tv-card-badge "+badgeCls+"'>"+sm.ar+"</span>"
-        +"<div class='tv-card-info'>"
-        +"<b>"+ar(o.count||1)+" خروف</b> | "+(o.deliveryType||"—")
-        +(sheepSummary?"<br><span style='font-size:13px'>"+sheepSummary+"</span>":"")
-        +"</div>"
-        +"<div class='tv-card-time'>&#x1F4C5; "+dtS+"</div>"
-        +"</div>";
-    }).join("") + "</div>";
-  }
-  el.innerHTML = html;
-  // Live clock
-  if(tvTimer) clearInterval(tvTimer);
-  tvTimer = setInterval(function(){
-    var cl = document.getElementById("tv-clock");
-    if(cl) cl.textContent = new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-  }, 1000);
-}
-
-// ── EDIT ORDER ────────────────────────────────
-var editKey = null;
+function closePrint(){document.getElementById("povl").style.display="none";}
 
 function openEdit(key){
-  editKey = key;
-  var o = AD.find(function(x){ return x._key===key; });
-  if(!o) return;
-  var dtDate = (o.deliveryDatetime||"").slice(0,10);
-  var dtTime = (o.deliveryDatetime||"").slice(11,16);
-  var sheep = o.sheep||[];
-  var sheepHTML = sheep.map(function(s,i){
-    return "<div style='background:#F0FBF4;border:1.5px solid #A5D6A7;border-radius:10px;padding:12px 14px;margin-bottom:10px'>"
-      +"<div style='font-size:12px;font-weight:700;color:#1B3A1B;margin-bottom:8px'>&#x1F411; خروف "+(i+1)+"</div>"
+  editKey=key;var o=AD.find(function(x){return x._key===key;});if(!o)return;
+  var dtDate=(o.deliveryDatetime||"").slice(0,10);var dtTime=(o.deliveryDatetime||"").slice(11,16);
+  var sheep=o.sheep||[];
+  var sheepHTML=sheep.map(function(s,i){
+    return"<div style='background:#F0FBF4;border:1.5px solid #A5D6A7;border-radius:10px;padding:12px 14px;margin-bottom:10px'>"
+      +"<div style='font-size:12px;font-weight:700;color:#1B3A1B;margin-bottom:8px'>🐑 خروف "+(i+1)+"</div>"
       +"<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px'>"
-      +"<div><div class='flbl' style='margin-bottom:5px'>عن مين يُذبح</div>"
-      +"<input type='text' class='fi' id='es-for-"+i+"' value='"+(s.for||"").replace(/'/g,"&#39;")+"'/></div>"
-      +"<div><div class='flbl' style='margin-bottom:5px'>نوع الطلب</div>"
-      +"<select class='fsel' id='es-cut-"+i+"'>"
-      +["تقطيع بحضور العميل","تقطيع المركزية","ملاحظات معينة","تبرع للجمعيات","حضور الذبح فقط"].map(function(opt){
-        return "<option value='"+opt+"'"+(s.cutType===opt?" selected":"")+">"+opt+"</option>";
-      }).join("")
-      +"</select></div>"
-      +"</div>"
-      +"<div style='margin-top:8px'><div class='flbl' style='margin-bottom:5px'>ملاحظات</div>"
-      +"<input type='text' class='fi' id='es-note-"+i+"' value='"+(s.cutNotes||"").replace(/'/g,"&#39;")+"' placeholder='ملاحظات خاصة'/></div>"
+      +"<div><div class='flbl' style='margin-bottom:5px'>عن مين يُذبح</div><input type='text' class='fi' id='es-for-"+i+"' value='"+(s.for||"").replace(/'/g,"&#39;")+"'/></div>"
+      +"<div><div class='flbl' style='margin-bottom:5px'>نوع الطلب</div><select class='fsel' id='es-cut-"+i+"'>"
+      +["تقطيع بحضور العميل","تقطيع المركزية","ملاحظات معينة","تبرع للجمعيات","حضور الذبح فقط"].map(function(opt){return"<option value='"+opt+"'"+(s.cutType===opt?" selected":"")+">"+opt+"</option>";}).join("")
+      +"</select></div></div>"
+      +"<div style='margin-top:8px'><div class='flbl' style='margin-bottom:5px'>ملاحظات</div><input type='text' class='fi' id='es-note-"+i+"' value='"+(s.cutNotes||"").replace(/'/g,"&#39;")+"' placeholder='ملاحظات خاصة'/></div>"
       +"</div>";
   }).join("");
-
-  document.getElementById("edit-body").innerHTML =
+  document.getElementById("edit-body").innerHTML=
     "<div style='display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px'>"
     +"<div><div class='flbl' style='margin-bottom:5px'>اسم العميل</div><input type='text' class='fi' id='e-name' value='"+(o.clientName||"").replace(/'/g,"&#39;")+"'/></div>"
     +"<div><div class='flbl' style='margin-bottom:5px'>رقم الجوال</div><input type='tel' class='fi' id='e-phone' value='"+(o.clientPhone||"")+"' style='direction:ltr;text-align:right'/></div>"
@@ -995,73 +646,118 @@ function openEdit(key){
     +"</div>"
     +"<div style='margin-bottom:14px'><div class='flbl' style='margin-bottom:6px'>طريقة الاستلام</div>"
     +"<select class='fsel' id='e-del'>"
-    +["استلام من المطعم","استلام من المزرعة","توصيل للبيت"].map(function(opt){
-      return "<option value='"+opt+"'"+(o.deliveryType===opt?" selected":"")+">"+opt+"</option>";
-    }).join("")
+    +["استلام من المطعم","استلام من المزرعة","توصيل للبيت"].map(function(opt){return"<option value='"+opt+"'"+(o.deliveryType===opt?" selected":"")+">"+opt+"</option>";}).join("")
     +"</select></div>"
     +(o.address?"<div style='margin-bottom:14px'><div class='flbl' style='margin-bottom:6px'>العنوان</div><input type='text' class='fi' id='e-addr' value='"+(o.address||"")+"'/></div>":"")
     +(sheepHTML?"<div style='font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px'>تفاصيل الأضاحي</div>"+sheepHTML:"");
-
   document.getElementById("edit-ovl").style.display="flex";
 }
-
-function closeEdit(){
-  document.getElementById("edit-ovl").style.display="none";
-  editKey = null;
-}
-
+function closeEdit(){document.getElementById("edit-ovl").style.display="none";editKey=null;}
 function saveEdit(){
-  if(!editKey) return;
-  var o = AD.find(function(x){ return x._key===editKey; });
-  if(!o) return;
-  var name  = document.getElementById("e-name").value.trim();
-  var phone = document.getElementById("e-phone").value.trim();
-  var date  = document.getElementById("e-date").value;
-  var time  = document.getElementById("e-time").value;
-  var del   = document.getElementById("e-del").value;
-  var addr  = document.getElementById("e-addr")?document.getElementById("e-addr").value.trim():"";
-  if(!name||!phone||!date||!time){ alert("يرجى تعبئة جميع الحقول الأساسية"); return; }
-  var dt = date+"T"+time+":00";
-  // Update sheep
-  var sheep = (o.sheep||[]).map(function(s,i){
-    var forEl  = document.getElementById("es-for-"+i);
-    var cutEl  = document.getElementById("es-cut-"+i);
-    var noteEl = document.getElementById("es-note-"+i);
-    return Object.assign({},s,{
-      for:  forEl  ? forEl.value.trim()  : s.for,
-      cutType: cutEl  ? cutEl.value        : s.cutType,
-      cutNotes: noteEl ? noteEl.value.trim() : s.cutNotes,
-    });
+  if(!editKey)return;var o=AD.find(function(x){return x._key===editKey;});if(!o)return;
+  var name=document.getElementById("e-name").value.trim();var phone=document.getElementById("e-phone").value.trim();
+  var date=document.getElementById("e-date").value;var time=document.getElementById("e-time").value;
+  var del=document.getElementById("e-del").value;
+  var addr=document.getElementById("e-addr")?document.getElementById("e-addr").value.trim():"";
+  if(!name||!phone||!date||!time){alert("يرجى تعبئة جميع الحقول الأساسية");return;}
+  var sheep=(o.sheep||[]).map(function(s,i){
+    var fe=document.getElementById("es-for-"+i);var ce=document.getElementById("es-cut-"+i);var ne=document.getElementById("es-note-"+i);
+    return Object.assign({},s,{for:fe?fe.value.trim():s.for,cutType:ce?ce.value:s.cutType,cutNotes:ne?ne.value.trim():s.cutNotes});
   });
-  var btn = document.getElementById("edit-save-btn");
-  btn.textContent="جاري الحفظ..."; btn.disabled=true;
-  db.ref("eid_orders/"+editKey).update({
-    clientName: name, clientPhone: phone,
-    deliveryDatetime: dt, deliveryDate: date,
-    deliveryType: del, address: addr,
-    sheep: sheep,
-    lastEdited: new Date().toISOString(),
-  }).then(function(){
-    btn.textContent="&#x2713; تم الحفظ!";
-    setTimeout(function(){ closeEdit(); btn.textContent="حفظ التعديلات"; btn.disabled=false; }, 1200);
-  }).catch(function(e){ alert("خطأ: "+e.message); btn.textContent="حفظ التعديلات"; btn.disabled=false; });
+  var btn=document.getElementById("edit-save-btn");btn.textContent="جاري الحفظ...";btn.disabled=true;
+  db.ref("eid_orders/"+editKey).update({clientName:name,clientPhone:phone,deliveryDatetime:date+"T"+time+":00",deliveryDate:date,deliveryType:del,address:addr,sheep:sheep,lastEdited:new Date().toISOString()})
+  .then(function(){btn.textContent="✓ تم الحفظ!";setTimeout(function(){closeEdit();btn.textContent="حفظ التعديلات";btn.disabled=false;},1200);})
+  .catch(function(e){alert("خطأ: "+e.message);btn.textContent="حفظ التعديلات";btn.disabled=false;});
 }
 
+function setToday(){document.getElementById("rd").value=new Date().toISOString().slice(0,10);RR();}
+function RR(){
+  var dv=document.getElementById("rd").value;var el=document.getElementById("rb");
+  if(!dv){el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F4CA;</div><div class='empty-t'>اختر تاريخاً</div></div>";return;}
+  var day=AD.filter(function(o){return(o.createdAt||"").startsWith(dv);});
+  var c={new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
+  var del=0,pick=0,farm=0,animals=0,baladi=0,romani=0,w3638=0,w4244=0;
+  day.forEach(function(o){
+    if(c[o.status]!==undefined)c[o.status]++;
+    if(o.deliveryType==="توصيل للبيت")del++;else if(o.deliveryType==="استلام من المزرعة")farm++;else pick++;
+    animals+=parseInt(o.count)||1;
+    if(o.sheep&&o.sheep.length){
+      o.sheep.forEach(function(s){
+        if(s.type==="روماني")romani++;else baladi++;
+        if((s.weight||"").indexOf("٣٦")!==-1)w3638++;
+        else if((s.weight||"").indexOf("٤٢")!==-1)w4244++;
+      });
+    }else{baladi+=parseInt(o.count)||1;}
+  });
+  var t=day.length,pend=t-c.done-c.pend;
+  var dAr=new Date(dv+"T12:00:00").toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  function rc(n,l,col){return"<div class='rcard'><div class='rn' style='color:"+col+"'>"+n+"</div><div class='rl'>"+l+"</div></div>";}
+  function rb(lbl,v,col){var p=t>0?Math.round(v/t*100):0;return"<div class='rrow'><span style='min-width:175px;font-size:13px'>"+lbl+"</span><div class='rbar'><div class='rbarinr' style='width:"+p+"%;background:"+col+"'></div></div><span class='rval' style='color:"+col+"'>"+ar(v)+"</span></div>";}
+  el.innerHTML="<div style='font-size:15px;font-weight:700;color:#1B3A1B;margin-bottom:16px'>"+dAr+"</div>"
+    +"<div class='rgrid'>"+rc(ar(t),"إجمالي الطلبات","#2E6B2E")+rc(ar(animals),"إجمالي الأضاحي","#33691E")+rc(ar(baladi)+"/"+ar(romani),"بلدي / روماني","#558B2F")+rc(ar(c.done+c.pend),"تم التسليم","#1565C0")+rc(ar(pend>0?pend:0),"باقي / معلّق","#C62828")+"</div>"
+    +"<div class='rsec'><div class='rtit'>توزيع الحالات</div>"
+    +rb("🔴 طلب جديد",c.new,"#EF5350")+rb("🔪 مذبوح",c.slau,"#B71C1C")+rb("🥩 عند اللحام",c.butc,"#1565C0")
+    +rb("✅ تم التجهيز",c.done2,"#558B2F")+rb("🟢 سُلِّم للعميل",c.done,"#2E7D32")+rb("👁️ حضور الذبح",c.pres+c.pend,"#6A1B9A")
+    +"</div>"
+    +"<div class='rsec'><div class='rtit'>نوع الأضاحي</div>"+rb("🇯🇴 بلدي",baladi,"#2E6B2E")+rb("🇷🇴 روماني",romani,"#1565C0")+"</div>"
+    +"<div class='rsec'><div class='rtit'>الخرفان حسب الوزن</div>"+rb("⚖️ وزن ٣٦-٣٨ كغ",w3638,"#8D6E63")+rb("⚖️ وزن ٤٢-٤٤ كغ",w4244,"#5D4037")+"</div>"
+    +"<div class='rsec'><div class='rtit'>طريقة الاستلام</div>"+rb("🏪 استلام من المطعم",pick,"#E65100")+rb("🌿 استلام من المزرعة",farm,"#2E6B2E")+rb("🚗 توصيل للبيت",del,"#880E4F")+"</div>"
+    +(day.length?"<div class='rsec'><div class='rtit'>قائمة الطلبات</div>"+day.map(function(o){var sm=SM[o.status]||SM.new;var dt=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",{hour:"2-digit",minute:"2-digit"}):"—";return"<div style='display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F3EE;gap:8px;flex-wrap:wrap'><span style='font-weight:700'>"+(o.clientName||"—")+"</span><span style='color:#888;font-size:12px'>"+(o.count||1)+" خروف</span><span class='sbadge "+sm.b+"' style='font-size:10px'>"+sm.ar+"</span><span style='font-size:12px;color:#555'>⏰ "+dt+"</span></div>";}).join("")+"</div>":"");
+}
 
+function T(n){
+  ["orders","add","report","tv"].forEach(function(t){
+    document.getElementById("tab-"+t).classList.remove("active");
+    document.getElementById("nav-"+t).classList.remove("active");
+  });
+  document.getElementById("tab-"+n).classList.add("active");
+  document.getElementById("nav-"+n).classList.add("active");
+  if(n==="report")RR();
+  if(n==="tv")renderTV();
+  if(n!=="tv"&&tvTimer){clearInterval(tvTimer);tvTimer=null;}
+}
+
+function renderTV(){
+  var el=document.getElementById("tv-body");if(!el)return;
+  var now=new Date();
+  var active=AD.filter(function(o){return o.status!=="done"&&o.status!=="pend";});
+  active.sort(function(a,b){var at=a.deliveryDatetime?new Date(a.deliveryDatetime):new Date(9e15);var bt=b.deliveryDatetime?new Date(b.deliveryDatetime):new Date(9e15);return at-bt;});
+  var counts={new:0,slau:0,butc:0,done2:0};
+  AD.forEach(function(o){if(counts[o.status]!==undefined)counts[o.status]++;});
+  var timeStr=now.toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  var html="<div class='tv-header'><div class='tv-title'>&#x1F411; أضاحي عيد الأضحى — مطعم المركزية</div><div class='tv-time' id='tv-clock'>"+timeStr+"</div></div>"
+    +"<div class='tv-stats'>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#FFAB91'>"+ar(counts.new)+"</div><div class='tv-stat-l'>جديد</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#EF9A9A'>"+ar(counts.slau)+"</div><div class='tv-stat-l'>مذبوح</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#90CAF9'>"+ar(counts.butc)+"</div><div class='tv-stat-l'>عند اللحام</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#A5D6A7'>"+ar(counts.done2)+"</div><div class='tv-stat-l'>تم التجهيز</div></div>"
+    +"<div class='tv-stat'><div class='tv-stat-n' style='color:#69F0AE'>"+ar(AD.filter(function(o){return o.status==="done";}).length)+"</div><div class='tv-stat-l'>سُلِّم</div></div>"
+    +"</div>";
+  if(!active.length){html+="<div class='tv-empty'>✅ جميع الطلبات تم تسليمها</div>";}
+  else{
+    html+="<div class='tv-cards'>"+active.map(function(o){
+      var sm=SM[o.status]||SM.new;
+      var dtO=o.deliveryDatetime?new Date(o.deliveryDatetime):null;
+      var dtS=dtO?dtO.toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
+      var overdue=dtO&&(now-dtO)>0;var urgent=dtO&&(dtO-now)<3*3600*1000&&(dtO-now)>0;
+      var sheep=o.sheep||[];
+      var sheepSum=sheep.map(function(s,i){return"خروف "+(i+1)+": "+(s.type||"")+" | "+(s.weight||"");}).join(" — ");
+      return"<div class='tv-card"+(overdue||urgent?" urgent":"")+"'>"
+        +"<div class='tv-card-num'>طلب #"+(o.orderNum||o._key.slice(-5).toUpperCase())+(overdue?" 🚨 متأخر":urgent?" ⚡ قريب":"")+"</div>"
+        +"<div class='tv-card-name'>"+(o.clientName||"—")+"</div>"
+        +"<div class='tv-card-phone'>"+(o.clientPhone||"—")+"</div>"
+        +"<span class='tv-card-badge tv-badge-"+(SM[o.status]?o.status:"new")+"'>"+sm.ar+"</span>"
+        +"<div class='tv-card-info'><b>"+ar(o.count||1)+" خروف</b> | "+(o.deliveryType||"—")+(sheepSum?"<br><span style='font-size:13px'>"+sheepSum+"</span>":"")+"</div>"
+        +"<div class='tv-card-time'>📅 "+dtS+"</div></div>";
+    }).join("")+"</div>";
+  }
+  el.innerHTML=html;
+  if(tvTimer)clearInterval(tvTimer);
+  tvTimer=setInterval(function(){var cl=document.getElementById("tv-clock");if(cl)cl.textContent=new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit",second:"2-digit"});},1000);
+}
+
+document.getElementById("rd").value=new Date().toISOString().slice(0,10);
+buildSheep();
 </script>
-
-<!-- EDIT MODAL -->
-<div id="edit-ovl" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeEdit()">
-  <div style="background:#fff;border-radius:16px;padding:24px 28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative">
-    <button onclick="closeEdit()" style="position:absolute;top:12px;left:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#AAA">&#x2715;</button>
-    <div style="font-size:16px;font-weight:700;color:#1B3A1B;margin-bottom:18px">&#x270F;&#xFE0F; تعديل الطلب</div>
-    <div id="edit-body"></div>
-    <div style="display:flex;gap:10px;margin-top:18px">
-      <button id="edit-save-btn" onclick="saveEdit()" style="flex:1;padding:12px;border-radius:9px;background:#2E6B2E;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer">حفظ التعديلات</button>
-      <button onclick="closeEdit()" style="padding:12px 20px;border-radius:9px;background:#F5F3EE;color:#555;border:1.5px solid #DDD;font-size:14px;cursor:pointer">إلغاء</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
