@@ -178,6 +178,30 @@ input,button,select,textarea{font-family:inherit}
 .empty-l{background:none;border:none;color:#2E6B2E;font-size:13px;cursor:pointer;text-decoration:underline}
 @media print{body>*:not(#povl){display:none!important}.povl{position:static!important;background:none!important;padding:0!important}.pcard{box-shadow:none!important}.pc-close,.pbtn{display:none!important}}
 @media(max-width:600px){.fgrid{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr 1fr}.hdr{flex-direction:column;align-items:flex-start}.toolbar{flex-direction:column}}
+
+/* FAQ */
+.faq-cat-btn{padding:5px 14px;border-radius:20px;border:1.5px solid #DDD8D0;background:#fff;color:#888;font-size:12px;cursor:pointer;font-weight:600;transition:all .2s}
+.faq-cat-btn.active{background:#2E6B2E;color:#fff;border-color:#2E6B2E}
+.faq-section-lbl{font-size:11px;font-weight:700;color:#AAA;text-transform:uppercase;letter-spacing:1px;padding:6px 0 8px;display:block;margin-top:4px}
+.faq-item{background:#fff;border-radius:12px;border:1.5px solid #E5E0D8;margin-bottom:8px;overflow:hidden}
+.faq-q{padding:13px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;font-size:14px;font-weight:600;color:#1A1A1A;user-select:none}
+.faq-q:hover{background:#F9F7F4}
+.faq-q .faq-arr{flex-shrink:0;font-size:12px;color:#AAA;margin-top:2px;transition:transform .2s}
+.faq-item.open .faq-arr{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 16px 13px;font-size:13px;color:#555;line-height:1.8;border-top:1px solid #F0EDE8}
+.faq-item.open .faq-a{display:block}
+.faq-a ul{padding-right:18px;margin-top:6px}
+.faq-a li{margin-bottom:5px}
+.faq-a b{color:#1A1A1A}
+.ftag{display:inline-block;padding:2px 9px;border-radius:7px;font-size:11px;font-weight:700;margin-right:3px}
+.ftag-r{background:#FFEBEE;color:#B71C1C}
+.ftag-g{background:#E8F5E9;color:#1B5E20}
+.ftag-a{background:#FFF8E1;color:#E65100}
+.ftag-b{background:#E3F2FD;color:#0D47A1}
+.faq-price-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+.faq-price-table th{text-align:right;padding:7px 10px;background:#F5F3EE;color:#555;font-weight:600;border:1px solid #E5E0D8}
+.faq-price-table td{padding:7px 10px;border:1px solid #E5E0D8;color:#1A1A1A}
+.faq-no-results{text-align:center;padding:60px 20px;color:#AAA;font-size:14px}
 </style>
 </head>
 <body>
@@ -227,6 +251,7 @@ input,button,select,textarea{font-family:inherit}
   <button class="nb" id="nav-add" onclick="T('add')">&#x2795; إضافة طلب</button>
   <button class="nb" id="nav-report" onclick="T('report')">&#x1F4CA; التقرير اليومي</button>
   <button class="nb" id="nav-tv" onclick="T('tv')">&#x1F4FA; شاشة TV</button>
+  <button class="nb" id="nav-faq" onclick="T('faq')">&#x1F4D6; FAQ</button>
 </div>
 
 <div class="body">
@@ -316,6 +341,18 @@ input,button,select,textarea{font-family:inherit}
 <!-- TV -->
 <div class="tab" id="tab-tv" style="padding:0">
   <div id="tv-body" style="background:#0A1A0A;min-height:100vh;padding:20px"></div>
+</div>
+
+<!-- FAQ TAB -->
+<div class="tab" id="tab-faq">
+  <div style="max-width:740px">
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <input type="text" id="faq-si" placeholder="&#x1F50D; ابحث عن سؤال..." oninput="faqFilter()"
+        style="flex:1;min-width:200px;padding:9px 13px;border-radius:10px;border:1.5px solid #E0DDD8;background:#fff;font-size:13px"/>
+    </div>
+    <div id="faq-cat-bar" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px"></div>
+    <div id="faq-container"></div>
+  </div>
 </div>
 
 </div>
@@ -706,7 +743,7 @@ function RR(){
 }
 
 function T(n){
-  ["orders","add","report","tv"].forEach(function(t){
+  ["orders","add","report","tv","faq"].forEach(function(t){
     document.getElementById("tab-"+t).classList.remove("active");
     document.getElementById("nav-"+t).classList.remove("active");
   });
@@ -714,6 +751,7 @@ function T(n){
   document.getElementById("nav-"+n).classList.add("active");
   if(n==="report")RR();
   if(n==="tv")renderTV();
+  if(n==="faq")initFaq();
   if(n!=="tv"&&tvTimer){clearInterval(tvTimer);tvTimer=null;}
 }
 
@@ -758,6 +796,109 @@ function renderTV(){
 
 document.getElementById("rd").value=new Date().toISOString().slice(0,10);
 buildSheep();
+
+// ── FAQ ────────────────────────────────────────
+var FAQ_DATA = [
+  {cat:"الأسعار والأصناف", items:[
+    {q:"ما هي أصناف وأوزان الأضاحي المتوفرة؟",
+     a:`<b>الخروف الروماني والبلدي — نفس الأسعار:</b><br/><table class="faq-price-table"><tr><th>الوزن</th><th>اللحم الصافي</th><th>السعر</th></tr><tr><td>36-38 كغم</td><td>17 كغم</td><td><b>255 دينار</b></td></tr><tr><td>42-44 كغم</td><td>20 كغم</td><td><b>285 دينار</b></td></tr><tr><td>فوق 45 كغم</td><td>حسب الوزن</td><td><span class="ftag ftag-r">لا تذكر سعر الكيلو للعميل</span></td></tr></table>`},
+    {q:"هل تتوفر عجول؟",
+     a:`نعم تتوفر عجول بلدية.<br/><br/><span class="ftag ftag-r">مهم</span> أي طلب عجول يُحوَّل مباشرة لـ <b>عبد الله مدير فرع خلدا</b>. لا تتعامل مع هذه الطلبات بنفسك.`},
+    {q:"ما هي شروط الأضحية الشرعية؟",
+     a:`جميع الأضاحي مطابقة للشروط الشرعية:<ul><li>العمر: 6-8 أشهر</li><li>جميع الخراف <b>ذكور</b></li><li>خالية من أي عيب خلقي</li><li>أسنانها كاملة وغير مبدّلة</li><li>من مزارعنا الخاصة</li></ul>`},
+    {q:"هل يمكن اقتراح لحم عجل مع الطلب؟",
+     a:`<span class="ftag ftag-g">مطلوب</span> اقتراح إضافة لحم عجل على كل عميل. ترفع قيمة الطلب وتحسّن التجربة. سعر الكيلو حسب السعر المعتمد وقت الطلب.`},
+  ]},
+  {cat:"الحجز والدفع", items:[
+    {q:"متى يُثبَّت الحجز؟",
+     a:`<span class="ftag ftag-r">لا يُثبَّت أي حجز إلا بعد الدفع الكامل.</span><br/><ul><li>أضحية واحدة: دفع كامل مسبقاً</li><li>أكثر من أضحية: راجع المسؤول لآلية الدفع</li></ul><span class="ftag ftag-r">ممنوع</span> تسجيل حجوزات خارج النظام أو شفوياً.`},
+    {q:"ما هي البيانات المطلوبة عند الحجز؟",
+     a:`أدخل كل هذه البيانات في النظام:<ul><li>اسم العميل الكامل</li><li>رقم الهاتف</li><li>نوع الأضحية (روماني / بلدي)</li><li>فئة الوزن</li><li>طريقة الاستلام أو التوصيل</li><li>أي ملاحظات خاصة بالتقطيع أو الإضافات</li></ul>`},
+    {q:"ماذا أفعل إذا تعذّر الإدخال على النظام؟",
+     a:`استخدم نموذج الحجز الورقي المعتمد مؤقتاً، ثم <span class="ftag ftag-a">أدخل الطلب على النظام فور توفر الإمكانية.</span>`},
+  ]},
+  {cat:"الاستلام والتوصيل", items:[
+    {q:"من أين يتم الاستلام؟",
+     a:`الاستلام من <b>فرع خلدا حصراً.</b> <span class="ftag ftag-r">ممنوع</span> استلام طلبات من فرع المدينة.`},
+    {q:"متى يبدأ التسليم يوم العيد؟",
+     a:`<ul><li>التسليم يبدأ <b>بعد الساعة 12 ظهراً</b> من اليوم الأول</li><li>حد أدنى <b>6 ساعات من وقت الذبح</b></li></ul>`},
+    {q:"ما هي مناطق التوصيل وأسعارها؟",
+     a:`<b>التوصيل بـ 5 دنانير:</b><ul><li>عبدون، دير غبار، الصويفية، خلدا، أم السماق، تلاع العلي، الرابية، الشميساني، دابوق، وادي السير، أم اذينة الغربي، بدر الجديدة، مرج الحمام، الجاردنز، ضاحية الرشيد، صويلح</li></ul><b>التوصيل بـ 8 دنانير:</b><ul><li>جبل النصر، عدن، الوحدات، ناعور، شارع الحرية، المنارة، أم النواره، عراق الأمير، ضاحية الحاج حسن، جبل الزهور، البنيات، حي نزال، الجبل الأخضر، المقابلين، القويسمة، صالحية العابد، ماركا، أبو علندا، جاوا، الجويدة، خريبة السوق، الرصيفة، سحاب</li></ul><span class="ftag ftag-a">منطقة غير مذكورة؟ راجع المسؤول المباشر.</span>`},
+    {q:"هل أُبلغ العميل برسوم التوصيل؟",
+     a:`<span class="ftag ftag-r">نعم، يجب توضيح رسوم التوصيل قبل تثبيت الحجز.</span> ولا تؤكد أي موعد غير متاح على النظام.`},
+  ]},
+  {cat:"التقطيع والتجهيز", items:[
+    {q:"ما هي خيارات التقطيع؟",
+     a:`<ul><li><b>تقطيع المركزية</b> — مشمول في السعر (1.5 كغم/صحن)</li><li><b>حسب رغبة العميل</b> — سجّل بوضوح عند الحجز</li><li><b>شقف وكباب كامل</b> — <span class="ftag ftag-b">+20 دينار</span></li><li><b>تشكيل على أسياخ</b> — <span class="ftag ftag-b">3 دنانير/كغم</span></li></ul>`},
+    {q:"ما الذي يشمله السعر وما لا يشمله؟",
+     a:`<b><span class="ftag ftag-g">مشمول:</span></b><ul><li>الذبح، السلخ، التنظيف، التقطيع الأساسي، التغليف، فيديو الذبح، الرأس منظّفاً</li></ul><b><span class="ftag ftag-r">غير مشمول:</span></b><ul><li>الكوارع — لا تُنظَّف</li><li>الكرشة والمصران — لا تُنظَّف</li></ul>`},
+    {q:"هل يمكن طلب طبخ اللحوم؟",
+     a:`نعم:<table class="faq-price-table"><tr><th>الخدمة</th><th>السعر</th></tr><tr><td>طبخ اللحوم (منسف، بخاري، قدرة...)</td><td><b>7 دنانير/كغم</b></td></tr><tr><td>خروف محشي كامل</td><td><b>50 دينار</b></td></tr><tr><td>نصف خروف محشي</td><td><b>25 دينار</b></td></tr></table><span class="ftag ftag-r">سجّل الطلب على النظام.</span>`},
+    {q:"هل يمكن تقطيع المعلّق والكبدة؟",
+     a:`نعم، <b>في حال طلب العميل عند الحجز.</b> سجّل الملاحظة على النظام.`},
+  ]},
+  {cat:"الفيديو والتوثيق", items:[
+    {q:"هل يحصل العميل على فيديو الذبح؟",
+     a:`نعم يُرسَل فيديو الذبح للعميل بعد التنفيذ.<br/><span class="ftag ftag-r">مهم:</span><ul><li>لا يُرسَل إلا بعد التحقق من صحة بيانات الحجز</li><li>تأكد من مطابقة الفيديو للأضحية الصحيحة</li><li>أي خطأ → رفعه للمسؤول قبل التواصل مع العميل</li></ul>`},
+  ]},
+  {cat:"التصعيد والممنوعات", items:[
+    {q:"متى أرجع لعبد الله مدير فرع خلدا؟",
+     a:`في هذه الحالات:<ul><li>أي طلب يتعلق بالعجول أو الذبائح الكبيرة</li><li>أي حالة خاصة أو طلب غير واضح</li><li>الأوزان الثقيلة فوق 45 كغم</li></ul>إذا لم تتمكن → <span class="ftag ftag-a">راجع محمد عوض.</span>`},
+    {q:"ما الذي يُمنع فعله مطلقاً؟",
+     a:`<ul><li><span class="ftag ftag-r">ممنوع</span> إعطاء وعود غير مؤكدة للعميل</li><li><span class="ftag ftag-r">ممنوع</span> تنفيذ طلب غير مسجل على النظام</li><li><span class="ftag ftag-r">ممنوع</span> تسجيل حجوزات خارج النظام أو شفوياً</li><li><span class="ftag ftag-r">ممنوع</span> تأكيد موعد غير متاح على النظام</li><li><span class="ftag ftag-r">ممنوع</span> ذكر سعر الكيلو للعميل في الأوزان الثقيلة</li><li><span class="ftag ftag-r">ممنوع</span> الاستلام من فرع المدينة</li></ul>`},
+    {q:"ما الذي يجب تسجيله على النظام؟",
+     a:`<ul><li>بيانات العميل كاملة</li><li>أي طلب تقطيع خاص أو شقف أو كباب</li><li>طلبات الطبخ والتجهيز الإضافي</li><li>طلبات العجل أو الإضافات</li><li>أي تعديل على الطلب بعد الحجز</li></ul>`},
+  ]},
+];
+
+var faqActiveCat = "all";
+
+function initFaq(){
+  var bar = document.getElementById("faq-cat-bar");
+  if(!bar) return;
+  var html = '<button class="faq-cat-btn active" onclick="faqSetCat('all',this)">الكل</button>';
+  FAQ_DATA.forEach(function(d){
+    html += '<button class="faq-cat-btn" onclick="faqSetCat(''+d.cat+'',this)">'+d.cat+'</button>';
+  });
+  bar.innerHTML = html;
+  faqRender();
+}
+
+function faqSetCat(cat, el){
+  faqActiveCat = cat;
+  document.querySelectorAll(".faq-cat-btn").forEach(function(b){ b.classList.remove("active"); });
+  el.classList.add("active");
+  faqRender();
+}
+
+function faqFilter(){ faqRender(); }
+
+function faqRender(){
+  var q = (document.getElementById("faq-si").value||"").toLowerCase().trim();
+  var container = document.getElementById("faq-container");
+  if(!container) return;
+  var html = "", count = 0;
+  FAQ_DATA.forEach(function(section){
+    if(faqActiveCat !== "all" && faqActiveCat !== section.cat) return;
+    var items = section.items.filter(function(item){
+      return !q || item.q.toLowerCase().indexOf(q)!==-1 || item.a.toLowerCase().indexOf(q)!==-1;
+    });
+    if(!items.length) return;
+    html += '<span class="faq-section-lbl">'+section.cat+'</span>';
+    items.forEach(function(item){
+      var id = "fq"+count;
+      html += '<div class="faq-item" id="'+id+'">'
+        +'<div class="faq-q" onclick="document.getElementById(''+id+'').classList.toggle('open')">'
+        +'<span>'+item.q+'</span><span class="faq-arr">&#x25BE;</span>'
+        +'</div>'
+        +'<div class="faq-a">'+item.a+'</div>'
+        +'</div>';
+      count++;
+    });
+  });
+  if(!count) html = '<div class="faq-no-results">لا توجد نتائج</div>';
+  container.innerHTML = html;
+}
 </script>
 </body>
 </html>
