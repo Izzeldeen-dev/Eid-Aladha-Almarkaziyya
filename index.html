@@ -1212,6 +1212,8 @@ function renderOverview(){
   var totalSheep  = 0;
   var baladi=0, romani=0;
   var w3638=0, w4244=0, wcustom=0;
+  var b3638=0, b4244=0, bcustom=0;
+  var r3638=0, r4244=0, rcustom=0;
   var cutCounts = {};
   var donationSheep = 0;
 
@@ -1220,10 +1222,19 @@ function renderOverview(){
     if(sheep.length){
       sheep.forEach(function(s){
         totalSheep++;
-        // Type
-        if((s.type||"").indexOf("روماني")!==-1) romani++; else baladi++;
-        // Weight
+        // Type + nested weight
         var w = s.weight||"";
+        var isRomani = (s.type||"").indexOf("روماني")!==-1;
+        if(isRomani){ romani++;
+          if(w.indexOf("٣٦")!==-1)      r3638++;
+          else if(w.indexOf("٤٢")!==-1) r4244++;
+          else                           rcustom++;
+        } else { baladi++;
+          if(w.indexOf("٣٦")!==-1)      b3638++;
+          else if(w.indexOf("٤٢")!==-1) b4244++;
+          else                           bcustom++;
+        }
+        // Weight total
         if(w.indexOf("٣٦")!==-1)      w3638++;
         else if(w.indexOf("٤٢")!==-1) w4244++;
         else                           wcustom++;
@@ -1275,20 +1286,21 @@ function renderOverview(){
     +"<div class='ov-card'><div class='ov-card-n' style='color:#1565C0'>"+ar(totalSheep>0?Math.round(totalSheep/totalOrders*10)/10:0)+"</div><div class='ov-card-l'>متوسط خرفان/طلب</div></div>"
     +"</div>"
 
-    // Type + Weight side by side
+    // بلدي by weight + روماني by weight
     +"<div class='ov-split'>"
-    // Type
+    // بلدي
     +"<div class='ov-sec'>"
-    +"<div class='ov-sec-title'>&#x1F40F; النوع</div>"
-    +ovBar("🇯🇴 بلدي",   baladi, totalSheep, "#2E6B2E")
-    +ovBar("🇷🇴 روماني", romani, totalSheep, "#1565C0")
+    +"<div class='ov-sec-title'>&#x1F1EF;&#x1F1F4; بلدي — "+ar(baladi)+" خروف</div>"
+    +ovBar("٣٦-٣٨ كغم", b3638,   baladi||1, "#2E6B2E")
+    +ovBar("٤٢-٤٤ كغم", b4244,   baladi||1, "#558B2F")
+    +ovBar("وزن مخصص",  bcustom, baladi||1, "#A5D6A7")
     +"</div>"
-    // Weight
+    // روماني
     +"<div class='ov-sec'>"
-    +"<div class='ov-sec-title'>&#x2696;&#xFE0F; الوزن</div>"
-    +ovBar("٣٦-٣٨ كغم", w3638,   totalSheep, "#8D6E63")
-    +ovBar("٤٢-٤٤ كغم", w4244,   totalSheep, "#5D4037")
-    +ovBar("وزن مخصص",  wcustom, totalSheep, "#6A1B9A")
+    +"<div class='ov-sec-title'>&#x1F1F7;&#x1F1F4; روماني — "+ar(romani)+" خروف</div>"
+    +ovBar("٣٦-٣٨ كغم", r3638,   romani||1, "#1565C0")
+    +ovBar("٤٢-٤٤ كغم", r4244,   romani||1, "#1976D2")
+    +ovBar("وزن مخصص",  rcustom, romani||1, "#90CAF9")
     +"</div>"
     +"</div>"
 
