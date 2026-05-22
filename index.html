@@ -214,6 +214,24 @@ input,button,select,textarea{font-family:inherit}
 .faq-tbl{width:100%;border-collapse:collapse;margin-top:9px;font-size:13px}
 .faq-tbl th{text-align:right;padding:6px 9px;background:#F5F3EE;color:#555;font-weight:600;border:1px solid #E5E0D8}
 .faq-tbl td{padding:6px 9px;border:1px solid #E5E0D8}
+
+/* OVERVIEW */
+.ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.ov-card{background:#fff;border-radius:12px;padding:16px;border:1.5px solid #E5E0D8;text-align:center}
+.ov-card-n{font-size:36px;font-weight:700;line-height:1;margin-bottom:4px}
+.ov-card-l{font-size:12px;color:#888;font-weight:500}
+.ov-sec{background:#fff;border-radius:12px;padding:18px 20px;border:1.5px solid #E5E0D8;margin-bottom:12px}
+.ov-sec-title{font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ov-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F5F3EE}
+.ov-row:last-child{border-bottom:none}
+.ov-row-lbl{min-width:180px;font-size:14px;color:#333;font-weight:500}
+.ov-bar-wrap{flex:1;height:10px;background:#F0EDE8;border-radius:5px;overflow:hidden}
+.ov-bar-fill{height:100%;border-radius:5px;transition:width .5s}
+.ov-row-num{font-size:16px;font-weight:700;min-width:40px;text-align:left}
+.ov-row-pct{font-size:12px;color:#AAA;min-width:36px;text-align:left}
+.ov-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:600px){.ov-grid{grid-template-columns:1fr 1fr}.ov-split{grid-template-columns:1fr}}
+
 /* EMPTY */
 .empty{text-align:center;padding:60px 20px}
 .empty-i{font-size:48px;opacity:.12;margin-bottom:10px}
@@ -279,6 +297,7 @@ input,button,select,textarea{font-family:inherit}
   <button class="nb" id="nav-report" onclick="T('report')">&#x1F4CA; التقرير اليومي</button>
   <button class="nb" id="nav-tv" onclick="T('tv')">&#x1F4FA; شاشة TV</button>
   <button class="nb" id="nav-faq" onclick="T('faq')">&#x1F4D6; FAQ</button>
+  <button class="nb" id="nav-overview" onclick="T('overview')">&#x1F4CA; التقرير الشامل</button>
 </div>
 
 <div class="body">
@@ -380,6 +399,20 @@ input,button,select,textarea{font-family:inherit}
     </div>
     <div id="faq-catbar" class="faq-catbar"></div>
     <div id="faq-container"></div>
+  </div>
+</div>
+
+<!-- OVERVIEW TAB -->
+<div class="tab" id="tab-overview">
+  <div style="max-width:760px">
+    <div style="background:#fff;border-radius:12px;border:1.5px solid #E5E0D8;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:13px;color:#555;font-weight:600">فلتر حسب تاريخ التسليم:</span>
+      <input type="date" class="df" id="ov-from" oninput="renderOverview()" placeholder="من"/>
+      <span style="font-size:12px;color:#888">حتى</span>
+      <input type="date" class="df" id="ov-to" oninput="renderOverview()"/>
+      <button class="tb on" id="ov-all-btn" onclick="ovClearDates()">كل الوقت</button>
+    </div>
+    <div id="ov-body"></div>
   </div>
 </div>
 
@@ -1013,7 +1046,7 @@ function RR(){
 
 // ── TAB SWITCH ────────────────────────────────────────────────
 function T(n){
-  ["orders","add","report","tv","faq"].forEach(function(t){
+  ["orders","add","report","tv","faq","overview"].forEach(function(t){
     document.getElementById("tab-"+t).classList.remove("active");
     document.getElementById("nav-"+t).classList.remove("active");
   });
@@ -1022,6 +1055,7 @@ function T(n){
   if(n==="report") RR();
   if(n==="tv") renderTV();
   if(n==="faq"){ faqInitCats(); faqRender(); }
+  if(n==="overview") renderOverview();
   if(n!=="tv"&&tvTimer){ clearInterval(tvTimer); tvTimer=null; }
 }
 
@@ -1150,6 +1184,133 @@ function faqRender(){
 // ── INIT ──────────────────────────────────────────────────────
 document.getElementById("rd").value=new Date().toISOString().slice(0,10);
 buildSheep();
+
+// ── OVERVIEW TAB ──────────────────────────────────────────────
+function ovClearDates(){
+  document.getElementById("ov-from").value="";
+  document.getElementById("ov-to").value="";
+  renderOverview();
+}
+
+function renderOverview(){
+  var fromV = document.getElementById("ov-from").value;
+  var toV   = document.getElementById("ov-to").value;
+  var btn   = document.getElementById("ov-all-btn");
+  btn.classList.toggle("on", !fromV && !toV);
+
+  // Filter orders
+  var orders = AD.filter(function(o){
+    if(!fromV && !toV) return true;
+    var d = (o.deliveryDate || (o.deliveryDatetime||"").slice(0,10));
+    if(fromV && d < fromV) return false;
+    if(toV   && d > toV)   return false;
+    return true;
+  });
+
+  // Count sheep
+  var totalOrders = orders.length;
+  var totalSheep  = 0;
+  var baladi=0, romani=0;
+  var w3638=0, w4244=0, wcustom=0;
+  var cutCounts = {};
+  var donationSheep = 0;
+
+  orders.forEach(function(o){
+    var sheep = o.sheep || [];
+    if(sheep.length){
+      sheep.forEach(function(s){
+        totalSheep++;
+        // Type
+        if((s.type||"").indexOf("روماني")!==-1) romani++; else baladi++;
+        // Weight
+        var w = s.weight||"";
+        if(w.indexOf("٣٦")!==-1)      w3638++;
+        else if(w.indexOf("٤٢")!==-1) w4244++;
+        else                           wcustom++;
+        // Cut
+        var cut = s.cutType||"غير محدد";
+        cutCounts[cut] = (cutCounts[cut]||0)+1;
+        // Donation
+        if(s.cutType==="تبرع للجمعيات") donationSheep++;
+      });
+    } else {
+      // No sheep detail — count from order
+      var n = parseInt(o.count)||1;
+      totalSheep += n; baladi += n; w3638 += n;
+    }
+  });
+
+  var el = document.getElementById("ov-body");
+  if(!orders.length){
+    el.innerHTML="<div class='empty'><div class='empty-i'>&#x1F4CA;</div><div class='empty-t'>لا توجد بيانات في هذه الفترة</div></div>";
+    return;
+  }
+
+  function ovBar(lbl, val, total, color){
+    var pct = total>0 ? Math.round(val/total*100) : 0;
+    return "<div class='ov-row'>"
+      +"<div class='ov-row-lbl'>"+lbl+"</div>"
+      +"<div class='ov-bar-wrap'><div class='ov-bar-fill' style='width:"+pct+"%;background:"+color+"'></div></div>"
+      +"<div class='ov-row-num' style='color:"+color+"'>"+ar(val)+"</div>"
+      +"<div class='ov-row-pct'>"+pct+"%</div>"
+      +"</div>";
+  }
+
+  // Cut type rows
+  var cutOrder = ["تقطيع المركزية","تقطيع بحضور العميل","ملاحظات معينة","تبرع للجمعيات","حضور الذبح فقط"];
+  var cutColors= {"تقطيع المركزية":"#2E6B2E","تقطيع بحضور العميل":"#1565C0","ملاحظات معينة":"#F57F17","تبرع للجمعيات":"#6A1B9A","حضور الذبح فقط":"#888888"};
+  var cutHTML = cutOrder.map(function(k){
+    var v = cutCounts[k]||0; if(!v) return "";
+    return ovBar(k, v, totalSheep, cutColors[k]||"#888");
+  }).join("") + Object.keys(cutCounts).filter(function(k){return cutOrder.indexOf(k)===-1&&cutCounts[k]>0;}).map(function(k){
+    return ovBar(k,cutCounts[k],totalSheep,"#888");
+  }).join("");
+
+  el.innerHTML =
+    // KPI cards
+    "<div class='ov-grid'>"
+    +"<div class='ov-card'><div class='ov-card-n' style='color:#2E6B2E'>"+ar(totalSheep)+"</div><div class='ov-card-l'>إجمالي الخرفان</div></div>"
+    +"<div class='ov-card'><div class='ov-card-n' style='color:#1B3A1B'>"+ar(totalOrders)+"</div><div class='ov-card-l'>إجمالي الطلبات</div></div>"
+    +"<div class='ov-card'><div class='ov-card-n' style='color:#6A1B9A'>"+ar(donationSheep)+"</div><div class='ov-card-l'>خرفان تبرع</div></div>"
+    +"<div class='ov-card'><div class='ov-card-n' style='color:#1565C0'>"+ar(totalSheep>0?Math.round(totalSheep/totalOrders*10)/10:0)+"</div><div class='ov-card-l'>متوسط خرفان/طلب</div></div>"
+    +"</div>"
+
+    // Type + Weight side by side
+    +"<div class='ov-split'>"
+    // Type
+    +"<div class='ov-sec'>"
+    +"<div class='ov-sec-title'>&#x1F40F; النوع</div>"
+    +ovBar("🇯🇴 بلدي",   baladi, totalSheep, "#2E6B2E")
+    +ovBar("🇷🇴 روماني", romani, totalSheep, "#1565C0")
+    +"</div>"
+    // Weight
+    +"<div class='ov-sec'>"
+    +"<div class='ov-sec-title'>&#x2696;&#xFE0F; الوزن</div>"
+    +ovBar("٣٦-٣٨ كغم", w3638,   totalSheep, "#8D6E63")
+    +ovBar("٤٢-٤٤ كغم", w4244,   totalSheep, "#5D4037")
+    +ovBar("وزن مخصص",  wcustom, totalSheep, "#6A1B9A")
+    +"</div>"
+    +"</div>"
+
+    // Cut types
+    +"<div class='ov-sec'>"
+    +"<div class='ov-sec-title'>&#x1F52A; نوع التقطيع</div>"
+    +cutHTML
+    +"</div>"
+
+    // Status summary
+    +"<div class='ov-sec'>"
+    +"<div class='ov-sec-title'>&#x1F4CB; حالة الطلبات</div>"
+    + (function(){
+      var sc={hold:0,new:0,slau:0,butc:0,done2:0,done:0,pres:0,pend:0};
+      orders.forEach(function(o){if(sc[o.status]!==undefined)sc[o.status]++;});
+      var scColors={hold:"#E65100",new:"#D84315",slau:"#B71C1C",butc:"#1565C0",done2:"#558B2F",done:"#1B5E20",pres:"#6A1B9A",pend:"#888"};
+      return Object.keys(sc).filter(function(k){return sc[k]>0;}).map(function(k){
+        return ovBar(SM[k]?SM[k].ar:k, sc[k], totalOrders, scColors[k]||"#888");
+      }).join("");
+    })()
+    +"</div>";
+}
 </script>
 </body>
 </html>
