@@ -823,6 +823,7 @@ function renderOverview(){
   var baladi=0,romani=0,jadi=0;
   var b3638=0,b4244=0,bcustom=0,r3638=0,r4244=0,rcustom=0,j3638=0,j4244=0,jcustom=0;
   var cutCounts={};
+  var ovDel=0,ovRest=0,ovFarm=0;
   orders.forEach(function(o){
     var sheep=o.sheep||[];
     if(sheep.length){
@@ -837,6 +838,9 @@ function renderOverview(){
         if(s.cutType==="تبرع للجمعيات") donationSheep++;
       });
     } else { var n=parseInt(o.count)||1; totalSheep+=n; baladi+=n; b3638+=n; }
+    if(o.deliveryType==="توصيل للبيت") ovDel++;
+    else if(o.deliveryType==="استلام من المزرعة") ovFarm++;
+    else ovRest++;
   });
   function ovB(lbl,val,total,col){var pct=total>0?Math.round(val/total*100):0;return "<div class='ov-row'><div class='ov-row-lbl'>"+lbl+"</div><div class='ov-bar-wrap'><div class='ov-bar-fill' style='width:"+pct+"%;background:"+col+"'></div></div><div class='ov-row-num' style='color:"+col+"'>"+ar(val)+"</div><div class='ov-row-pct'>"+pct+"%</div></div>";}
   var cutOrder=["تقطيع المركزية","تقطيع بحضور العميل","ملاحظات معينة","تبرع للجمعيات","حضور الذبح فقط"];
@@ -859,6 +863,7 @@ function renderOverview(){
     +"<div class='ov-sec'><div class='ov-sec-title'>&#x1F410; جدي — "+ar(jadi)+"</div>"+ovB("٣٦-٣٨ كغم",j3638,jadi||1,"#6A1B9A")+ovB("٤٢-٤٤ كغم",j4244,jadi||1,"#8E24AA")+ovB("مخصص",jcustom,jadi||1,"#CE93D8")+"</div>"
     +"</div>"
     +"<div class='ov-sec'><div class='ov-sec-title'>&#x1F52A; نوع التقطيع</div>"+cutH+"</div>"
+    +"<div class='ov-sec'><div class='ov-sec-title'>&#x1F69A; طريقة الاستلام</div>"+ovB("🏪 استلام من المطعم",ovRest,totalOrders,"#E65100")+ovB("🌿 استلام من المزرعة",ovFarm,totalOrders,"#2E6B2E")+ovB("🚗 توصيل للبيت",ovDel,totalOrders,"#880E4F")+"</div>"
     +"<div class='ov-sec'><div class='ov-sec-title'>&#x1F4CB; حالة الطلبات</div>"
     +Object.keys(sc).filter(function(k){return sc[k]>0;}).map(function(k){return ovB(SM[k]?SM[k].ar:k,sc[k],totalOrders,scC[k]||"#888");}).join("")
     +"</div>";
