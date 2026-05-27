@@ -257,6 +257,7 @@ input,button,select,textarea{font-family:inherit}
     <input type="date" class="df" id="dfilt" oninput="RC()"/>
     <button class="tb" id="sort-btn" onclick="toggleSort()">&#x23F0; ترتيب بالموعد</button>
     <button class="tb" onclick="clearF()">&#x2715; مسح</button>
+    <button class="tb" onclick="exportExcel()" style="background:#1B5E20;color:#fff;border-color:#1B5E20">&#x1F4E5; تصدير Excel</button>
   </div>
   <div class="sbar">
     <button class="sfp sf-all active" id="fp-all"   onclick="SF('all')">الكل <span class="sc" id="fc-all">٠</span></button>
@@ -292,7 +293,7 @@ input,button,select,textarea{font-family:inherit}
         <div class="fg"><div class="flbl">تاريخ الاستلام *</div><input type="date" class="fi" id="fdate" onchange="renderSlots()"/></div>
       </div>
       <div id="slots-sec" style="display:none">
-        <div class="flbl" style="margin-bottom:6px">وقت الاستلام * <span style="font-size:11px;color:#888;font-weight:400">(١٢ عميل/ساعة كحد أقصى)</span></div>
+        <div class="flbl" style="margin-bottom:6px">وقت الاستلام * <span style="font-size:11px;color:#888;font-weight:400">(١٦ عميل/ساعة كحد أقصى)</span></div>
         <div class="slot-grid" id="slots-grid"></div>
         <input type="hidden" id="fdt"/>
       </div>
@@ -379,7 +380,7 @@ firebase.initializeApp({
 });
 var db = firebase.database();
 var AD=[], CF="all", DLF="all", DOSORT=false, DEL_KEY="rest", SEL_SLOT=null, editKey=null, tvTimer=null, OV_TYPE="entry", FAQ_CAT2="all";
-var SMAX=12;
+var SMAX=16;
 var DT = {rest:"استلام من المطعم", farm:"استلام من المزرعة", home:"توصيل للبيت"};
 var SM = {
   hold:  {ar:"معلّق — بانتظار الدفع", b:"b-hold",  tv:"tvb-hold"},
@@ -867,6 +868,53 @@ function renderOverview(){
     +"<div class='ov-sec'><div class='ov-sec-title'>&#x1F4CB; حالة الطلبات</div>"
     +Object.keys(sc).filter(function(k){return sc[k]>0;}).map(function(k){return ovB(SM[k]?SM[k].ar:k,sc[k],totalOrders,scC[k]||"#888");}).join("")
     +"</div>";
+}
+
+// Export to CSV/Excel
+function exportExcel(){
+  if(!AD.length){alert("لا يوجد طلبات للتصدير");return;}
+  var headers=["رقم الطلب","اسم العميل","رقم الجوال","عدد الأضاحي","الحالة","طريقة الاستلام","تاريخ الإدخال","موعد التسليم","الموظف","العنوان","تفاصيل الأضاحي"];
+  var rows=[headers];
+  AD.forEach(function(o){
+    var statusAr=SM[o.status]?SM[o.status].ar:o.status;
+    var opts={day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"};
+    var createdAt=o.createdAt?new Date(o.createdAt).toLocaleString("ar-EG",opts):"";
+    var deliveryDt=o.deliveryDatetime?new Date(o.deliveryDatetime).toLocaleString("ar-EG",opts):"";
+    var sheepList=(o.sheep||[]).map(function(s,i){
+      return "خروف "+(i+1)+": "+(s.type||"")+" - "+(s.weight||"")+(s.for?" - عن: "+s.for:"")+" - "+(s.cutType||"");
+    }).join(" | ");
+    rows.push([
+      "#"+(o.orderNum||o._key.slice(-5).toUpperCase()),
+      o.clientName||"",
+      o.clientPhone||"",
+      o.count||1,
+      statusAr,
+      o.deliveryType||"",
+      createdAt,
+      deliveryDt,
+      o.agent||"",
+      o.address||"",
+      sheepList
+    ]);
+  });
+  var nl="\n";
+  var csv="\uFEFF"+rows.map(function(r){
+    return r.map(function(v){
+      var s=String(v||"");
+      if(s.indexOf(",")>=0||s.indexOf('"')>=0||s.indexOf("\n")>=0) s='"'+s.replace(/"/g,'""')+'"';
+      return s;
+    }).join(",");
+  }).join(nl);
+  var blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  var now=new Date();
+  a.href=url;
+  a.download="طلبات_الاضاحي_"+now.getFullYear()+"_"+(now.getMonth()+1)+"_"+now.getDate()+".csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // Tab switch
